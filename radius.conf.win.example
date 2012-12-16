@@ -1,0 +1,43 @@
+RAD_VERSION = 0.0.1
+RAD_MAJOR_VERSION = 0
+RAD_MINOR_VERSION = 0
+RAD_PATCH_VERSION = 1
+#RAD_PATCH1_VERSION = 1
+
+PRODUCT_NAME = Radius Client
+ORGANIZATION = Radius
+EXECUTABLE_PREFIX = radclient
+
+
+#installation params
+RAD_PREFIX = "C:/Radius/radius-$RAD_VERSION"
+RAD_DATA_DIR = $$RAD_PREFIX/data
+
+
+#external libraries paths
+EXT = "C:/Program Files/Radius/Radius Client 0.0.1"
+EXTERNAL_PREFIX = $$EXT
+FFT_HOME = $$EXTERNAL_PREFIX
+FFT_LIB_DIR = $$EXTERNAL_PREFIX/lib
+FFT_INC_DIR = $$EXTERNAL_PREFIX/include
+BLAS_HOME = $$EXTERNAL_PREFIX
+BLAS_LIB_DIR = $$EXTERNAL_PREFIX/lib
+BLAS_INC_DIR = $$EXTERNAL_PREFIX/include
+
+
+#additional installation params
+RAD_EXEC_DIR = $$RAD_PREFIX/bin
+RAD_BIN_DIR = $$RAD_PREFIX/bin
+RAD_LIB_DIR = $$RAD_PREFIX/lib
+RAD_INCLUDE_DIR = $$RAD_PREFIX/include
+RAD_PLUGIN_DIR = $$RAD_PREFIX/lib/plugins
+RAD_DOC_DIR = $$RAD_PREFIX/share/doc
+RAD_TRANSL_DIR = $$RAD_PREFIX/bin
+
+#set it to 1 if target platform use big endian (RISC)
+#default is litle endian (Intel, VAX)
+USE_BIGENDIAN = 0
+
+DEFINES *= _CRT_NONSTDC_NO_DEPRECATE
+DEFINES *= _CRT_SECURE_NO_WARNINGS
+DEFINES *= _CRT_SECURE_NO_DEPRECATE
