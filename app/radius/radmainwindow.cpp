@@ -8,8 +8,13 @@
 #include <QMdiSubWindow>
 
 #include <radDataWidget.h>
+#include <constants1.h>
+#include <complex>
+
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
+
+using std::complex;
 
 RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     : QMainWindow (parent, flags),
@@ -39,6 +44,36 @@ void RadMainWindow :: openDataFile (void)
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
     QFile fData (fileName);
+    double * st = new double [nd2];
+    complex<long double> * stc = new complex<long double> [nd];
+    complex<long double> * stc1 = new complex<long double> [nd];
+    complex<long double> * stc4 (0);// = new complex<double> [nd];
+    for (int i=0; i<nd2; i++)
+    {
+        st [i] = 0.0;
+    }
+    for (int i=0; i<nd; i++)
+    {
+        stc[i] = complex<long double> (0.0, 0.0);
+        stc1[i] = complex<long double> (0.0, 0.0);
+    }
+    int a = 0;
+    for (int i=1; i<=na; i++)
+    {
+        //fread (st+i-1, sizeof (unsigned long), nd2, fid5);
+        for (int ii=1; ii<= nd2; ii++)
+            if (st[ii-1] > 128)
+                st[ii-1] -= 256;
+
+        for (int ii=1; ii<=128; ii++)
+            st[ii-1] = 0.0;
+
+        for (int ii=0; ii<ndn; ii++)
+            stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
+        qDebug () << __PRETTY_FUNCTION__ << i << " " << na << endl;
+    }
+
+
 }
 
 void RadMainWindow :: init (void)

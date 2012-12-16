@@ -19,10 +19,12 @@ INCLUDEPATH *= $$BLAS_INC_DIR
 LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lm -L$$BLAS_LIB_DIR -lblas
 
 INCLUDEPATH *= ../../src \
-               ../../src/gui
+               ../../src/gui \
+               ../../src/misc
 
 DEPENDPATH *= ../../src \
-               ../../src/gui
+               ../../src/gui \
+               ../../src/misc
 
 LIBS += -L$$DESTDIR -lfft_matrix
 
