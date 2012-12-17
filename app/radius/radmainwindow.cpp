@@ -6,10 +6,16 @@
 #include <QtDebug>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QIODevice>
+#include <QDataStream>
+#include <QBuffer>
 
 #include <radDataWidget.h>
 #include <constants1.h>
+
 #include <complex>
+#include <math.h>
+#include <stdio.h>
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -38,12 +44,11 @@ void RadMainWindow :: openDataFile (void)
     if (fileName.isEmpty())
         return;
 
-    qDebug () << __PRETTY_FUNCTION__ << fileName;
     radDataWidget * w = new radDataWidget();
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
-    QFile fData (fileName);
+    QFile * fData = new QFile (fileName);
     double * st = new double [nd2];
     complex<long double> * stc = new complex<long double> [nd];
     complex<long double> * stc1 = new complex<long double> [nd];
@@ -58,8 +63,35 @@ void RadMainWindow :: openDataFile (void)
         stc1[i] = complex<long double> (0.0, 0.0);
     }
     int a = 0;
+
+    //FILE * fid5 = fopen (fileName.toUtf8().data(), "rb");
+    qDebug () << __PRETTY_FUNCTION__ << fileName.toUtf8().constData();// << fid5;
+    //if (!fid5)
+    //{
+    //    qDebug () << __PRETTY_FUNCTION__ << errno;
+    //    return;
+    //}
+    if (!fData->open (QIODevice::ReadOnly))
+        return;
+    QDataStream stStream (fData);
     for (int i=1; i<=na; i++)
     {
+        char buf [nd2];
+        qint64 lineLength = stStream.readRawData (buf, nd2);//fData->readLine (buf, nd2);
+        if (lineLength < 0)
+        {
+            fData->close ();
+            delete fData;
+        }
+        //QByteArray bCol (buf);
+        QByteArray colBuf (buf);
+        QBuffer lBuf (&colBuf);
+        lBuf.open (QIODevice::ReadOnly);
+        QDataStream numStr (&lBuf);
+        quint64 num;
+        numStr >> num;
+        qDebug () << __PRETTY_FUNCTION__ << num;
+        //st[i-1] = num;
         //fread (st+i-1, sizeof (unsigned long), nd2, fid5);
         for (int ii=1; ii<= nd2; ii++)
             if (st[ii-1] > 128)
@@ -70,8 +102,10 @@ void RadMainWindow :: openDataFile (void)
 
         for (int ii=0; ii<ndn; ii++)
             stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
-        qDebug () << __PRETTY_FUNCTION__ << i << " " << na << endl;
+        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
+    fData->close ();
+    delete fData;
 
 
 }
