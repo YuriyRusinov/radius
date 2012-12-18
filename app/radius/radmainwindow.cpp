@@ -53,6 +53,7 @@ void RadMainWindow :: openDataFile (void)
     complex<long double> * stc = new complex<long double> [nd];
     complex<long double> * stc1 = new complex<long double> [nd];
     complex<long double> * stc4 (0);// = new complex<double> [nd];
+    Q_UNUSED (stc4);
     for (int i=0; i<nd2; i++)
     {
         st [i] = 0.0;
@@ -63,34 +64,50 @@ void RadMainWindow :: openDataFile (void)
         stc1[i] = complex<long double> (0.0, 0.0);
     }
     int a = 0;
+    Q_UNUSED (a);
 
-    //FILE * fid5 = fopen (fileName.toUtf8().data(), "rb");
     qDebug () << __PRETTY_FUNCTION__ << fileName.toUtf8().constData();// << fid5;
-    //if (!fid5)
-    //{
-    //    qDebug () << __PRETTY_FUNCTION__ << errno;
-    //    return;
-    //}
     if (!fData->open (QIODevice::ReadOnly))
         return;
-    QDataStream stStream (fData);
+    QByteArray dataFromRep;
+//    QDataStream stStream (fData);
     for (int i=1; i<=na; i++)
     {
-        char buf [nd2];
-        qint64 lineLength = stStream.readRawData (buf, nd2);//fData->readLine (buf, nd2);
-        if (lineLength < 0)
+        char * colData = new char [nd2*sizeof (unsigned long)];
+        qint64 colLength = fData->readLine (colData, nd2*sizeof (unsigned long));
+        if (colLength < 0)
         {
-            fData->close ();
-            delete fData;
+            qDebug () << __PRETTY_FUNCTION__ << QString ("Read error");
+            continue;
         }
-        //QByteArray bCol (buf);
-        QByteArray colBuf (buf);
-        QBuffer lBuf (&colBuf);
+        QByteArray buff (colData);
+        delete [] colData;
+        //qDebug () << __PRETTY_FUNCTION__ << i << buff;
+
+        QBuffer lBuf (&buff);
         lBuf.open (QIODevice::ReadOnly);
         QDataStream numStr (&lBuf);
+/*        for (int ii=0; ii<nd2; ii++)
+        {
+            char * sNum = new char [sizeof (unsigned long)];
+            int lNum = numStr.readRawData (sNum, sizeof (unsigned long));
+            if (lNum < 0)
+                break;
+            QString strNum (sNum);
+            bool ok;
+            unsigned long num = strNum.toULong (&ok);
+            //qDebug () << __PRETTY_FUNCTION__ << num << ok;
+            st[ii] = num;
+        }
+*/
         quint64 num;
-        numStr >> num;
-        qDebug () << __PRETTY_FUNCTION__ << num;
+        for (int ii=0; ii<nd2; ii++)
+        {
+            numStr >> num;
+            qDebug () << __PRETTY_FUNCTION__ << num;
+            st[ii] = num;
+        }
+
         //st[i-1] = num;
         //fread (st+i-1, sizeof (unsigned long), nd2, fid5);
         for (int ii=1; ii<= nd2; ii++)

@@ -109,7 +109,11 @@ int main (int argc, char* argv[])
             st[ii-1] = 0.0;
 
         for (int ii=0; ii<ndn; ii++)
+        {
             stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
+            cout << st[2*ii] << " " << st[2*ii+1] << " ";
+        }
+        cout << endl;
         cout << i << " " << na << endl;
     }
 
