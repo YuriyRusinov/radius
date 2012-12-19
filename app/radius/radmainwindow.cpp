@@ -48,7 +48,7 @@ void RadMainWindow :: openDataFile (void)
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
-    QFile * fData = new QFile (fileName);
+    QFile fData (fileName);
     double * st = new double [nd2];
     complex<long double> * stc = new complex<long double> [nd];
     complex<long double> * stc1 = new complex<long double> [nd];
@@ -66,40 +66,31 @@ void RadMainWindow :: openDataFile (void)
     int a = 0;
     Q_UNUSED (a);
 
-    qDebug () << __PRETTY_FUNCTION__ << fileName.toUtf8().constData();// << fid5;
-    if (!fData->open (QIODevice::ReadOnly))
+    FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
+    qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
+    if (!fData.open (QIODevice::ReadOnly | QIODevice::Unbuffered))
         return;
-    QByteArray dataFromRep;
-//    QDataStream stStream (fData);
+    QByteArray dataFromRep;// = fData.readAll ();
+//    qDebug () << __PRETTY_FUNCTION__ << dataFromRep.size();
+    QDataStream stStream (&fData);
     for (int i=1; i<=na; i++)
     {
         char * colData = new char [nd2*sizeof (unsigned long)];
-        qint64 colLength = fData->readLine (colData, nd2*sizeof (unsigned long));
-        if (colLength < 0)
+        qint64 colLength;// = nd2*sizeof (unsigned long);
+        //stStream.readBytes (colData, colLength);
+        colLength = fData.read (colData, nd2*sizeof (unsigned long));
+        if (colLength <= 0)
         {
-            qDebug () << __PRETTY_FUNCTION__ << QString ("Read error");
-            continue;
+            qDebug () << __PRETTY_FUNCTION__ << i << QString ("Read error");
+            return;
         }
         QByteArray buff (colData);
         delete [] colData;
-        //qDebug () << __PRETTY_FUNCTION__ << i << buff;
-
+//        qDebug () << __PRETTY_FUNCTION__ << i << buff;
+/*
         QBuffer lBuf (&buff);
         lBuf.open (QIODevice::ReadOnly);
         QDataStream numStr (&lBuf);
-/*        for (int ii=0; ii<nd2; ii++)
-        {
-            char * sNum = new char [sizeof (unsigned long)];
-            int lNum = numStr.readRawData (sNum, sizeof (unsigned long));
-            if (lNum < 0)
-                break;
-            QString strNum (sNum);
-            bool ok;
-            unsigned long num = strNum.toULong (&ok);
-            //qDebug () << __PRETTY_FUNCTION__ << num << ok;
-            st[ii] = num;
-        }
-*/
         quint64 num;
         for (int ii=0; ii<nd2; ii++)
         {
@@ -119,11 +110,10 @@ void RadMainWindow :: openDataFile (void)
 
         for (int ii=0; ii<ndn; ii++)
             stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
+*/
         qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
-    fData->close ();
-    delete fData;
-
+    fData.close ();
 
 }
 
