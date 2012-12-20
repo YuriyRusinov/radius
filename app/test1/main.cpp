@@ -1,3 +1,5 @@
+#define _FILE_OFFSET_BITS  64
+
 #include <iostream>
 #include <complex>
 #include <math.h>
@@ -89,9 +91,12 @@ int main (int argc, char* argv[])
         stc1[i] = complex<long double> (0.0, 0.0);
     }
 
-    FILE * fid5 = fopen ("./test_data/source.rgg", "rb");
+    FILE * fid5 = fopen ("./test_data/20\ 07\ 10\ \ 23.02.49.rgg", "rb");
     if (!fid5)
+    {
+        cout << "Cannot open data file " << errno << endl;
         return 1;
+    }
 
     FILE * fid6 = fopen ("./test_data/conv_dal1.rgg", "w+");
     if (!fid6)
@@ -111,9 +116,9 @@ int main (int argc, char* argv[])
         for (int ii=0; ii<ndn; ii++)
         {
             stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
-            cout << st[2*ii] << " " << st[2*ii+1] << " ";
+            //cout << st[2*ii] << " " << st[2*ii+1] << " ";
         }
-        cout << endl;
+        //cout << endl;
         cout << i << " " << na << endl;
     }
 
@@ -151,6 +156,7 @@ int main (int argc, char* argv[])
         stc2[2*i+1] = imag (stc3[i]);
     }
     size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
+    cout << h << endl;
     a++;
 
     fclose (fid6);

@@ -8,7 +8,10 @@
 #include <QMdiSubWindow>
 #include <QIODevice>
 #include <QDataStream>
+#include <QKeySequence>
 #include <QBuffer>
+#include <QAbstractItemModel>
+#include <QStandardItemModel>
 
 #include <radDataWidget.h>
 #include <constants1.h>
@@ -46,9 +49,8 @@ void RadMainWindow :: openDataFile (void)
 
     radDataWidget * w = new radDataWidget();
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
-    w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
-    QFile fData (fileName);
+//    QFile fData (fileName);
     double * st = new double [nd2];
     complex<long double> * stc = new complex<long double> [nd];
     complex<long double> * stc1 = new complex<long double> [nd];
@@ -68,39 +70,17 @@ void RadMainWindow :: openDataFile (void)
 
     FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
     qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
-    if (!fData.open (QIODevice::ReadOnly | QIODevice::Unbuffered))
+    QAbstractItemModel * radModel = new QStandardItemModel (w);// (nd2, na);
+    bool isRowsInserted = radModel->insertRows (0, nd2);
+    if (!isRowsInserted)
         return;
-    QByteArray dataFromRep;// = fData.readAll ();
-//    qDebug () << __PRETTY_FUNCTION__ << dataFromRep.size();
-    QDataStream stStream (&fData);
+    bool isColInserted = radModel->insertColumns (0, na);
+    if (!isColInserted)
+        return;
+
     for (int i=1; i<=na; i++)
     {
-        char * colData = new char [nd2*sizeof (unsigned long)];
-        qint64 colLength;// = nd2*sizeof (unsigned long);
-        //stStream.readBytes (colData, colLength);
-        colLength = fData.read (colData, nd2*sizeof (unsigned long));
-        if (colLength <= 0)
-        {
-            qDebug () << __PRETTY_FUNCTION__ << i << QString ("Read error");
-            return;
-        }
-        QByteArray buff (colData);
-        delete [] colData;
-//        qDebug () << __PRETTY_FUNCTION__ << i << buff;
-/*
-        QBuffer lBuf (&buff);
-        lBuf.open (QIODevice::ReadOnly);
-        QDataStream numStr (&lBuf);
-        quint64 num;
-        for (int ii=0; ii<nd2; ii++)
-        {
-            numStr >> num;
-            qDebug () << __PRETTY_FUNCTION__ << num;
-            st[ii] = num;
-        }
-
-        //st[i-1] = num;
-        //fread (st+i-1, sizeof (unsigned long), nd2, fid5);
+        fread (st, sizeof (quint8), nd2, fid5);
         for (int ii=1; ii<= nd2; ii++)
             if (st[ii-1] > 128)
                 st[ii-1] -= 256;
@@ -109,11 +89,22 @@ void RadMainWindow :: openDataFile (void)
             st[ii-1] = 0.0;
 
         for (int ii=0; ii<ndn; ii++)
-            stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
-*/
+        {
+            double re = st[2*ii];
+            double im = st[2*ii+1];
+            stc[ii] = complex<long double> (re, im);//st[2*ii], st[2*ii+1]);
+
+            QModelIndex stReInd = radModel->index (2*ii, i);
+            //radModel->setData (stReInd, QString::number (re), Qt::DisplayRole);
+            QModelIndex stImInd = radModel->index (2*ii+1, i);
+            //radModel->setData (stImInd, QString::number (im), Qt::DisplayRole);
+        }
         qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
-    fData.close ();
+
+    w->setModel (radModel);
+    //fData.close ();
+    w->show ();
 
 }
 
@@ -123,9 +114,13 @@ void RadMainWindow :: init (void)
     UI->menuFile->addMenu (openMenu);
 
     QAction * actOpenDataFile = openMenu->addAction (tr("Open &source file"));
+    QKeySequence keyOpen (tr("Ctrl+O", "File|Open"));
+    actOpenDataFile->setShortcut (keyOpen);
     connect (actOpenDataFile, SIGNAL (triggered()), this, SLOT (openDataFile()) );
 
     UI->menuFile->addSeparator ();
-    QAction * actExit = UI->menuFile->addAction (tr("E&xit"));
-    connect (actExit, SIGNAL (triggered()), this, SLOT (close()) );
+    QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
+    QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
+    actQuit->setShortcut (keyQuit);
+    connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
 }
