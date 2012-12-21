@@ -1,5 +1,6 @@
 #include <QTreeView>
 #include <QAbstractItemModel>
+#include <QStandardItemModel>
 #include <QGridLayout>
 #include <QtDebug>
 
@@ -7,23 +8,24 @@
 
 radDataWidget :: radDataWidget (QWidget * parent, Qt::WindowFlags flags)
     : QWidget (parent, flags),
-    tvData (new QTreeView)
+    tvData (new QTreeView (this))
 {
+    setWindowTitle (tr("Source matrix"));
     QGridLayout * gLay = new QGridLayout (this);
-    gLay->addWidget (tvData);
-    tvData->setModel (0);
+    gLay->addWidget (tvData, 0, 0, 1, 1);
 }
 
 radDataWidget :: ~radDataWidget (void)
 {
-    delete tvData;
 }
 
 void radDataWidget :: setModel (QAbstractItemModel * mod)
 {
     QAbstractItemModel * oldModel = tvData->model ();
-    qDebug () << __PRETTY_FUNCTION__ << oldModel;
+    qDebug () << __PRETTY_FUNCTION__ << mod << oldModel;
     tvData->setModel (mod);
-    if (oldModel && oldModel != mod)
+    qDebug () << __PRETTY_FUNCTION__ << mod << tr("Model was set");
+/*    if (oldModel && oldModel != mod)
         delete oldModel;
+*/
 }

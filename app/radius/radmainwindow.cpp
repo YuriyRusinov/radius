@@ -48,14 +48,13 @@ void RadMainWindow :: openDataFile (void)
         return;
 
     radDataWidget * w = new radDataWidget();
-    QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
-    subW->setAttribute (Qt::WA_DeleteOnClose);
-//    QFile fData (fileName);
+/*    QFile fData (fileName);
     double * st = new double [nd2];
     complex<long double> * stc = new complex<long double> [nd];
     complex<long double> * stc1 = new complex<long double> [nd];
     complex<long double> * stc4 (0);// = new complex<double> [nd];
     Q_UNUSED (stc4);
+
     for (int i=0; i<nd2; i++)
     {
         st [i] = 0.0;
@@ -70,17 +69,20 @@ void RadMainWindow :: openDataFile (void)
 
     FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
     qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
-    QAbstractItemModel * radModel = new QStandardItemModel (w);// (nd2, na);
-    bool isRowsInserted = radModel->insertRows (0, nd2);
-    if (!isRowsInserted)
+    if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
         return;
-    bool isColInserted = radModel->insertColumns (0, na);
-    if (!isColInserted)
-        return;
-
+*/
+    QAbstractItemModel * radModel = new QStandardItemModel (nd2, na, 0);// (nd2, na);
+/*
+    QFile fContData (QString ("cont_data.dat"));
+    fContData.open (QIODevice::WriteOnly);
+    QTextStream stCont (&fContData);
     for (int i=1; i<=na; i++)
     {
         fread (st, sizeof (quint8), nd2, fid5);
+        if (i == 1)
+            for (int ii=0; ii < nd2; ii++)
+                stCont << st[ii] << " \n";
         for (int ii=1; ii<= nd2; ii++)
             if (st[ii-1] > 128)
                 st[ii-1] -= 256;
@@ -99,13 +101,17 @@ void RadMainWindow :: openDataFile (void)
             QModelIndex stImInd = radModel->index (2*ii+1, i);
             //radModel->setData (stImInd, QString::number (im), Qt::DisplayRole);
         }
-        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
+//        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
 
+    fContData.close();
+*/
     w->setModel (radModel);
-    //fData.close ();
-    w->show ();
-
+//    fData.close ();
+    QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
+    subW->show ();
+    //subW->setAttribute (Qt::WA_DeleteOnClose);
+    Q_UNUSED (subW);
 }
 
 void RadMainWindow :: init (void)
