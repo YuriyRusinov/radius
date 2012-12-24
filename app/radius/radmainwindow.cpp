@@ -12,6 +12,7 @@
 #include <QBuffer>
 #include <QAbstractItemModel>
 #include <QStandardItemModel>
+#include <QTreeView>
 
 #include <radDataWidget.h>
 #include <constants1.h>
@@ -48,8 +49,8 @@ void RadMainWindow :: openDataFile (void)
         return;
 
     radDataWidget * w = new radDataWidget();
-/*    QFile fData (fileName);
-    double * st = new double [nd2];
+    QFile fData (fileName);
+    quint8 * st = new quint8 [nd2];
     complex<long double> * stc = new complex<long double> [nd];
     complex<long double> * stc1 = new complex<long double> [nd];
     complex<long double> * stc4 (0);// = new complex<double> [nd];
@@ -57,7 +58,7 @@ void RadMainWindow :: openDataFile (void)
 
     for (int i=0; i<nd2; i++)
     {
-        st [i] = 0.0;
+        st [i] = 0;
     }
     for (int i=0; i<nd; i++)
     {
@@ -71,15 +72,18 @@ void RadMainWindow :: openDataFile (void)
     qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
     if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
         return;
-*/
-    QAbstractItemModel * radModel = new QStandardItemModel (nd2, na, 0);// (nd2, na);
-/*
+
+    qDebug () << __PRETTY_FUNCTION__ << (int)na;
+    QAbstractItemModel * radModel = new QStandardItemModel (nd2, 2, 0);// (nd2, na);
+
     QFile fContData (QString ("cont_data.dat"));
     fContData.open (QIODevice::WriteOnly);
     QTextStream stCont (&fContData);
     for (int i=1; i<=na; i++)
     {
-        fread (st, sizeof (quint8), nd2, fid5);
+        int cr = fread (st, sizeof (quint8), nd2, fid5);
+        if (cr <= 0)
+            return;
         if (i == 1)
             for (int ii=0; ii < nd2; ii++)
                 stCont << st[ii] << " \n";
@@ -96,22 +100,23 @@ void RadMainWindow :: openDataFile (void)
             double im = st[2*ii+1];
             stc[ii] = complex<long double> (re, im);//st[2*ii], st[2*ii+1]);
 
-            QModelIndex stReInd = radModel->index (2*ii, i);
-            //radModel->setData (stReInd, QString::number (re), Qt::DisplayRole);
-            QModelIndex stImInd = radModel->index (2*ii+1, i);
-            //radModel->setData (stImInd, QString::number (im), Qt::DisplayRole);
+            if (i <= 2)
+            {
+                QModelIndex stReInd = radModel->index (2*ii, i-1);
+                radModel->setData (stReInd, QString::number (re), Qt::DisplayRole);
+                QModelIndex stImInd = radModel->index (2*ii+1, i-1);
+                radModel->setData (stImInd, QString::number (im), Qt::DisplayRole);
+            }
         }
 //        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
 
     fContData.close();
-*/
     w->setModel (radModel);
-//    fData.close ();
+    fData.close ();
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
-    subW->show ();
-    //subW->setAttribute (Qt::WA_DeleteOnClose);
-    Q_UNUSED (subW);
+    w->show ();
+    subW->setAttribute (Qt::WA_DeleteOnClose);
 }
 
 void RadMainWindow :: init (void)
