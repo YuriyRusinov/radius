@@ -3,12 +3,17 @@
 
 #include <QMainWindow>
 
+#include <complex>
+
 class QMdiArea;
+class QAction;
 
 namespace Ui
 {
     class Rad_Main_Window; 
 };
+
+using std::complex;
 
 class RadMainWindow : public QMainWindow
 {
@@ -18,6 +23,8 @@ public:
 
 private slots:
     void openDataFile (void);
+    void slotTest1 (void);
+    void slotTest2 (void);
 
 private:
     //
@@ -31,6 +38,15 @@ private:
     //
     Ui::Rad_Main_Window * UI;
     QMdiArea * m_mdiArea;
+
+    QAction * actCalc1;
+    QAction * actCalc2;
+
+    complex<long double> * stc;// = new complex<long double> [nd];
+    complex<long double> * stc1;/// = new complex<long double> [nd];
+    long double * stc2;
+    complex<long double> * stc3;
+    complex<long double> * stc4;// = new complex<double> [nd];
 private:
     Q_OBJECT
 };

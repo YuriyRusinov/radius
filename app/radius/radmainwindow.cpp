@@ -17,28 +17,42 @@
 #include <radDataWidget.h>
 #include <constants1.h>
 
-#include <complex>
 #include <math.h>
 #include <stdio.h>
+#include <fftw3.h>
+
+#include "fft_c.h"
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
 
-using std::complex;
-
 RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     : QMainWindow (parent, flags),
-    UI (new Ui::Rad_Main_Window)
+    UI (new Ui::Rad_Main_Window),
+    m_mdiArea (new QMdiArea (this)),
+    actCalc1 (new QAction (tr("Calculate&1"), this)),
+    actCalc2 (new QAction (tr("Calculate&2"), this)),
+    stc (new complex<long double> [nd]),
+    stc1 (new complex<long double> [nd]),
+    stc2 (new long double [2*nd]),
+    stc3 (0),
+    stc4 (0)
 {
     UI->setupUi (this);
 
-    m_mdiArea = new QMdiArea (this);
     setCentralWidget (m_mdiArea);
     init ();
 }
 
 RadMainWindow :: ~RadMainWindow (void)
 {
+    delete [] stc2;
+    delete [] stc1;
+    delete [] stc;
+    if (stc3)
+        delete [] stc3;
+    if (stc4)
+        delete [] stc4;
 }
 
 void RadMainWindow :: openDataFile (void)
@@ -51,10 +65,6 @@ void RadMainWindow :: openDataFile (void)
     radDataWidget * w = new radDataWidget();
     QFile fData (fileName);
     quint8 * st = new quint8 [nd2];
-    complex<long double> * stc = new complex<long double> [nd];
-    complex<long double> * stc1 = new complex<long double> [nd];
-    complex<long double> * stc4 (0);// = new complex<double> [nd];
-    Q_UNUSED (stc4);
 
     for (int i=0; i<nd2; i++)
     {
@@ -117,6 +127,8 @@ void RadMainWindow :: openDataFile (void)
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
+    delete [] st;
+    actCalc1->setEnabled (true);
 }
 
 void RadMainWindow :: init (void)
@@ -134,4 +146,63 @@ void RadMainWindow :: init (void)
     QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
     actQuit->setShortcut (keyQuit);
     connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
+
+    QMenu * calcMenu = new QMenu (tr ("&Calculate"), this);
+    UI->menuBar->addMenu (calcMenu);
+
+    calcMenu->addAction (actCalc1);
+    connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
+    actCalc1->setEnabled (false);
+
+    calcMenu->addAction (actCalc2);
+    connect (actCalc2, SIGNAL (triggered()), this, SLOT (slotTest2()) );
+    actCalc2->setEnabled (false);
+}
+
+void RadMainWindow :: slotTest1 (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+    double * st1 = new double [nd];
+    complex<long double> * opor = new complex<long double> [nd];
+    complex<long double> * opor2 = new complex<long double> [nd];
+
+    for (int i=0; i<nd; i++)
+    {
+        st1[i] = 0.0;
+        opor[i] = complex<long double>(0.0, 0.0);
+        opor2[i] = complex<long double>(0.0, 0.0);
+    }
+
+    for (int n=1; n<= N1; n++)
+    {
+        double phase = pi*fsp*(n-1)*(n-1)/(N1*fcvant2) - pi*fsp*(n-1)/fcvant2 ; 
+        double oc = cos (phase);
+        double os = sin (phase);
+        opor[n-1] = complex<long double>(oc, os);
+    }
+    int N2 = (N1/2);
+    for (int i=1; i<=N2; i++)
+    {
+        opor2[i] = opor[i+N2];
+        opor2[i+nd-N2] = opor[i];
+    }
+
+    FFT_Transform fft;// = new FFT_Transform;
+    opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
+    stc4 = fft (stc, ndn, 2*nd, FFTW_FORWARD, FFTW_ESTIMATE);
+    for (int i=0; i<nd; i++)
+    {
+        stc1[i] = stc4[i]*opor[i];///(nd*nd);
+        stc1[i] = complex<long double> (real (stc1[i]) / ((long double)nd*nd), imag (stc1[i]) / ((long double)nd*nd));
+    }
+    delete [] opor;
+    delete [] st1;
+
+
+    actCalc2->setEnabled (true);
+}
+
+void RadMainWindow :: slotTest2 (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
 }
