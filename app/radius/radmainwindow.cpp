@@ -197,8 +197,22 @@ void RadMainWindow :: slotTest1 (void)
     }
     delete [] opor;
     delete [] st1;
+    stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
+    for (int i=0; i<nd; i++)
+    {
+        stc2[2*i] = real (stc3[i]);
+        stc2[2*i+1] = imag (stc3[i]);
+    }
 
-
+    QString fileOutName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
+    if (fileOutName.isEmpty())
+        return;
+    FILE * fid6 = fopen (fileOutName.toAscii().constData(), "wb");
+    if (!fid6)
+        return;
+    size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
+    qDebug () << __PRETTY_FUNCTION__ << h;
+    fclose (fid6);
     actCalc2->setEnabled (true);
 }
 
