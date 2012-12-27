@@ -18,7 +18,7 @@ const int ndrazmer (256);
 const int ndv = ndcentre - ndrazmer/2;
 const int ndn2 = ndcentre + ndrazmer/2;
 
-const int ndrz = ndn - ndv;
+const int ndrz = ndn2 - ndv;
 
 const int na2 (16384);
 const int nas (8192);

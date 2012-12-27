@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <fftw3.h>
 
+#include "matrix.h"
 #include "fft_c.h"
 
 #include "radmainwindow.h"
@@ -141,6 +142,9 @@ void RadMainWindow :: init (void)
     actOpenDataFile->setShortcut (keyOpen);
     connect (actOpenDataFile, SIGNAL (triggered()), this, SLOT (openDataFile()) );
 
+    QAction * actOpenConvFile = openMenu->addAction (tr("Open &convolution file"));
+    connect (actOpenConvFile, SIGNAL (triggered()), this, SLOT (openConvFile()) );
+
     UI->menuFile->addSeparator ();
     QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
     QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
@@ -207,6 +211,7 @@ void RadMainWindow :: slotTest1 (void)
     QString fileOutName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
     if (fileOutName.isEmpty())
         return;
+
     FILE * fid6 = fopen (fileOutName.toAscii().constData(), "wb");
     if (!fid6)
         return;
@@ -216,7 +221,85 @@ void RadMainWindow :: slotTest1 (void)
     actCalc2->setEnabled (true);
 }
 
+void RadMainWindow :: openConvFile (void)
+{
+    actCalc2->setEnabled (true);
+}
+
 void RadMainWindow :: slotTest2 (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+    QString fileName = QFileDialog::getOpenFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
+    if (fileName.isEmpty())
+        return;
+
+    FILE * fid6 = fopen (fileName.toAscii().constData(), "rb");
+    if (!fid6)
+        return;
+    qDebug () << __PRETTY_FUNCTION__ << fid6;
+    int h1 = fseek (fid6, nd*8*na_ots, SEEK_SET);
+    if (h1 < 0)
+    {
+        fclose (fid6);
+        return;
+    }
+    int read (0);
+    CMatrix rgg1 (0.0, ndrz, na2);
+    for (int i=0; i<na2; i++)
+    {
+        long double stlb[2*nd];
+        long double stlb2[ndrz*2];
+        fread (stlb, 32, nd*2, fid6);
+        for (int j=0; j<ndrz*2;j++)
+            stlb2[j]=stlb[j+2*ndv];
+        for (int j=0; j<ndrz;j++)
+            rgg1(j, i) = complex<long double>(stlb2[2*j], stlb2[2*j+1]);
+        //qDebug () << __PRETTY_FUNCTION__ << i << na2;
+        read++;
+    }
+    CMatrix rgg  (0.0, ndrz, na2);
+    qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set");
+
+    CMatrix corf (complex<long double>(0.0), ndrz, na2);
+    CMatrix corf2 (complex<long double>(0.0), ndrz, na2);
+    CMatrix corf3 (complex<long double>(0.0), ndrz, nas);
+    int from_opor (0);
+    for (int i=0; i<ndrz; i++)
+    {
+        for (int j=0; j<nas; j++)
+        {
+            double x = (-nas/2+i)*dx;
+            double rt = sqrt (r*r+x*x+h*h);
+            double rt1 = rt - sqrt (r*r+h*h);
+            int N0 = (int)(rt1/dnr);
+            double phase = -4*pi*rt/lamp;
+            corf3(N0, i) = complex<long double>(cos(phase), sin(phase));
+        }
+        from_opor++;
+    }
+
+    int cor_func (0);
+    for (int i=0; i<nas/2; i++)
+    {
+        for (int j=0; j<ndrz; j++)
+        {
+            corf(j, i) = corf3(j, i+nas/2);
+            corf(j, i+na2-nas/2) = corf3 (j, i);
+        }
+        cor_func++;
+    }
+
+    FFT2_Transform fft2;// = new FFT2_Transform;
+    complex<long double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<long double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    int cor_volfr (0);
+    for (int i=0; i<na2; i++)
+    {
+        for (int j=0; j<ndrz; j++)
+            rgg(j, i) *= conj (corf2(j, i));
+        cor_volfr++;
+    }
+    complex<long double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+
+    fclose (fid6);
 }
