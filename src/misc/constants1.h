@@ -24,8 +24,8 @@ const int na2 (16384);
 const int nas (8192);
 const int na_ots (3000);
 
-const long double r (5396);
-const long double h (3964);
+const long double R (5396);
+const long double H (3964);
 
 const long double dx (0.058);
 const long double lamp (0.03450);

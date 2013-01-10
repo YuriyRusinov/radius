@@ -13,10 +13,15 @@
 #include <QAbstractItemModel>
 #include <QStandardItemModel>
 #include <QTreeView>
+#include <QPixmap>
+#include <QLabel>
+#include <QWidget>
+#include <QHBoxLayout>
 
 #include <radDataWidget.h>
 #include <constants1.h>
 
+#include <complex>
 #include <math.h>
 #include <stdio.h>
 #include <fftw3.h>
@@ -26,6 +31,8 @@
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
+
+using std::complex;
 
 RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     : QMainWindow (parent, flags),
@@ -224,6 +231,7 @@ void RadMainWindow :: slotTest1 (void)
 void RadMainWindow :: openConvFile (void)
 {
     actCalc2->setEnabled (true);
+    slotTest2 ();
 }
 
 void RadMainWindow :: slotTest2 (void)
@@ -269,11 +277,12 @@ void RadMainWindow :: slotTest2 (void)
         for (int j=0; j<nas; j++)
         {
             double x = (-nas/2+i)*dx;
-            double rt = sqrt (r*r+x*x+h*h);
-            double rt1 = rt - sqrt (r*r+h*h);
+            double rt = sqrt (R*R+x*x+H*H);
+            double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamp;
             corf3(N0, i) = complex<long double>(cos(phase), sin(phase));
+            qDebug () << __PRETTY_FUNCTION__ << x << phase << (double)real (corf3(N0, i)) << (double)imag (corf3(N0, i));
         }
         from_opor++;
     }
@@ -291,6 +300,12 @@ void RadMainWindow :: slotTest2 (void)
 
     FFT2_Transform fft2;// = new FFT2_Transform;
     complex<long double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+/*    for (int i=0; i<ndrz*nas/2; i++)
+    {
+        long double xr = real (corf3.getData()[i]);
+        long double yr = imag (corf3.getData()[i]);
+        qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
+    }*/
     complex<long double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
     int cor_volfr (0);
     for (int i=0; i<na2; i++)
@@ -300,6 +315,23 @@ void RadMainWindow :: slotTest2 (void)
         cor_volfr++;
     }
     complex<long double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
+    QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
+    uchar * imData = new uchar [ndrz*nas/2];
+    for (int i=0; i<ndrz*nas/2; i++)
+    {
+        imData[i] = abs (rggBD[i])*8000;
+        //qDebug () << __PRETTY_FUNCTION__ << i << imData[i];
+    }
+    bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
+    qDebug () << __PRETTY_FUNCTION__ << isLoaded;
+    QPixmap pIm = QPixmap::fromImage (*hIm);
+    QLabel * lIm = new QLabel ;
+    QWidget * wImage = new QWidget;
+    QHBoxLayout * hImLay = new QHBoxLayout (wImage);
+    lIm->setPixmap (pIm);
+    hImLay->addWidget (lIm);
+    m_mdiArea->addSubWindow (wImage);
 
     fclose (fid6);
 }
