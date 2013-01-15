@@ -209,10 +209,13 @@ void RadMainWindow :: slotTest1 (void)
     delete [] opor;
     delete [] st1;
     stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
+    long double * stc2abs = new long double [nd];
     for (int i=0; i<nd; i++)
     {
         stc2[2*i] = real (stc3[i]);
         stc2[2*i+1] = imag (stc3[i]);
+        stc2abs[i] = sqrt (stc2[2*i]*stc2[2*i] + stc2[2*i+1]*stc2[2*i+1]);
+        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
     }
 
     QString fileOutName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
@@ -223,8 +226,25 @@ void RadMainWindow :: slotTest1 (void)
     if (!fid6)
         return;
     size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
+    radDataWidget * w = new radDataWidget();
+    QAbstractItemModel * radCModel = new QStandardItemModel (nd, 3, 0);// (nd2, na);
+    for (int i=0; i<nd; i++)
+    {
+        QModelIndex wIndex = radCModel->index (i, 0);
+        radCModel->setData (wIndex, (double)stc2[2*i], Qt::DisplayRole);
+        wIndex = radCModel->index (i, 1);
+        radCModel->setData (wIndex, (double)stc2[2*i+1], Qt::DisplayRole);
+        wIndex = radCModel->index (i, 2);
+        radCModel->setData (wIndex, (double)stc2abs[i], Qt::DisplayRole);
+    }
+    w->setModel (radCModel);
+    QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
+    w->show ();
+    subW->setAttribute (Qt::WA_DeleteOnClose);
+
     qDebug () << __PRETTY_FUNCTION__ << h;
     fclose (fid6);
+    delete [] stc2abs;
     actCalc2->setEnabled (true);
 }
 
@@ -300,6 +320,7 @@ void RadMainWindow :: slotTest2 (void)
 
     FFT2_Transform fft2;// = new FFT2_Transform;
     complex<long double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    Q_UNUSED (corfw);
 /*    for (int i=0; i<ndrz*nas/2; i++)
     {
         long double xr = real (corf3.getData()[i]);
@@ -307,6 +328,7 @@ void RadMainWindow :: slotTest2 (void)
         qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
     }*/
     complex<long double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    Q_UNUSED (rggD);
     int cor_volfr (0);
     for (int i=0; i<na2; i++)
     {
