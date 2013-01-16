@@ -206,7 +206,6 @@ void RadMainWindow :: slotTest1 (void)
         stc1[i] = stc4[i]*opor[i];///(nd*nd);
         stc1[i] = complex<long double> (real (stc1[i]) / ((long double)nd*nd), imag (stc1[i]) / ((long double)nd*nd));
     }
-    delete [] opor;
     delete [] st1;
     stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
     long double * stc2abs = new long double [nd];
@@ -228,15 +227,19 @@ void RadMainWindow :: slotTest1 (void)
     size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
     radDataWidget * w = new radDataWidget();
     QAbstractItemModel * radCModel = new QStandardItemModel (nd, 3, 0);// (nd2, na);
+    radCModel->setHeaderData (0, Qt::Horizontal, QString("Real"), Qt::DisplayRole);
+    radCModel->setHeaderData (1, Qt::Horizontal, QString("Image"), Qt::DisplayRole);
+    radCModel->setHeaderData (2, Qt::Horizontal, QString("Module"), Qt::DisplayRole);
     for (int i=0; i<nd; i++)
     {
         QModelIndex wIndex = radCModel->index (i, 0);
-        radCModel->setData (wIndex, (double)stc2[2*i], Qt::DisplayRole);
+        radCModel->setData (wIndex, (double)(stc2[2*i]), Qt::DisplayRole);
         wIndex = radCModel->index (i, 1);
-        radCModel->setData (wIndex, (double)stc2[2*i+1], Qt::DisplayRole);
+        radCModel->setData (wIndex, (double)(stc2[2*i+1]), Qt::DisplayRole);
         wIndex = radCModel->index (i, 2);
         radCModel->setData (wIndex, (double)stc2abs[i], Qt::DisplayRole);
     }
+    delete [] opor;
     w->setModel (radCModel);
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
     w->show ();

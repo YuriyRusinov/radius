@@ -1,3 +1,5 @@
+#include <QtDebug>
+
 #include "fft_c.h"
 
 FFT_Transform :: FFT_Transform (void)
@@ -29,6 +31,10 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
     //fftwl_complex * out = (fftwl_complex*) fftwl_malloc (sizeof(fftwl_complex) * n2);
     p = fftwl_plan_dft_1d (n2, reinterpret_cast<fftwl_complex*>(in), reinterpret_cast<fftwl_complex*>(res), sign, flags);
     fftwl_execute (p);
+    for (int i=0; i<n2; i++)
+    {
+        qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
+    }
     fftwl_destroy_plan (p);
     return res;
 }

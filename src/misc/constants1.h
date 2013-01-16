@@ -10,7 +10,7 @@ const double fsp = 0.3e9;
 const double dnr = 0.375;
 const double fcvant2 = c/(0.2e1*dnr);
 const double dimp = 10.0*0.1e-6;
-const int N1 = (int)dimp*fcvant2;
+const int N1 = (int)(dimp*fcvant2);
 const double pi (3.14159265358979);
 const int ndcentre (6178);
 const int ndrazmer (256);
