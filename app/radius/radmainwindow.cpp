@@ -214,7 +214,7 @@ void RadMainWindow :: slotTest1 (void)
         stc2[2*i] = real (stc3[i]);
         stc2[2*i+1] = imag (stc3[i]);
         stc2abs[i] = sqrt (stc2[2*i]*stc2[2*i] + stc2[2*i+1]*stc2[2*i+1]);
-        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
+//        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
     }
 
     QString fileOutName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
@@ -224,6 +224,7 @@ void RadMainWindow :: slotTest1 (void)
     FILE * fid6 = fopen (fileOutName.toAscii().constData(), "wb");
     if (!fid6)
         return;
+    qDebug () << __PRETTY_FUNCTION__ << sizeof (long double);
     size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
     radDataWidget * w = new radDataWidget();
     QAbstractItemModel * radCModel = new QStandardItemModel (nd, 3, 0);// (nd2, na);
