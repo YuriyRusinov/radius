@@ -126,8 +126,8 @@ long double * Calc2 :: operator () (const double* stlb, int nd2)
         for (int j=0; j<nas; j++)
         {
             double x = (-nas/2+i)*dx;
-            double rt = sqrt (r*r+x*x+h*h);
-            double rt1 = rt - sqrt (r*r+h*h);
+            double rt = sqrt (R*R+x*x+H*H);
+            double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamp;
             corf3(N0, i) = complex<long double>(cos(phase), sin(phase));
@@ -148,6 +148,7 @@ long double * Calc2 :: operator () (const double* stlb, int nd2)
 
     FFT2_Transform fft2;// = new FFT2_Transform;
     complex<long double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+//    Q_UNUSED (corfw);
     complex<long double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
     int cor_volfr (0);
     for (int i=0; i<na; i++)
