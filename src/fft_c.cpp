@@ -12,6 +12,8 @@ FFT_Transform :: ~FFT_Transform (void)
 
 complex<long double> * FFT_Transform :: operator () (complex<long double> * src, int nsrc, int n2, int sign, unsigned flags)
 {
+    if (n2 <=0 )
+        return 0;
     complex<long double> * res = new complex<long double> [n2];
     complex<long double> * in = new complex<long double> [n2];
 
