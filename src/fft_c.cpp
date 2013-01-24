@@ -38,6 +38,7 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
 //        qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
 //    }
     fftwl_destroy_plan (p);
+    delete [] in;
     return res;
 }
 
