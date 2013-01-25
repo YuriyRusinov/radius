@@ -39,6 +39,8 @@ private:
     //
     Ui::Rad_Main_Window * UI;
     QMdiArea * m_mdiArea;
+    QString fileName;
+    QString fileConvName;
 
     QAction * actCalc1;
     QAction * actCalc2;

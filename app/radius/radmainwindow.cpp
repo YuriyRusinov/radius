@@ -66,14 +66,52 @@ RadMainWindow :: ~RadMainWindow (void)
 void RadMainWindow :: openDataFile (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    QString fileName = QFileDialog::getOpenFileName (this, tr("Select source file"), QDir::currentPath(), tr("All files (*)"));
+    fileName = QFileDialog::getOpenFileName (this, tr("Select source file"), QDir::currentPath(), tr("All files (*)"));
+    if (fileName.isEmpty())
+        return;
+
+    actCalc1->setEnabled (true);
+}
+
+void RadMainWindow :: init (void)
+{
+    QMenu * openMenu = new QMenu (tr ("&File"), this);
+    UI->menuFile->addMenu (openMenu);
+
+    QAction * actOpenDataFile = openMenu->addAction (tr("Open &source file"));
+    QKeySequence keyOpen (tr("Ctrl+O", "File|Open"));
+    actOpenDataFile->setShortcut (keyOpen);
+    connect (actOpenDataFile, SIGNAL (triggered()), this, SLOT (openDataFile()) );
+
+    QAction * actOpenConvFile = openMenu->addAction (tr("Open &convolution file"));
+    connect (actOpenConvFile, SIGNAL (triggered()), this, SLOT (openConvFile()) );
+
+    UI->menuFile->addSeparator ();
+    QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
+    QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
+    actQuit->setShortcut (keyQuit);
+    connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
+
+    QMenu * calcMenu = new QMenu (tr ("&Calculate"), this);
+    UI->menuBar->addMenu (calcMenu);
+
+    calcMenu->addAction (actCalc1);
+    connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
+    actCalc1->setEnabled (false);
+
+    calcMenu->addAction (actCalc2);
+    connect (actCalc2, SIGNAL (triggered()), this, SLOT (slotTest2()) );
+    actCalc2->setEnabled (false);
+}
+
+void RadMainWindow :: slotTest1 (void)
+{
     if (fileName.isEmpty())
         return;
 
     radDataWidget * w = new radDataWidget();
     QFile fData (fileName);
     quint8 * st = new quint8 [nd2];
-
     for (int i=0; i<nd2; i++)
     {
         st [i] = 0;
@@ -136,42 +174,6 @@ void RadMainWindow :: openDataFile (void)
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
     delete [] st;
-    actCalc1->setEnabled (true);
-}
-
-void RadMainWindow :: init (void)
-{
-    QMenu * openMenu = new QMenu (tr ("&File"), this);
-    UI->menuFile->addMenu (openMenu);
-
-    QAction * actOpenDataFile = openMenu->addAction (tr("Open &source file"));
-    QKeySequence keyOpen (tr("Ctrl+O", "File|Open"));
-    actOpenDataFile->setShortcut (keyOpen);
-    connect (actOpenDataFile, SIGNAL (triggered()), this, SLOT (openDataFile()) );
-
-    QAction * actOpenConvFile = openMenu->addAction (tr("Open &convolution file"));
-    connect (actOpenConvFile, SIGNAL (triggered()), this, SLOT (openConvFile()) );
-
-    UI->menuFile->addSeparator ();
-    QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
-    QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
-    actQuit->setShortcut (keyQuit);
-    connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
-
-    QMenu * calcMenu = new QMenu (tr ("&Calculate"), this);
-    UI->menuBar->addMenu (calcMenu);
-
-    calcMenu->addAction (actCalc1);
-    connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
-    actCalc1->setEnabled (false);
-
-    calcMenu->addAction (actCalc2);
-    connect (actCalc2, SIGNAL (triggered()), this, SLOT (slotTest2()) );
-    actCalc2->setEnabled (false);
-}
-
-void RadMainWindow :: slotTest1 (void)
-{
     qDebug () << __PRETTY_FUNCTION__;
     double * st1 = new double [nd];
     complex<long double> * opor = new complex<long double> [nd];
@@ -197,8 +199,8 @@ void RadMainWindow :: slotTest1 (void)
         opor2[i] = opor[i+N2];
         opor2[i+nd-N2] = opor[i];
     }
-    QString fileOutName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
-    if (fileOutName.isEmpty())
+    fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
+    if (fileConvName.isEmpty())
         return;
 
     FILE * fid6 = fopen (fileOutName.toAscii().constData(), "wb");
