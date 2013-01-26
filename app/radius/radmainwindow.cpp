@@ -203,7 +203,7 @@ void RadMainWindow :: slotTest1 (void)
     if (fileConvName.isEmpty())
         return;
 
-    FILE * fid6 = fopen (fileOutName.toAscii().constData(), "wb");
+    FILE * fid6 = fopen (fileConvName.toAscii().constData(), "wb");
     if (!fid6)
         return;
 
