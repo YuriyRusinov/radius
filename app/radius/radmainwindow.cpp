@@ -211,6 +211,7 @@ void RadMainWindow :: slotTest1 (void)
     opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     stc4 = fft (stc, ndn, 2*nd, FFTW_FORWARD, FFTW_ESTIMATE);
     long double * stc2abs = new long double [nd];
+    QImage convImage (nd, na, QImage::Format_Mono);
     for (int i0=0; i0<na; i0++)
     {
         for (int i=0; i<nd; i++)
@@ -225,6 +226,13 @@ void RadMainWindow :: slotTest1 (void)
             stc2[2*i] = real (stc3[i]);
             stc2[2*i+1] = imag (stc3[i]);
             stc2abs[i] = sqrt (stc2[2*i]*stc2[2*i] + stc2[2*i+1]*stc2[2*i+1]);
+            double gray (stc2abs[i]);
+            uint val = (uint)(256*gray);
+
+            QRgb v = qRgb (val, val, val);
+            qDebug ()  << __PRETTY_FUNCTION__ << v;
+//            convImage.setPixel (i, i0, v);//qRgb(val, val, val));
+
     //        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
         }
 
