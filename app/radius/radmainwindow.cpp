@@ -200,18 +200,23 @@ void RadMainWindow :: slotTest1 (void)
         opor2[i+nd-N2] = opor[i];
     }
     fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
-    if (fileConvName.isEmpty())
-        return;
 
-    FILE * fid6 = fopen (fileConvName.toAscii().constData(), "wb");
-    if (!fid6)
-        return;
+    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
 
     FFT_Transform fft;// = new FFT_Transform;
     opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     stc4 = fft (stc, ndn, 2*nd, FFTW_FORWARD, FFTW_ESTIMATE);
     long double * stc2abs = new long double [nd];
-    QImage convImage (nd, na, QImage::Format_Mono);
+    QSize imSize (nd, na/5);
+    QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
+    if (!convImage || convImage->size().isNull())
+    {
+        if (convImage)
+            delete convImage;
+        return;
+    }
+    convImage->fill (0);
+    qDebug () << __PRETTY_FUNCTION__ << convImage->size () << imSize;
     for (int i0=0; i0<na; i0++)
     {
         for (int i=0; i<nd; i++)
@@ -230,14 +235,17 @@ void RadMainWindow :: slotTest1 (void)
             uint val = (uint)(256*gray);
 
             QRgb v = qRgb (val, val, val);
-            qDebug ()  << __PRETTY_FUNCTION__ << v;
-//            convImage.setPixel (i, i0, v);//qRgb(val, val, val));
+            //qDebug ()  << __PRETTY_FUNCTION__ << v;
+            convImage->setPixel (i, i0/5, v);//qRgb(val, val, val));
 
     //        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
         }
 
-        size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
-        Q_UNUSED (h);
+        if (fid6)
+        {
+            size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
+            Q_UNUSED (h);
+        }
         if (i0==0)
         {
             radDataWidget * w = new radDataWidget();
@@ -263,10 +271,16 @@ void RadMainWindow :: slotTest1 (void)
         delete [] stc3;
 //        qDebug () << __PRETTY_FUNCTION__ << h;
     }
+    QString fileImageName = QString ("rgg.png");
+    convImage->save (fileImageName, "PNG");
+
+
+    delete convImage;
     delete [] stc2abs;
     delete [] st1;
     delete [] opor;
-    fclose (fid6);
+    if (fid6)
+        fclose (fid6);
     actCalc2->setEnabled (true);
 }
 
