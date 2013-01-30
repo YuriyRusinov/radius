@@ -1,5 +1,8 @@
-HEADERS += gui/radDataWidget.h
+HEADERS += gui/radDataWidget.h \
+           gui/rggImageWidget.h
 
-SOURCES += gui/radDataWidget.cpp
+SOURCES += gui/radDataWidget.cpp \
+           gui/rggImageWidget.cpp
 
-headers.files += gui/radDataWidget.h
+headers.files += gui/radDataWidget.h \
+                 gui/rggImageWidget.h
