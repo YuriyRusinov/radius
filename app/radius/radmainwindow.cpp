@@ -19,6 +19,7 @@
 #include <QHBoxLayout>
 
 #include <radDataWidget.h>
+#include <rggImageWidget.h>
 #include <constants1.h>
 
 #include <complex>
@@ -274,6 +275,11 @@ void RadMainWindow :: slotTest1 (void)
     QString fileImageName = QString ("rgg.png");
     convImage->save (fileImageName, "PNG");
 
+    rggImageWidget * imW = new rggImageWidget;
+    imW->setImage (*convImage);
+    QMdiSubWindow * subImW = m_mdiArea->addSubWindow (imW);
+    imW->show ();
+    subImW->setAttribute (Qt::WA_DeleteOnClose);
 
     delete convImage;
     delete [] stc2abs;
