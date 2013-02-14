@@ -4,7 +4,7 @@
 const int ndn = 11776;
 const int nd2 = 2*ndn;
 const int nd = 16384;
-const int na = 100000;
+const int na = 28000;//100000;
 const double c = 0.3e9;
 const double fsp = 0.3e9;
 const double dnr = 0.375;

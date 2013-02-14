@@ -206,7 +206,7 @@ void RadMainWindow :: slotTest1 (void)
 
     FFT_Transform fft;// = new FFT_Transform;
     opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-    stc4 = fft (stc, ndn, 2*nd, FFTW_FORWARD, FFTW_ESTIMATE);
+    stc4 = fft (stc, ndn, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     long double * stc2abs = new long double [nd];
     QSize imSize (nd, na/5);
     QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
@@ -244,7 +244,7 @@ void RadMainWindow :: slotTest1 (void)
 
         if (fid6)
         {
-            size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
+            size_t h = fwrite (stc2, sizeof (double), 2*nd, fid6);
             Q_UNUSED (h);
         }
         if (i0==0)
