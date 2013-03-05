@@ -133,17 +133,11 @@ void RadMainWindow :: slotTest1 (void)
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
     QAbstractItemModel * radModel = new QStandardItemModel (nd2, 2, 0);// (nd2, na);
 
-    QFile fContData (QString ("cont_data.dat"));
-    fContData.open (QIODevice::WriteOnly);
-    QTextStream stCont (&fContData);
     for (int i=1; i<=na; i++)
     {
         int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
-        if (i == 1)
-            for (int ii=0; ii < nd2; ii++)
-                stCont << st[ii] << " \n";
         for (int ii=1; ii<= nd2; ii++)
             if (st[ii-1] > 128)
                 st[ii-1] -= 256;
@@ -168,7 +162,6 @@ void RadMainWindow :: slotTest1 (void)
 //        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
 
-    fContData.close();
     w->setModel (radModel);
     fData.close ();
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
@@ -197,9 +190,19 @@ void RadMainWindow :: slotTest1 (void)
     int N2 = (N1/2);
     for (int i=1; i<=N2; i++)
     {
-        opor2[i] = opor[i+N2];
-        opor2[i+nd-N2] = opor[i];
+        opor2[i-1] = opor[i+N2];
+        opor2[i+nd-N2] = opor[i-1];
     }
+    QFile fContData (QString ("cont_data_op2.dat"));
+    fContData.open (QIODevice::WriteOnly);
+    QTextStream stCont (&fContData);
+    for (int i=0; i<nd; i++)
+    {
+        double r = real (opor2[i]);
+        double im = imag (opor2[i]);
+        stCont << r << (im >=0 ? "+ " : " ") << im << "i" << endl;
+    }
+    fContData.close();
     fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
     FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
