@@ -13,20 +13,23 @@ DEFINES += _FILE_OFFSET_BITS=64
 INCLUDEPATH *= $$FFT_INC_DIR
 INCLUDEPATH *= $$BLAS_INC_DIR
 
-DEPENDSPATH *= $$FFT_INC_DIR
-DEPENDSPATH *= $$BLAS_INC_DIR
+DEPENDPATH *= $$FFT_INC_DIR
+DEPENDPATH *= $$BLAS_INC_DIR
 
 LIBS *= -L$$FFT_LIB_DIR -lfftw3l -lm -L$$BLAS_LIB_DIR -lblas
 
-INCLUDEPATH *= gui \
+INCLUDEPATH *= . \
+               gui \
                misc
 
-DEPENDSPATH *= gui \
+DEPENDPATH *= . \
+               gui \
                misc
 
 HEADERS += fft_c.h \
            matrix.h \
-           calcim.h
+           calcim.h \
+           src_config.h
 
 SOURCES += fft_c.cpp \
            matrix.cpp \

@@ -101,4 +101,10 @@
 
 static const char FFTMATR_version[] = "LibFFTMatrix Version 0.0.1";
 
+#if defined( WIN32 )
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#else
+#define __FUNCTION__ __PRETTY_FUNCTION__
+#endif
+
 #endif /* _FFTMATR_CONFIG_H_ */
