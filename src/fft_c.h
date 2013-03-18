@@ -17,7 +17,7 @@ public:
     virtual complex<long double> * operator () (complex<long double> * src, int nsrc, int n2, int sign, unsigned flags);
 };
 
-class FFT2_Transform
+class _FFTMATR_EXPORT_ FFT2_Transform
 {
 public:
     FFT2_Transform (void);
