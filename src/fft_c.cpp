@@ -22,7 +22,7 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
     {
         delete [] res;
         //delete [] in;
-        //fftw_free(in);
+        fftw_free(in);
         return 0;
     }
     for (int i=0; i<nsrc; i++)
@@ -44,9 +44,11 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
     for (int i=0; i<n2; i++)
     {
         res[i] = complex<long double> (out[i][0], out[i][1]);
-        qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
+        //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftwl_destroy_plan (p);
+    fftw_free(in);
+    fftw_free(out);
 //    delete [] in;
     return res;
 }
