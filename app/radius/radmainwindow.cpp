@@ -162,6 +162,9 @@ void RadMainWindow :: slotTest1 (void)
 //        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     }
 
+    QFile contOp ("opor.dat");
+    contOp.open (QIODevice::WriteOnly);
+
     w->setModel (radModel);
     fData.close ();
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
@@ -180,18 +183,26 @@ void RadMainWindow :: slotTest1 (void)
         opor2[i] = complex<long double>(0.0, 0.0);
     }
 
-    for (int n=1; n<= N1; n++)
+    for (int n=0; n< N1; n++)
     {
-        double phase = pi*fsp*(n-1)*(n-1)/(N1*fcvant2) - pi*fsp*(n-1)/fcvant2 ; 
-        double oc = cos (phase);
-        double os = sin (phase);
-        opor[n-1] = complex<long double>(oc, os);
+        long double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
+        long double oc = cosl (phase);
+        long double os = sinl (phase);
+        opor[n] = complex<long double>(oc, os);
     }
-    int N2 = (N1/2);
-    for (int i=1; i<=N2; i++)
+    QTextStream stOp (&contOp);
+    for (int i=0; i<N1; i++)
     {
-        opor2[i-1] = opor[i+N2];
-        opor2[i+nd-N2] = opor[i-1];
+        double re = real (opor[i]);
+        double im = imag (opor[i]);
+        stOp << re << " " << im << "i" << endl;
+    }
+    contOp.close ();
+    int N2 = (N1/2);
+    for (int i=0; i<N2; i++)
+    {
+        opor2[i] = opor[i+N2];
+        opor2[i+nd-N2] = opor[i];
     }
     QFile fContData (QString ("cont_data_op2.dat"));
     fContData.open (QIODevice::WriteOnly);
