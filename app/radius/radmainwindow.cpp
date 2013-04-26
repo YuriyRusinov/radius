@@ -388,10 +388,13 @@ void RadMainWindow :: slotTest2 (void)
     for (int i=0; i<ndrz*nas/2; i++)
     {
         imData[i] = abs (rggBD[i])*8000;
+        uint val = (uint)(256*imData[i]);
+        QRgb v = qRgb (val, val, val);
+        hIm->setPixel (i/ndrz, i%ndrz, v);
         //qDebug () << __PRETTY_FUNCTION__ << i << imData[i];
     }
-    bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
-    qDebug () << __PRETTY_FUNCTION__ << isLoaded;
+    //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
+    //qDebug () << __PRETTY_FUNCTION__ << isLoaded;
     QPixmap pIm = QPixmap::fromImage (*hIm);
     QLabel * lIm = new QLabel ;
     QWidget * wImage = new QWidget;
