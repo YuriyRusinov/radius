@@ -8,6 +8,7 @@
 #include <QMdiSubWindow>
 #include <QIODevice>
 #include <QDataStream>
+#include <QTextStream>
 #include <QKeySequence>
 #include <QBuffer>
 #include <QAbstractItemModel>
@@ -16,6 +17,7 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QWidget>
+#include <QVector>
 #include <QHBoxLayout>
 
 #include <radDataWidget.h>
@@ -86,6 +88,10 @@ void RadMainWindow :: init (void)
 
     QAction * actOpenConvFile = openMenu->addAction (tr("Open &convolution file"));
     connect (actOpenConvFile, SIGNAL (triggered()), this, SLOT (openConvFile()) );
+
+    UI->menuFile->addSeparator ();
+    QAction * actFFTTest = openMenu->addAction (tr("Test &FFT"));
+    connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
 
     UI->menuFile->addSeparator ();
     QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
@@ -204,16 +210,17 @@ void RadMainWindow :: slotTest1 (void)
         opor2[i] = opor[i+N2];
         opor2[i+nd-N2] = opor[i];
     }
-    QFile fContData (QString ("cont_data_op2.dat"));
+    QFile fContData (QString ("stc4.dat"));
     fContData.open (QIODevice::WriteOnly);
     QTextStream stCont (&fContData);
     for (int i=0; i<nd; i++)
     {
         double r = real (opor2[i]);
         double im = imag (opor2[i]);
-        stCont << r << (im >=0 ? "+ " : " ") << im << "i" << endl;
+        Q_UNUSED (r);
+        Q_UNUSED (im);
+        //stCont << r << (im >=0 ? "+ " : " ") << im << "i" << endl;
     }
-    fContData.close();
     fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
     FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
@@ -221,6 +228,13 @@ void RadMainWindow :: slotTest1 (void)
     FFT_Transform fft;// = new FFT_Transform;
     opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     stc4 = fft (stc, ndn, nd, FFTW_FORWARD, FFTW_ESTIMATE);
+    for (int i=0; i<nd; i++)
+    {
+        double r = real (stc[i]);
+        double im = imag (stc[i]);
+        stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
+    }
+    fContData.close();
     long double * stc2abs = new long double [nd];
     QSize imSize (nd, na/5);
     QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
@@ -396,13 +410,21 @@ void RadMainWindow :: slotTest2 (void)
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
     uchar * imData = new uchar [ndrz*nas/2];
-    for (int i=0; i<ndrz*nas/2; i++)
+    int ii (0);
+    for (int i=0; i<ndrz; i++)
     {
-        imData[i] = abs (rggBD[i])*8000;
-        //qDebug () << __PRETTY_FUNCTION__ << i << imData[i];
+        for (int j=0; j<nas/2;j++)
+        {
+            imData[ii] = abs (rggBD[ii])*8000;
+            uint val = (uint)(256*imData[ii]);
+            QRgb v = qRgb (val, val, val);
+            hIm->setPixel (i, j, v);
+            qDebug () << __PRETTY_FUNCTION__ << ii << imData[ii];
+            ii++;
+        }
     }
-    bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
-    qDebug () << __PRETTY_FUNCTION__ << isLoaded;
+    //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
+    //qDebug () << __PRETTY_FUNCTION__ << isLoaded;
     QPixmap pIm = QPixmap::fromImage (*hIm);
     QLabel * lIm = new QLabel ;
     QWidget * wImage = new QWidget;
@@ -412,4 +434,64 @@ void RadMainWindow :: slotTest2 (void)
     m_mdiArea->addSubWindow (wImage);
 
     fclose (fid6);
+}
+
+void RadMainWindow :: fftTest (void)
+{
+    QString fName = QFileDialog::getOpenFileName (this, tr("Open File"), QDir::currentPath(), tr("All files (*.*)"));
+    if (fName.isEmpty())
+        return;
+
+    QVector<double> v001;
+    QFile f001 (fName);
+    f001.open (QIODevice::ReadOnly);
+    QString rfftStr;
+
+    QTextStream fstr (&f001);
+    rfftStr = fstr.readLine();// >> rfftStr;
+    //qDebug () << __PRETTY_FUNCTION__ << rfftStr;
+    QStringList fftStrList = rfftStr.split(QString("\t"));
+    //fstr >> v001;
+    int n = fftStrList.size();
+    qDebug () << __PRETTY_FUNCTION__ << n;
+    for (int i=0; i<n; i++)
+    {
+        bool ok;
+        double x = fftStrList[i].toDouble (&ok);
+        if (ok)
+            v001.append (x);
+    }
+
+//    for (int i=0; i<v001.size(); i++)
+//        qDebug () << __PRETTY_FUNCTION__ << v001[i];
+
+    int n2 = 1024;
+    complex<long double> * x = new complex<long double>[n2];
+    for (int i=0; i<n2; i++)
+        x[i] = complex<long double>(0.0, 0.0);
+
+    for (int i=0; i<n; i++)
+        x[i] = complex<long double>(v001[i], 0.0);
+    FFT_Transform fft;// = new FFT_Transform;
+    complex<long double> * xfft = new complex<long double> [n2];
+    xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE);
+    QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));
+    if (fSaveName.isEmpty())
+    {
+        delete [] xfft;
+        delete [] x;
+        return;
+    }
+    QFile fSave(fSaveName);
+    fSave.open (QIODevice::WriteOnly);
+    QTextStream fftRes (&fSave);
+    for (int i=0; i<n2; i++)
+    {
+        double r = real (xfft[i]);
+        double im = imag (xfft[i]);
+        fftRes << r << " " << im << "i" << endl;
+    }
+
+    delete [] xfft;
+    delete [] x;
 }

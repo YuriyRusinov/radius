@@ -24,6 +24,7 @@ public:
 private slots:
     void openDataFile (void);
     void openConvFile (void);
+    void fftTest (void);
     void slotTest1 (void);
     void slotTest2 (void);
 
