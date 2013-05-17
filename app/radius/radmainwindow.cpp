@@ -466,15 +466,16 @@ void RadMainWindow :: fftTest (void)
 //        qDebug () << __PRETTY_FUNCTION__ << v001[i];
 
     int n2 = 1024;
-    complex<long double> * x = new complex<long double>[n2];
+    //complex<long double> * x = new complex<long double>[n2];
+    long double * x = new long double [n2];
     for (int i=0; i<n2; i++)
-        x[i] = complex<long double>(0.0, 0.0);
+        x[i] = 0.0;//complex<long double>(0.0, 0.0);
 
     for (int i=0; i<n; i++)
-        x[i] = complex<long double>(v001[i], 0.0);
-    FFT_Transform fft;// = new FFT_Transform;
+        x[i] = v001[i];//complex<long double>(v001[i], 0.0);
+    FFT_RealTransform fft;// = new FFT_Transform;
     complex<long double> * xfft = new complex<long double> [n2];
-    xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE);
+    xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE | FFTW_MEASURE);
     QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));
     if (fSaveName.isEmpty())
     {
