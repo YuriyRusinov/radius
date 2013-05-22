@@ -43,7 +43,7 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
     fftwl_execute (p);
     for (int i=0; i<n2; i++)
     {
-        res[i] = complex<long double> (out[i][0], out[i][1]);
+        res[i] = complex<long double> (out[i][0]/n2, out[i][1]/n2);
         //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftwl_destroy_plan (p);
@@ -91,7 +91,7 @@ complex<long double> * FFT_RealTransform :: operator () (long double * src, int 
     fftwl_execute (p);
     for (int i=0; i<n2; i++)
     {
-        res[i] = complex<long double> (out[i][0], out[i][1]);
+        res[i] = complex<long double> (out[i][0]/n2, out[i][1]/n2);
         //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftwl_destroy_plan (p);

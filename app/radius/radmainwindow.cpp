@@ -454,18 +454,24 @@ void RadMainWindow :: fftTest (void)
     //fstr >> v001;
     int n = fftStrList.size();
     qDebug () << __PRETTY_FUNCTION__ << n;
+    QFile fftc ("001c.dat");
+    fftc.open (QIODevice::WriteOnly);
+    QTextStream fftcStr (&fftc);
     for (int i=0; i<n; i++)
     {
         bool ok;
         double x = fftStrList[i].toDouble (&ok);
         if (ok)
+        {
             v001.append (x);
+            fftcStr << x << endl;
+        }
     }
 
 //    for (int i=0; i<v001.size(); i++)
 //        qDebug () << __PRETTY_FUNCTION__ << v001[i];
 
-    int n2 = 1024;
+    int n2 = 8;//1024;
     //complex<long double> * x = new complex<long double>[n2];
     long double * x = new long double [n2];
     for (int i=0; i<n2; i++)
@@ -475,7 +481,7 @@ void RadMainWindow :: fftTest (void)
         x[i] = v001[i];//complex<long double>(v001[i], 0.0);
     FFT_RealTransform fft;// = new FFT_Transform;
     complex<long double> * xfft = new complex<long double> [n2];
-    xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE | FFTW_MEASURE);
+    xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
     QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));
     if (fSaveName.isEmpty())
     {
