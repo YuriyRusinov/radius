@@ -17,10 +17,10 @@ DEPENDPATH *= $$FFT_INC_DIR
 DEPENDPATH *= $$BLAS_INC_DIR
 
 unix{
-    LIBS *= -L$$FFT_LIB_DIR -lfftw3l -lm -L$$BLAS_LIB_DIR -lblas
+    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lm -L$$BLAS_LIB_DIR -lblas
 }
 win32{
-    LIBS *= -L$$FFT_LIB_DIR -llibfftw3l-3
+    LIBS *= -L$$FFT_LIB_DIR -llibfftw3-3
 }
 
 INCLUDEPATH *= . \

@@ -43,9 +43,9 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     m_mdiArea (new QMdiArea (this)),
     actCalc1 (new QAction (tr("Calculate&1"), this)),
     actCalc2 (new QAction (tr("Calculate&2"), this)),
-    stc (new complex<long double> [nd]),
-    stc1 (new complex<long double> [nd]),
-    stc2 (new long double [2*nd]),
+    stc (new complex<double> [nd]),
+    stc1 (new complex<double> [nd]),
+    stc2 (new double [2*nd]),
     stc3 (0),
     stc4 (0)
 {
@@ -125,8 +125,8 @@ void RadMainWindow :: slotTest1 (void)
     }
     for (int i=0; i<nd; i++)
     {
-        stc[i] = complex<long double> (0.0, 0.0);
-        stc1[i] = complex<long double> (0.0, 0.0);
+        stc[i] = complex<double> (0.0, 0.0);
+        stc1[i] = complex<double> (0.0, 0.0);
     }
     int a = 0;
     Q_UNUSED (a);
@@ -155,7 +155,7 @@ void RadMainWindow :: slotTest1 (void)
         {
             double re = st[2*ii];
             double im = st[2*ii+1];
-            stc[ii] = complex<long double> (re, im);//st[2*ii], st[2*ii+1]);
+            stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
 
             if (i <= 2)
             {
@@ -179,22 +179,22 @@ void RadMainWindow :: slotTest1 (void)
     delete [] st;
     qDebug () << __PRETTY_FUNCTION__;
     double * st1 = new double [nd];
-    complex<long double> * opor = new complex<long double> [nd];
-    complex<long double> * opor2 = new complex<long double> [nd];
+    complex<double> * opor = new complex<double> [nd];
+    complex<double> * opor2 = new complex<double> [nd];
 
     for (int i=0; i<nd; i++)
     {
         st1[i] = 0.0;
-        opor[i] = complex<long double>(0.0, 0.0);
-        opor2[i] = complex<long double>(0.0, 0.0);
+        opor[i] = complex<double>(0.0, 0.0);
+        opor2[i] = complex<double>(0.0, 0.0);
     }
 
     for (int n=0; n< N1; n++)
     {
-        long double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
-        long double oc = cosl (phase);
-        long double os = sinl (phase);
-        opor[n] = complex<long double>(oc, os);
+        double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
+        double oc = cosl (phase);
+        double os = sinl (phase);
+        opor[n] = complex<double>(oc, os);
     }
     QTextStream stOp (&contOp);
     for (int i=0; i<N1; i++)
@@ -235,7 +235,7 @@ void RadMainWindow :: slotTest1 (void)
         stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
     fContData.close();
-    long double * stc2abs = new long double [nd];
+    double * stc2abs = new double [nd];
     QSize imSize (nd, na/5);
     QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
     if (!convImage || convImage->size().isNull())
@@ -251,7 +251,7 @@ void RadMainWindow :: slotTest1 (void)
         for (int i=0; i<nd; i++)
         {
             stc1[i] = stc4[i]*opor[i];///(nd*nd);
-            stc1[i] = complex<long double> (real (stc1[i]) / ((long double)nd*nd), imag (stc1[i]) / ((long double)nd*nd));
+            stc1[i] = complex<double> (real (stc1[i]) / ((double)nd*nd), imag (stc1[i]) / ((double)nd*nd));
         }
         stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
         qDebug () << __PRETTY_FUNCTION__ << stc3 << i0+1 << " of " << na;
@@ -345,22 +345,22 @@ void RadMainWindow :: slotTest2 (void)
     CMatrix rgg1 (0.0, ndrz, na2);
     for (int i=0; i<na2; i++)
     {
-        long double stlb[2*nd];
-        long double stlb2[ndrz*2];
+        double stlb[2*nd];
+        double stlb2[ndrz*2];
         fread (stlb, 32, nd*2, fid6);
         for (int j=0; j<ndrz*2;j++)
             stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
-            rgg1(j, i) = complex<long double>(stlb2[2*j], stlb2[2*j+1]);
+            rgg1(j, i) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         //qDebug () << __PRETTY_FUNCTION__ << i << na2;
         read++;
     }
     CMatrix rgg  (0.0, ndrz, na2);
     qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set");
 
-    CMatrix corf (complex<long double>(0.0), ndrz, na2);
-    CMatrix corf2 (complex<long double>(0.0), ndrz, na2);
-    CMatrix corf3 (complex<long double>(0.0), ndrz, nas);
+    CMatrix corf (complex<double>(0.0), ndrz, na2);
+    CMatrix corf2 (complex<double>(0.0), ndrz, na2);
+    CMatrix corf3 (complex<double>(0.0), ndrz, nas);
     int from_opor (0);
     for (int i=0; i<ndrz; i++)
     {
@@ -371,7 +371,7 @@ void RadMainWindow :: slotTest2 (void)
             double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamp;
-            corf3(N0, i) = complex<long double>(cos(phase), sin(phase));
+            corf3(N0, i) = complex<double>(cos(phase), sin(phase));
             qDebug () << __PRETTY_FUNCTION__ << x << phase << (double)real (corf3(N0, i)) << (double)imag (corf3(N0, i));
         }
         from_opor++;
@@ -389,15 +389,15 @@ void RadMainWindow :: slotTest2 (void)
     }
 
     FFT2_Transform fft2;// = new FFT2_Transform;
-    complex<long double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
     Q_UNUSED (corfw);
 /*    for (int i=0; i<ndrz*nas/2; i++)
     {
-        long double xr = real (corf3.getData()[i]);
-        long double yr = imag (corf3.getData()[i]);
+        double xr = real (corf3.getData()[i]);
+        double yr = imag (corf3.getData()[i]);
         qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
     }*/
-    complex<long double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
     Q_UNUSED (rggD);
     int cor_volfr (0);
     for (int i=0; i<na2; i++)
@@ -406,7 +406,7 @@ void RadMainWindow :: slotTest2 (void)
             rgg(j, i) *= conj (corf2(j, i));
         cor_volfr++;
     }
-    complex<long double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    complex<double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
     uchar * imData = new uchar [ndrz*nas/2];
@@ -472,15 +472,15 @@ void RadMainWindow :: fftTest (void)
 //        qDebug () << __PRETTY_FUNCTION__ << v001[i];
 
     int n2 = FFT_Transform::pow2roundup(v001.size());//1024;
-    //complex<long double> * x = new complex<long double>[n2];
-    long double * x = new long double [n2];
+    complex<double> * x = new complex<double>[n2];
+    //double * x = new double [n2];
     for (int i=0; i<n2; i++)
-        x[i] = 0.0;//complex<long double>(0.0, 0.0);
+        x[i] = complex<double>(0.0, 0.0);
 
     for (int i=0; i<n; i++)
-        x[i] = v001[i];//complex<long double>(v001[i], 0.0);
-    FFT_RealTransform fft;// = new FFT_Transform;
-    complex<long double> * xfft = new complex<long double> [n2];
+        x[i] = complex<double>(v001[i], 0.0);// v001[i];
+    FFT_Transform fft;// = new FFT_Transform;
+    complex<double> * xfft = new complex<double> [n2];
     xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
     QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));
     if (fSaveName.isEmpty())
@@ -494,9 +494,10 @@ void RadMainWindow :: fftTest (void)
     QTextStream fftRes (&fSave);
     for (int i=0; i<n2; i++)
     {
-        double r = real (xfft[i]);
-        double im = imag (xfft[i]);
-        fftRes << qSetFieldWidth(18) << qSetRealNumberPrecision(16) << r << " " << qSetFieldWidth(18) << qSetRealNumberPrecision(16) << im << "i" << endl;
+        double r = real (xfft[i])*n2;
+        double im = imag (xfft[i])*n2;
+        fftRes << qSetFieldWidth(20) << qSetRealNumberPrecision(16) << r << " "
+               << qSetFieldWidth(20) << qSetRealNumberPrecision(16) << im << "i" << endl;
     }
 
     delete [] xfft;

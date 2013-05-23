@@ -27,13 +27,13 @@ int main (int argc, char* argv[])
     const double pi (3.14159265358979);
 
     double * st1 = new double [nd];
-    complex<long double> * opor = new complex<long double> [nd];
-    complex<long double> * opor2 = new complex<long double> [nd];
+    complex<double> * opor = new complex<double> [nd];
+    complex<double> * opor2 = new complex<double> [nd];
     for (int i=0; i<nd; i++)
     {
         st1[i] = 0.0;
-        opor[i] = complex<long double>(0.0, 0.0);
-        opor2[i] = complex<long double>(0.0, 0.0);
+        opor[i] = complex<double>(0.0, 0.0);
+        opor2[i] = complex<double>(0.0, 0.0);
     }
 
     for (int n=1; n<= N1; n++)
@@ -41,7 +41,7 @@ int main (int argc, char* argv[])
         double phase = pi*fsp*(n-1)*(n-1)/(N1*fcvant2) - pi*fsp*(n-1)/fcvant2 ; 
         double oc = cos (phase);
         double os = sin (phase);
-        opor[n-1] = complex<long double>(oc, os);
+        opor[n-1] = complex<double>(oc, os);
     }
     int N2 = (N1/2);
     for (int i=1; i<=N2; i++)
@@ -78,17 +78,17 @@ int main (int argc, char* argv[])
     fftwl_free (out);
 */
     double * st = new double [nd2];
-    complex<long double> * stc = new complex<long double> [nd];
-    complex<long double> * stc1 = new complex<long double> [nd];
-    complex<long double> * stc4 (0);// = new complex<double> [nd];
+    complex<double> * stc = new complex<double> [nd];
+    complex<double> * stc1 = new complex<double> [nd];
+    complex<double> * stc4 (0);// = new complex<double> [nd];
     for (int i=0; i<nd2; i++)
     {
         st [i] = 0.0;
     }
     for (int i=0; i<nd; i++)
     {
-        stc[i] = complex<long double> (0.0, 0.0);
-        stc1[i] = complex<long double> (0.0, 0.0);
+        stc[i] = complex<double> (0.0, 0.0);
+        stc1[i] = complex<double> (0.0, 0.0);
     }
 
     FILE * fid5 = fopen ("./test_data/20\ 07\ 10\ \ 23.02.49.rgg", "rb");
@@ -115,7 +115,7 @@ int main (int argc, char* argv[])
 
         for (int ii=0; ii<ndn; ii++)
         {
-            stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
+            stc[ii] = complex<double> (st[2*ii], st[2*ii+1]);
             //cout << st[2*ii] << " " << st[2*ii+1] << " ";
         }
         //cout << endl;
@@ -145,17 +145,17 @@ int main (int argc, char* argv[])
     for (int i=0; i<nd; i++)
     {
         stc1[i] = stc4[i]*opor[i];///(nd*nd);
-        stc1[i] = complex<long double> (real (stc1[i]) / ((long double)nd*nd), imag (stc1[i]) / ((long double)nd*nd));
+        stc1[i] = complex<double> (real (stc1[i]) / ((double)nd*nd), imag (stc1[i]) / ((double)nd*nd));
     }
 
-    complex<long double> * stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
-    long double * stc2 = new long double [2*nd];
+    complex<double> * stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
+    double * stc2 = new double [2*nd];
     for (int i=0; i<nd; i++)
     {
         stc2[2*i] = real (stc3[i]);
         stc2[2*i+1] = imag (stc3[i]);
     }
-    size_t h = fwrite (stc2, sizeof (long double), 2*nd, fid6);
+    size_t h = fwrite (stc2, sizeof (double), 2*nd, fid6);
     cout << h << endl;
     a++;
 

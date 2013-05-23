@@ -21,16 +21,16 @@ Calc1 :: ~Calc1 ()
 {
 }
 
-long double * Calc1 :: operator () (const double* st, int nd2)
+double * Calc1 :: operator () (const double* st, int nd2)
 {
     double * st1 = new double [nd];
-    complex<long double> * opor = new complex<long double> [nd];
-    complex<long double> * opor2 = new complex<long double> [nd];
+    complex<double> * opor = new complex<double> [nd];
+    complex<double> * opor2 = new complex<double> [nd];
     for (int i=0; i<nd; i++)
     {
         st1[i] = 0.0;
-        opor[i] = complex<long double>(0.0, 0.0);
-        opor2[i] = complex<long double>(0.0, 0.0);
+        opor[i] = complex<double>(0.0, 0.0);
+        opor2[i] = complex<double>(0.0, 0.0);
     }
 
     for (int n=1; n<= N1; n++)
@@ -38,7 +38,7 @@ long double * Calc1 :: operator () (const double* st, int nd2)
         double phase = pi*fsp*(n-1)*(n-1)/(N1*fcvant2) - pi*fsp*(n-1)/fcvant2 ; 
         double oc = cos (phase);
         double os = sin (phase);
-        opor[n-1] = complex<long double>(oc, os);
+        opor[n-1] = complex<double>(oc, os);
     }
     int N2 = (N1/2);
     for (int i=1; i<=N2; i++)
@@ -49,33 +49,33 @@ long double * Calc1 :: operator () (const double* st, int nd2)
 
     FFT_Transform fft;
     opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-    complex<long double> * stc = new complex<long double> [nd];
-    complex<long double> * stc1 = new complex<long double> [nd];
-    complex<long double> * stc4 (0);// = new complex<double> [nd];
+    complex<double> * stc = new complex<double> [nd];
+    complex<double> * stc1 = new complex<double> [nd];
+    complex<double> * stc4 (0);// = new complex<double> [nd];
 /*    for (int i=0; i<nd2; i++)
     {
         st [i] = 0.0;
     }*/
     for (int i=0; i<nd; i++)
     {
-        stc[i] = complex<long double> (0.0, 0.0);
-        stc1[i] = complex<long double> (0.0, 0.0);
+        stc[i] = complex<double> (0.0, 0.0);
+        stc1[i] = complex<double> (0.0, 0.0);
     }
 
     for (int i=1; i<=na; i++)
     {
         for (int ii=0; ii<nd2/2; ii++)
-            stc[ii] = complex<long double> (st[2*ii], st[2*ii+1]);
+            stc[ii] = complex<double> (st[2*ii], st[2*ii+1]);
     }
     stc4 = fft (stc, ndn, 2*nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
         stc1[i] = stc4[i]*opor[i];///(nd*nd);
-        stc1[i] = complex<long double> (real (stc1[i]) / ((long double)nd*nd), imag (stc1[i]) / ((long double)nd*nd));
+        stc1[i] = complex<double> (real (stc1[i]) / ((double)nd*nd), imag (stc1[i]) / ((double)nd*nd));
     }
 
-    complex<long double> * stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
-    long double * stc2 = new long double [2*nd];
+    complex<double> * stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
+    double * stc2 = new double [2*nd];
     for (int i=0; i<nd; i++)
     {
         stc2[2*i] = real (stc3[i]);
@@ -100,26 +100,26 @@ Calc2 :: ~Calc2 ()
 {
 }
 
-long double * Calc2 :: operator () (const double* stlb, int nd2)
+double * Calc2 :: operator () (const double* stlb, int nd2)
 {
     CMatrix rgg1 (0.0, ndrz, na);
     CMatrix rgg  (0.0, ndrz, na);
     int read (0);
     for (int i=0; i<nd2; i++)
     {
-//        long double stlb[2*nd];
-        long double stlb2[ndrz*2];
+//        double stlb[2*nd];
+        double stlb2[ndrz*2];
 //        fread (stlb, 32, nd*2, fid6);
         for (int j=0; j<ndrz*2;j++)
             stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
-            rgg1(j, i) = complex<long double>(stlb2[2*j], stlb2[2*j+1]);
+            rgg1(j, i) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         read++;
     }
 
-    CMatrix corf (complex<long double>(0.0), ndrz, na);
-    CMatrix corf2 (complex<long double>(0.0), ndrz, na);
-    CMatrix corf3 (complex<long double>(0.0), ndrz, nas);
+    CMatrix corf (complex<double>(0.0), ndrz, na);
+    CMatrix corf2 (complex<double>(0.0), ndrz, na);
+    CMatrix corf3 (complex<double>(0.0), ndrz, nas);
     int from_opor (0);
     for (int i=0; i<ndrz; i++)
     {
@@ -130,7 +130,7 @@ long double * Calc2 :: operator () (const double* stlb, int nd2)
             double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamp;
-            corf3(N0, i) = complex<long double>(cos(phase), sin(phase));
+            corf3(N0, i) = complex<double>(cos(phase), sin(phase));
         }
         from_opor++;
     }
@@ -147,9 +147,9 @@ long double * Calc2 :: operator () (const double* stlb, int nd2)
     }
 
     FFT2_Transform fft2;// = new FFT2_Transform;
-    complex<long double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
 //    Q_UNUSED (corfw);
-    complex<long double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
     int cor_volfr (0);
     for (int i=0; i<na; i++)
     {
@@ -157,7 +157,7 @@ long double * Calc2 :: operator () (const double* stlb, int nd2)
             rgg(j, i) *= conj (corf2(j, i));
         cor_volfr++;
     }
-    complex<long double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    complex<double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
 
     return 0;
 }
