@@ -15,6 +15,8 @@ public:
     FFT_Transform (void);
     virtual ~FFT_Transform (void);
     virtual complex<long double> * operator () (complex<long double> * src, int nsrc, int n2, int sign, unsigned flags);
+
+    static int pow2roundup (int n);
 };
 
 class _FFTMATR_EXPORT_ FFT_RealTransform

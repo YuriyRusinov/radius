@@ -471,7 +471,7 @@ void RadMainWindow :: fftTest (void)
 //    for (int i=0; i<v001.size(); i++)
 //        qDebug () << __PRETTY_FUNCTION__ << v001[i];
 
-    int n2 = 8;//1024;
+    int n2 = FFT_Transform::pow2roundup(v001.size());//1024;
     //complex<long double> * x = new complex<long double>[n2];
     long double * x = new long double [n2];
     for (int i=0; i<n2; i++)
@@ -496,7 +496,7 @@ void RadMainWindow :: fftTest (void)
     {
         double r = real (xfft[i]);
         double im = imag (xfft[i]);
-        fftRes << r << " " << im << "i" << endl;
+        fftRes << qSetFieldWidth(18) << qSetRealNumberPrecision(16) << r << " " << qSetFieldWidth(18) << qSetRealNumberPrecision(16) << im << "i" << endl;
     }
 
     delete [] xfft;

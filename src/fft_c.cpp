@@ -22,7 +22,7 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
     {
         delete [] res;
         //delete [] in;
-        fftw_free(in);
+        fftwl_free(in);
         return 0;
     }
     for (int i=0; i<nsrc; i++)
@@ -47,10 +47,24 @@ complex<long double> * FFT_Transform :: operator () (complex<long double> * src,
         //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftwl_destroy_plan (p);
-    fftw_free(in);
-    fftw_free(out);
+    fftwl_free(in);
+    fftwl_free(out);
 //    delete [] in;
     return res;
+}
+
+int FFT_Transform :: pow2roundup (int n)
+{
+    int x(n);
+    if (x < 0)
+        return 0;
+    --x;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    return x+1;
 }
 
 FFT_RealTransform :: FFT_RealTransform (void)
@@ -67,17 +81,9 @@ complex<long double> * FFT_RealTransform :: operator () (long double * src, int 
         return 0;
     complex<long double> * res = new complex<long double> [n2];
     //complex<long double> * in = new complex<long double> [n2];
-    long double * in = new long double [n2];//(long double*) fftwl_malloc (sizeof(long double) * n2);
+    long double * in = (long double*) fftwl_malloc (sizeof(long double) * n2);
+    //new long double [n2];//(long double*) fftwl_malloc (sizeof(long double) * n2);
 
-    fftwl_plan p;
-    fftwl_complex * out = (fftwl_complex*) fftwl_malloc (sizeof(fftwl_complex) * n2);
-    if (sign == FFTW_FORWARD)
-        p = fftwl_plan_dft_r2c_1d(n2, in, out, flags);//fftwl_plan_dft_1d (n2, in, out, sign, flags);
-    else
-    {
-        delete [] res;
-        return 0;
-    }
     for (int i=0; i<nsrc; i++)
     {
         in[i] = src[i];
@@ -88,16 +94,36 @@ complex<long double> * FFT_RealTransform :: operator () (long double * src, int 
         in[i] = 0.0;
     }
 
+    fftwl_plan p;
+    fftwl_complex * out = (fftwl_complex*) fftwl_malloc (sizeof(fftwl_complex) * n2);
+    for (int i=0; i<n2; i++)
+    {
+        //out[i][0] = 0.0;
+        //out[i][1] = 0.0;
+        long double re = in[i];
+        long double im = 0.0;
+        //res[i] = complex<long double> (in[i][0]/n2, in[i][1]/n2);
+        qDebug () << __PRETTY_FUNCTION__ << (double)re << (double)im;
+    }
+    if (sign == FFTW_FORWARD)
+        p = fftwl_plan_dft_r2c_1d(n2, in, out, flags);//fftwl_plan_dft_1d (n2, in, out, sign, flags);
+    else
+    {
+        fftwl_free(out);
+        fftwl_free(in);
+        delete [] res;
+        return 0;
+    }
     fftwl_execute (p);
     for (int i=0; i<n2; i++)
     {
         res[i] = complex<long double> (out[i][0]/n2, out[i][1]/n2);
-        //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
+        qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftwl_destroy_plan (p);
-    fftw_free(out);
-    //fftw_free(in);
-    delete [] in;
+    fftwl_free(out);
+    fftwl_free(in);
+    //delete [] in;
     return res;
 }
 
