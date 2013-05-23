@@ -472,14 +472,14 @@ void RadMainWindow :: fftTest (void)
 //        qDebug () << __PRETTY_FUNCTION__ << v001[i];
 
     int n2 = FFT_Transform::pow2roundup(v001.size());//1024;
-    complex<double> * x = new complex<double>[n2];
-    //double * x = new double [n2];
+    //complex<double> * x = new complex<double>[n2];
+    double * x = new double [n2];
     for (int i=0; i<n2; i++)
-        x[i] = complex<double>(0.0, 0.0);
+        x[i] = 0.0;//complex<double>(0.0, 0.0);
 
     for (int i=0; i<n; i++)
-        x[i] = complex<double>(v001[i], 0.0);// v001[i];
-    FFT_Transform fft;// = new FFT_Transform;
+        x[i] = v001[i];//complex<double>(v001[i], 0.0);// v001[i];
+    FFT_RealTransform fft;// = new FFT_Transform;
     complex<double> * xfft = new complex<double> [n2];
     xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
     QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));

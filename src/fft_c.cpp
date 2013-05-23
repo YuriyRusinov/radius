@@ -112,31 +112,32 @@ FFT_RealTransform :: ~FFT_RealTransform (void)
 
 complex<double> * FFT_RealTransform :: operator () (double * src, int nsrc, int n2, int sign, unsigned flags)
 {
-    fftw_complex * in;
+    double * in;
     fftw_complex * out;
     fftw_plan p;
     if (n2 <=0 || nsrc > n2)
         return 0;
     complex<double> * res = new complex<double> [n2];
     //complex<double> * in = new complex<double> [n2];
-    in = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
+    in = (double*) fftw_malloc (sizeof(double) * n2);
+    //(fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
     //new double [n2];//(double*) fftw_malloc (sizeof(double) * n2);
 
     for (int i=0; i<nsrc; i++)
     {
-        in[i][0] = src[i];
-        in[i][1] = 0.0;
+        in[i] = src[i];
+//        in[i][1] = 0.0;
     }
 
     for (int i=nsrc; i<n2; i++)
     {
-        in[i][0] = 0.0;
-        in[i][1] = 0.0;
+        in[i] = 0.0;
+//        in[i][1] = 0.0;
     }
 
     out = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
     //if (sign == FFTW_FORWARD)
-    p = fftw_plan_dft_1d (n2, in, out, sign, flags);//fftw_plan_dft_r2c_1d(n2, in, out, flags);
+    p = fftw_plan_dft_r2c_1d(n2, in, out, flags);
 /*    else
     {
         fftw_free(out);
@@ -146,10 +147,12 @@ complex<double> * FFT_RealTransform :: operator () (double * src, int nsrc, int 
     }
 */
     fftw_execute (p);
-    qDebug () << __PRETTY_FUNCTION__ << out[0][0];
-    for (int i=0; i<n2; i++)
+//    qDebug () << __PRETTY_FUNCTION__ << out[0][0];
+    for (int i=0; i<=n2/2; i++)
     {
         res[i] = complex<double> (out[i][0]/n2, out[i][1]/n2);
+        if (i>0)
+            res[n2-i] = complex<double> (out[i][0]/n2, -out[i][1]/n2);
         //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftw_destroy_plan (p);
