@@ -35,7 +35,6 @@ complex<double> * FFT_Transform :: operator () (complex<double> * src, int nsrc,
     out = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
     p = fftw_plan_dft_1d (n2, in, out, sign, flags);//fftw_plan_dft_r2c_1d(n2, in, out, flags);
     fftw_execute (p);
-    qDebug () << __PRETTY_FUNCTION__ << out[0][0];
     for (int i=0; i<n2; i++)
     {
         res[i] = complex<double> (out[i][0]/n2, out[i][1]/n2);
@@ -46,46 +45,6 @@ complex<double> * FFT_Transform :: operator () (complex<double> * src, int nsrc,
     fftw_free(in);
     //delete [] in;
     return res;
-/*    if (n2 <=0 )
-        return 0;
-    complex<double> * res = new complex<double> [n2];
-    //complex<double> * in = new complex<double> [n2];
-    fftw_complex * in = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
-
-    if (nsrc > n2)
-    {
-        delete [] res;
-        //delete [] in;
-        fftw_free(in);
-        return 0;
-    }
-    for (int i=0; i<nsrc; i++)
-    {
-        in[i][0] = real (src[i]);
-        in[i][1] = imag (src[i]);
-    }
-
-    for (int i=nsrc; i<n2; i++)
-    {
-        in[i][0] = 0.0;
-        in[i][1] = 0.0;
-    }
-
-    fftw_plan p;
-    fftw_complex * out = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
-    p = fftw_plan_dft_1d (n2, in, out, sign, flags);
-    fftw_execute (p);
-    for (int i=0; i<n2; i++)
-    {
-        res[i] = complex<double> (out[i][0]/n2, out[i][1]/n2);
-        //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
-    }
-    fftw_destroy_plan (p);
-    fftw_free(in);
-    fftw_free(out);
-//    delete [] in;
-    return res;
-*/
 }
 
 int FFT_Transform :: pow2roundup (int n)

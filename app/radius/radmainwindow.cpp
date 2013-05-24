@@ -177,7 +177,7 @@ void RadMainWindow :: slotTest1 (void)
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
     delete [] st;
-    qDebug () << __PRETTY_FUNCTION__;
+    qDebug () << __PRETTY_FUNCTION__ << N1;
     double * st1 = new double [nd];
     complex<double> * opor = new complex<double> [nd];
     complex<double> * opor2 = new complex<double> [nd];
@@ -192,8 +192,8 @@ void RadMainWindow :: slotTest1 (void)
     for (int n=0; n< N1; n++)
     {
         double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
-        double oc = cosl (phase);
-        double os = sinl (phase);
+        double oc = cos (phase);
+        double os = sin (phase);
         opor[n] = complex<double>(oc, os);
     }
     QTextStream stOp (&contOp);
@@ -226,7 +226,16 @@ void RadMainWindow :: slotTest1 (void)
     FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
 
     FFT_Transform fft;// = new FFT_Transform;
-    opor = fft (opor2, N2, nd, FFTW_FORWARD, FFTW_ESTIMATE);
+    opor = fft (opor2, N1, 2*FFT_Transform :: pow2roundup(N1), FFTW_FORWARD, FFTW_ESTIMATE);
+    QFile fOpor2 ("opor2.dat");
+    fOpor2.open (QIODevice::WriteOnly);
+    QTextStream op2 (&fOpor2);
+    for (int i=0; i<nd; i++)
+    {
+        double r = real (opor[i])*nd;
+        double im = imag (opor[i])*nd;
+        op2 << r << " " << im << "i" << endl;
+    }
     stc4 = fft (stc, ndn, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
