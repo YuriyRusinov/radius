@@ -204,6 +204,10 @@ void RadMainWindow :: slotTest1 (void)
         stOp << re << " " << im << "i" << endl;
     }
     contOp.close ();
+    radDataWidget * wOp = new radDataWidget (opor, N1);
+    QMdiSubWindow * subWop = m_mdiArea->addSubWindow (wOp);
+    wOp->show ();
+    subWop->setAttribute (Qt::WA_DeleteOnClose);
     int N2 = (N1/2);
     for (int i=0; i<N2; i++)
     {
