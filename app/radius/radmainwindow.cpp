@@ -109,6 +109,9 @@ void RadMainWindow :: init (void)
     calcMenu->addAction (actCalc2);
     connect (actCalc2, SIGNAL (triggered()), this, SLOT (slotTest2()) );
     actCalc2->setEnabled (false);
+
+    QAction * actOporTest = calcMenu->addAction (tr("Test FFT for opor"));
+    connect (actOporTest, SIGNAL (triggered()), this, SLOT (oporTest()) );
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -230,7 +233,7 @@ void RadMainWindow :: slotTest1 (void)
     FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
 
     FFT_Transform fft;// = new FFT_Transform;
-    opor = fft (opor2, N1, 2*FFT_Transform :: pow2roundup(N1), FFTW_FORWARD, FFTW_ESTIMATE);
+    opor = fft (opor2, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
     QFile fOpor2 ("opor2.dat");
     fOpor2.open (QIODevice::WriteOnly);
     QTextStream op2 (&fOpor2);
@@ -515,4 +518,54 @@ void RadMainWindow :: fftTest (void)
 
     delete [] xfft;
     delete [] x;
+}
+
+void RadMainWindow :: oporTest (void)
+{
+    complex<double> * opor = new complex<double> [nd];
+    complex<double> * opor2 = new complex<double> [nd];
+
+    for (int i=0; i<nd; i++)
+    {
+        opor[i] = complex<double>(0.0, 0.0);
+        opor2[i] = complex<double>(0.0, 0.0);
+    }
+
+    for (int n=0; n< N1; n++)
+    {
+        double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
+        double oc = cos (phase);
+        double os = sin (phase);
+        opor[n] = complex<double>(oc, os);
+    }
+    int N2 = (N1/2);
+    for (int i=0; i<N2; i++)
+    {
+        opor2[i] = opor[i+N2];
+        opor2[i+nd-N2] = opor[i];
+    }
+    radDataWidget * wOp = new radDataWidget (opor, N1);
+    QMdiSubWindow * subWop = m_mdiArea->addSubWindow (wOp);
+    wOp->setWindowTitle (tr("Opor before FFT"));
+    wOp->show ();
+    subWop->setAttribute (Qt::WA_DeleteOnClose);
+    FFT_Transform fft;
+    int nfft = nd;//4*FFT_Transform :: pow2roundup(N1);
+    opor = fft (opor2, nfft, nfft, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * oporFFT = new complex<double> [nd];
+    for (int i=0; i<nd; i++)
+    {
+        double re = real(opor[i])*nfft;
+        double im = imag (opor[i])*nfft;
+        oporFFT[i] = complex<double>(re, im);
+    }
+
+    radDataWidget * wOpFFT = new radDataWidget (oporFFT, N1);
+    wOpFFT->setWindowTitle (tr("Opor after FFT"));
+    QMdiSubWindow * subWopFFT = m_mdiArea->addSubWindow (wOpFFT);
+    wOpFFT->show ();
+    subWopFFT->setAttribute (Qt::WA_DeleteOnClose);
+    delete [] opor2;
+    delete [] opor;
+    delete [] oporFFT;
 }
