@@ -220,14 +220,6 @@ void RadMainWindow :: slotTest1 (void)
     QFile fContData (QString ("stc4.dat"));
     fContData.open (QIODevice::WriteOnly);
     QTextStream stCont (&fContData);
-    for (int i=0; i<nd; i++)
-    {
-        double r = real (opor2[i]);
-        double im = imag (opor2[i]);
-        Q_UNUSED (r);
-        Q_UNUSED (im);
-        //stCont << r << (im >=0 ? "+ " : " ") << im << "i" << endl;
-    }
     fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
     FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
