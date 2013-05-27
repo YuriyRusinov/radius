@@ -172,8 +172,8 @@ void RadMainWindow :: slotTest1 (void)
 
     for (int ii=1; ii<=ndn; ii++)
     {
-        double re = st[2*(ii-1)+1];
-        double im = st[2*(ii-1)];
+        double re = st[2*(ii-1)];
+        double im = st[2*(ii-1)+1];
         stContSt << re << " " << im << endl;
         stc[ii-1] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
     }
@@ -234,11 +234,15 @@ void RadMainWindow :: slotTest1 (void)
 
     FFT_Transform fft;// = new FFT_Transform;
     opor = fft (opor2, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
+    radDataWidget * wOpFFT = new radDataWidget (opor, N1);
+    QMdiSubWindow * subWopFFT = m_mdiArea->addSubWindow (wOpFFT);
+    wOpFFT->show ();
+    subWopFFT->setAttribute (Qt::WA_DeleteOnClose);
     stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
-        double r = real (stc4[i]);
-        double im = imag (stc4[i]);
+        double r = real (stc4[i])*nd;
+        double im = imag (stc4[i])*nd;
         stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
     fContData.close();
