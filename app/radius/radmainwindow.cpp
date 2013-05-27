@@ -140,37 +140,44 @@ void RadMainWindow :: slotTest1 (void)
         return;
 
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
-    QAbstractItemModel * radModel = new QStandardItemModel (nd2, 2, 0);// (nd2, na);
+    QAbstractItemModel * radModel = new QStandardItemModel (nd2, 1, 0);// (nd2, na);
 
-    for (int i=1; i<=na; i++)
+    int nr (0);
+    QFile fContStData (QString ("stc.dat"));
+    fContStData.open (QIODevice::WriteOnly);
+    QTextStream stContSt (&fContStData);
+/*    for (int i=0; i<na; i++)
     {
-        int cr = fread (st, sizeof (quint8), nd2, fid5);
-        if (cr <= 0)
-            return;
-        for (int ii=1; ii<= nd2; ii++)
-            if (st[ii-1] > 128)
-                st[ii-1] -= 256;
-
-        for (int ii=1; ii<=128; ii++)
-            st[ii-1] = 0.0;
-
-        for (int ii=0; ii<ndn; ii++)
-        {
-            double re = st[2*ii];
-            double im = st[2*ii+1];
-            stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
-
-            if (i <= 2)
-            {
-                QModelIndex stReInd = radModel->index (2*ii, i-1);
-                radModel->setData (stReInd, QString::number (re), Qt::DisplayRole);
-                QModelIndex stImInd = radModel->index (2*ii+1, i-1);
-                radModel->setData (stImInd, QString::number (im), Qt::DisplayRole);
-            }
-        }
-//        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
+*/
+    int cr = fread (st, sizeof (quint8), nd2, fid5);
+    if (cr <= 0)
+        return;
+    for (int ii=0; ii< nd2; ii++)
+    {
+        //if (i<1)
+        //{
+        QModelIndex wcIndex = radModel->index (nr, 0);
+        radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
+        nr++;
+        //}
+        if (st[ii] > 128)
+            st[ii] -= 256;
     }
+/*
+    }
+*/
 
+    for (int ii=0; ii<128; ii++)
+        st[ii] = 0.0;
+
+    for (int ii=1; ii<=ndn; ii++)
+    {
+        double re = st[2*(ii-1)+1];
+        double im = st[2*(ii-1)];
+        stContSt << re << " " << im << endl;
+        stc[ii-1] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
+    }
+//        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
     QFile contOp ("opor.dat");
     contOp.open (QIODevice::WriteOnly);
 
@@ -179,6 +186,7 @@ void RadMainWindow :: slotTest1 (void)
     QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
     w->show ();
     subW->setAttribute (Qt::WA_DeleteOnClose);
+
     delete [] st;
     qDebug () << __PRETTY_FUNCTION__ << N1;
     double * st1 = new double [nd];
@@ -226,20 +234,11 @@ void RadMainWindow :: slotTest1 (void)
 
     FFT_Transform fft;// = new FFT_Transform;
     opor = fft (opor2, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
-    QFile fOpor2 ("opor2.dat");
-    fOpor2.open (QIODevice::WriteOnly);
-    QTextStream op2 (&fOpor2);
+    stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
-        double r = real (opor[i])*nd;
-        double im = imag (opor[i])*nd;
-        op2 << r << " " << im << "i" << endl;
-    }
-    stc4 = fft (stc, ndn, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-    for (int i=0; i<nd; i++)
-    {
-        double r = real (stc[i]);
-        double im = imag (stc[i]);
+        double r = real (stc4[i]);
+        double im = imag (stc4[i]);
         stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
     fContData.close();
