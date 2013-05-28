@@ -112,6 +112,9 @@ void RadMainWindow :: init (void)
 
     QAction * actOporTest = calcMenu->addAction (tr("Test FFT for opor"));
     connect (actOporTest, SIGNAL (triggered()), this, SLOT (oporTest()) );
+
+    QAction * actStcTest = calcMenu->addAction (tr("Test FFT for stc"));
+    connect (actStcTest, SIGNAL (triggered()), this, SLOT (stcFFTTest()) );
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -160,8 +163,8 @@ void RadMainWindow :: slotTest1 (void)
         radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
         nr++;
         //}
-        if (st[ii] > 128)
-            st[ii] -= 256;
+//        if (st[ii] > 128)
+//            st[ii] -= 256;
     }
 /*
     }
@@ -174,6 +177,10 @@ void RadMainWindow :: slotTest1 (void)
     {
         double re = st[2*(ii-1)+1];
         double im = st[2*(ii-1)];
+        if (re > 128)
+            re -= 256;
+        if (im > 128)
+            im -= 256;
         stContSt << re << " " << im << endl;
         stc[ii-1] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
     }
@@ -237,8 +244,8 @@ void RadMainWindow :: slotTest1 (void)
     stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
-        double r = real (stc4[i]);
-        double im = imag (stc4[i]);
+        double r = real (stc4[i])*nd;
+        double im = imag (stc4[i])*nd;
         stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
     fContData.close();
@@ -559,4 +566,95 @@ void RadMainWindow :: oporTest (void)
     delete [] opor2;
     delete [] opor;
     delete [] oporFFT;
+}
+
+void RadMainWindow :: stcFFTTest (void)
+{
+    if (fileName.isEmpty())
+        return;
+
+    radDataWidget * w = new radDataWidget();
+    QFile fData (fileName);
+    quint8 * st = new quint8 [nd2];
+    for (int i=0; i<nd2; i++)
+    {
+        st [i] = 0;
+    }
+    for (int i=0; i<nd; i++)
+    {
+        stc[i] = complex<double> (0.0, 0.0);
+        stc1[i] = complex<double> (0.0, 0.0);
+    }
+    int a = 0;
+    Q_UNUSED (a);
+
+    FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
+    qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
+    if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
+        return;
+
+    qDebug () << __PRETTY_FUNCTION__ << (int)na;
+    QAbstractItemModel * radModel = new QStandardItemModel (nd2, 1, 0);// (nd2, na);
+
+    int nr (0);
+    QFile fContStData (QString ("stc.dat"));
+    fContStData.open (QIODevice::WriteOnly);
+    QTextStream stContSt (&fContStData);
+/*    for (int i=0; i<na; i++)
+    {
+*/
+    int cr = fread (st, sizeof (quint8), nd2, fid5);
+    if (cr <= 0)
+        return;
+    for (int ii=0; ii< nd2; ii++)
+    {
+        //if (i<1)
+        //{
+        //}
+        if (st[ii] > 128)
+            st[ii] -= 256;
+        QModelIndex wcIndex = radModel->index (nr, 0);
+        radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
+        nr++;
+    }
+/*
+    }
+*/
+
+    for (int ii=0; ii<128; ii++)
+        st[ii] = 0.0;
+
+    for (int ii=1; ii<=ndn; ii++)
+    {
+        double re = st[2*ii-1];
+        double im = st[2*ii-2];
+        if (re > 128)
+            re -= 256;
+        if (im > 128)
+            im -= 256;
+        stContSt << re << " " << im << endl;
+        stc[ii-1] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
+    }
+    for (int i=ndn; i<nd; i++)
+        stc[i] = complex<double>(0.0, 0.0);
+    radDataWidget * wStc = new radDataWidget(stc, nd);
+    QMdiSubWindow * subWStc = m_mdiArea->addSubWindow (wStc);
+    wStc->show();
+    subWStc->setAttribute (Qt::WA_DeleteOnClose);
+    w->setModel (radModel);
+    fData.close ();
+    QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
+    w->show ();
+    subW->setAttribute (Qt::WA_DeleteOnClose);
+
+    FFT_Transform fft;// = new FFT_Transform;
+    stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
+    for (int i=0; i<nd; i++)
+    {
+        stc4[i] *= nd;
+    }
+    radDataWidget * wStcFFT = new radDataWidget(stc4, nd);
+    QMdiSubWindow * subWStcFFT = m_mdiArea->addSubWindow (wStcFFT);
+    wStcFFT->show ();
+    subWStcFFT->setAttribute (Qt::WA_DeleteOnClose);
 }
