@@ -42,12 +42,12 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     UI (new Ui::Rad_Main_Window),
     m_mdiArea (new QMdiArea (this)),
     actCalc1 (new QAction (tr("Calculate&1"), this)),
-    actCalc2 (new QAction (tr("Calculate&2"), this)),
-    stc (new complex<double> [nd]),
-    stc1 (new complex<double> [nd]),
-    stc2 (new double [2*nd]),
-    stc3 (0),
-    stc4 (0)
+    actCalc2 (new QAction (tr("Calculate&2"), this))
+//    stc (new complex<double> [nd]),
+//    stc1 (new complex<double> [nd]),
+//    stc2 (new double [2*nd]),
+//    stc3 (0),
+//    stc4 (0)
 {
     UI->setupUi (this);
 
@@ -57,13 +57,14 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
 
 RadMainWindow :: ~RadMainWindow (void)
 {
-    delete [] stc2;
+/*    delete [] stc2;
     delete [] stc1;
     delete [] stc;
     if (stc3)
         delete [] stc3;
     if (stc4)
         delete [] stc4;
+*/
 }
 
 void RadMainWindow :: openDataFile (void)
@@ -115,6 +116,9 @@ void RadMainWindow :: init (void)
 
     QAction * actStcTest = calcMenu->addAction (tr("Test FFT for stc"));
     connect (actStcTest, SIGNAL (triggered()), this, SLOT (stcFFTTest()) );
+
+    QAction * actStc1Test = calcMenu->addAction (tr("Test FFT for stc1"));
+    connect (actStc1Test, SIGNAL (triggered()), this, SLOT (stc1FFTTest()) );
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -129,6 +133,8 @@ void RadMainWindow :: slotTest1 (void)
     {
         st [i] = 0;
     }
+    complex<double> * stc = new complex<double>[nd];
+    complex<double> * stc1 = new complex<double>[nd];
     for (int i=0; i<nd; i++)
     {
         stc[i] = complex<double> (0.0, 0.0);
@@ -245,11 +251,13 @@ void RadMainWindow :: slotTest1 (void)
     QMdiSubWindow * subWopFFT = m_mdiArea->addSubWindow (wOpFFT);
     wOpFFT->show ();
     subWopFFT->setAttribute (Qt::WA_DeleteOnClose);
+    complex<double> * stc4 = new complex<double> [nd];
     stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
         double r = real (stc4[i])*nd;
         double im = imag (stc4[i])*nd;
+        stc4[i] = complex<double> (r, im);
         stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
     fContData.close();
@@ -264,60 +272,84 @@ void RadMainWindow :: slotTest1 (void)
     }
     convImage->fill (0);
     qDebug () << __PRETTY_FUNCTION__ << convImage->size () << imSize;
-    for (int i0=0; i0<na; i0++)
+    QFile fileStc2 ("stc2.dat");
+    fileStc2.open (QIODevice::WriteOnly);
+    QTextStream stc2Op (&fileStc2);
+//    for (int i0=0; i0<na; i0++)
+//    {
+    int n2 = FFT_Transform::pow2roundup(nd);//1024;
+    complex<double> * xConv = new complex<double>[n2];
+    for (int i=0; i<nd; i++)
     {
-        for (int i=0; i<nd; i++)
-        {
-            stc1[i] = stc4[i]*opor[i];///(nd*nd);
-            stc1[i] = complex<double> (real (stc1[i]) / ((double)nd*nd), imag (stc1[i]) / ((double)nd*nd));
-        }
-        stc3 = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE);
-        qDebug () << __PRETTY_FUNCTION__ << stc3 << i0+1 << " of " << na;
-        for (int i=0; i<nd; i++)
-        {
-            stc2[2*i] = real (stc3[i]);
-            stc2[2*i+1] = imag (stc3[i]);
-            stc2abs[i] = sqrt (stc2[2*i]*stc2[2*i] + stc2[2*i+1]*stc2[2*i+1]);
-            double gray (stc2abs[i]);
-            uint val = (uint)(256*gray);
-
-            QRgb v = qRgb (val, val, val);
-            //qDebug ()  << __PRETTY_FUNCTION__ << v;
-            convImage->setPixel (i, i0/5, v);//qRgb(val, val, val));
-
-    //        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
-        }
-
-        if (fid6)
-        {
-            size_t h = fwrite (stc2, sizeof (double), 2*nd, fid6);
-            Q_UNUSED (h);
-        }
-        if (i0==0)
-        {
-            radDataWidget * w = new radDataWidget();
-            QAbstractItemModel * radCModel = new QStandardItemModel (nd, 3, 0);// (nd2, na);
-            radCModel->setHeaderData (0, Qt::Horizontal, QString("Real"), Qt::DisplayRole);
-            radCModel->setHeaderData (1, Qt::Horizontal, QString("Image"), Qt::DisplayRole);
-            radCModel->setHeaderData (2, Qt::Horizontal, QString("Module"), Qt::DisplayRole);
-            for (int i=0; i<nd; i++)
-            {
-                QModelIndex wIndex = radCModel->index (i, 0);
-                radCModel->setData (wIndex, (double)(stc2[2*i]), Qt::DisplayRole);
-                wIndex = radCModel->index (i, 1);
-                radCModel->setData (wIndex, (double)(stc2[2*i+1]), Qt::DisplayRole);
-                wIndex = radCModel->index (i, 2);
-                radCModel->setData (wIndex, (double)stc2abs[i], Qt::DisplayRole);
-            }
-            w->setModel (radCModel);
-            QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
-            w->show ();
-            subW->setAttribute (Qt::WA_DeleteOnClose);
-        }
-
-        delete [] stc3;
-//        qDebug () << __PRETTY_FUNCTION__ << h;
+        double rstc4 = real (stc4[i])/nd;
+        double imstc4 = imag (stc4[i])/nd;
+        double ropor = real (opor[i]);
+        double imopor = imag (opor[i]);
+        complex<double> res = complex<double> ((rstc4 * ropor - imstc4*imopor), (rstc4*imopor+imstc4*ropor));
+        xConv[i] = res;//stc4[i]*opor[i];///(nd*nd);
+        if (i<10)
+            qDebug () << __PRETTY_FUNCTION__ << real (res) << imag(res) << real (xConv[i]) << imag (xConv[i]);
     }
+    //FFT_Transform fftRev;
+
+    complex<double> * xfft = new complex<double> [nd];
+    xfft = fft (xConv, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
+    qDebug () << __PRETTY_FUNCTION__ << "FFT" << nd << n2;
+    for (int i=0; i<nd; i++)
+    {
+        //stc3[i] = xfft[i];
+        if (i<10)
+            qDebug () << __PRETTY_FUNCTION__ << real (xfft[i])/nd << imag (xfft[i])/nd;
+    }
+    delete [] xConv;
+    double * stc2 = new double [2*nd];
+    for (int i=0; i<nd; i++)
+    {
+        int ind = (i==0 ? nd-1 : i-1);
+        stc2[2*i] = real (xfft[ind])/nd;//stc3[i]);
+        stc2[2*i+1] = imag (xfft[ind])/nd;
+        stc2Op << stc2[2*i] << " " << stc2[2*i+1] << endl;
+        stc2abs[i] = sqrt (stc2[2*i]*stc2[2*i] + stc2[2*i+1]*stc2[2*i+1]);
+        double gray (stc2abs[i]);
+        uint val = (uint)(256*gray);
+
+        QRgb v = qRgb (val, val, val);
+        Q_UNUSED (v);
+        ////qDebug ()  << __PRETTY_FUNCTION__ << v;
+        //convImage->setPixel (i, i0/5, v);//qRgb(val, val, val));
+
+////        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
+    }
+    delete [] xfft;
+
+    if (fid6)
+    {
+        size_t h = fwrite (stc2, sizeof (double), 2*nd, fid6);
+        Q_UNUSED (h);
+    }
+    radDataWidget * wStc2 = new radDataWidget();
+    wStc2->setWindowTitle (tr("Stc2 after FFT"));
+    QAbstractItemModel * radCModel = new QStandardItemModel (nd, 3, 0);// (nd2, na);
+    radCModel->setHeaderData (0, Qt::Horizontal, QString("Real"), Qt::DisplayRole);
+    radCModel->setHeaderData (1, Qt::Horizontal, QString("Image"), Qt::DisplayRole);
+    radCModel->setHeaderData (2, Qt::Horizontal, QString("Module"), Qt::DisplayRole);
+    for (int i=0; i<nd; i++)
+    {
+        QModelIndex wIndex = radCModel->index (i, 0);
+        radCModel->setData (wIndex, (double)(stc2[2*i]), Qt::DisplayRole);
+        wIndex = radCModel->index (i, 1);
+        radCModel->setData (wIndex, (double)(stc2[2*i+1]), Qt::DisplayRole);
+        wIndex = radCModel->index (i, 2);
+        radCModel->setData (wIndex, (double)stc2abs[i], Qt::DisplayRole);
+    }
+    wStc2->setModel (radCModel);
+    QMdiSubWindow * subWStc2 = m_mdiArea->addSubWindow (wStc2);
+    wStc2->show ();
+    subWStc2->setAttribute (Qt::WA_DeleteOnClose);
+
+//    delete [] stc3;
+////        qDebug () << __PRETTY_FUNCTION__ << h;
+//    }
     QString fileImageName = QString ("rgg.png");
     convImage->save (fileImageName, "PNG");
 
@@ -327,10 +359,14 @@ void RadMainWindow :: slotTest1 (void)
     imW->show ();
     subImW->setAttribute (Qt::WA_DeleteOnClose);
 
-    delete convImage;
-    delete [] stc2abs;
-    delete [] st1;
+    delete [] stc2;
+    delete [] stc4;
     delete [] opor;
+    delete [] opor2;
+    delete [] stc1;
+//    delete [] stc;
+//    delete [] st1;
+
     if (fid6)
         fclose (fid6);
     actCalc2->setEnabled (true);
@@ -490,14 +526,14 @@ void RadMainWindow :: fftTest (void)
 //        qDebug () << __PRETTY_FUNCTION__ << v001[i];
 
     int n2 = FFT_Transform::pow2roundup(v001.size());//1024;
-    //complex<double> * x = new complex<double>[n2];
-    double * x = new double [n2];
+    complex<double> * x = new complex<double>[n2];
+    //double * x = new double [n2];
     for (int i=0; i<n2; i++)
-        x[i] = 0.0;//complex<double>(0.0, 0.0);
+        x[i] = complex<double>(0.0, 0.0);
 
     for (int i=0; i<n; i++)
-        x[i] = v001[i];//complex<double>(v001[i], 0.0);// v001[i];
-    FFT_RealTransform fft;// = new FFT_Transform;
+        x[i] = complex<double>(v001[i], 0.0);// v001[i];
+    FFT_Transform fft;// = new FFT_Transform;
     complex<double> * xfft = new complex<double> [n2];
     xfft = fft (x, n, n2, FFTW_FORWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
     QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));
@@ -510,14 +546,21 @@ void RadMainWindow :: fftTest (void)
     QFile fSave(fSaveName);
     fSave.open (QIODevice::WriteOnly);
     QTextStream fftRes (&fSave);
+    complex<double> * xfftrev = new complex<double> [n2];
+    xfftrev = fft (xfft, n, n2, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
+
     for (int i=0; i<n2; i++)
     {
         double r = real (xfft[i])*n2;
         double im = imag (xfft[i])*n2;
-        fftRes << qSetFieldWidth(20) << qSetRealNumberPrecision(16) << r << " "
-               << qSetFieldWidth(20) << qSetRealNumberPrecision(16) << im << "i" << endl;
+        fftRes << qSetFieldWidth(4) << qSetRealNumberPrecision(2) << real (x[i]) << " "
+               << qSetFieldWidth(4) << qSetRealNumberPrecision(2) << imag (x[i]) << "i "
+               << qSetFieldWidth(20) << qSetRealNumberPrecision(16) << r << " "
+               << qSetFieldWidth(20) << qSetRealNumberPrecision(16) << im << "i "
+               << qSetFieldWidth(4) << qSetRealNumberPrecision(2) << real (xfftrev[i]) << " "
+               << qSetFieldWidth(4) << qSetRealNumberPrecision(2) << imag (xfftrev[i]) << "i"
+               << endl;
     }
-
     delete [] xfft;
     delete [] x;
 }
@@ -572,6 +615,100 @@ void RadMainWindow :: oporTest (void)
     delete [] oporFFT;
 }
 
+void RadMainWindow :: stc1FFTTest (void)
+{
+    QString fName = QFileDialog::getOpenFileName (this, tr("Open File"), QDir::currentPath(), tr("All files (*.*)"));
+    if (fName.isEmpty())
+        return;
+
+    QVector<double> v001;
+    QFile f001 (fName);
+    f001.open (QIODevice::ReadOnly);
+    QString rfftStr;
+
+    QTextStream fstr (&f001);
+    rfftStr = fstr.readLine();// >> rfftStr;
+    //qDebug () << __PRETTY_FUNCTION__ << rfftStr;
+    QStringList fftStrList = rfftStr.split(QString("\t"));
+    //fstr >> v001;
+    int n = fftStrList.size();
+    qDebug () << __PRETTY_FUNCTION__ << n;
+    QFile fftc ("stc1c.dat");
+    fftc.open (QIODevice::WriteOnly);
+    QTextStream fftcStr (&fftc);
+    for (int i=0; i<n; i++)
+    {
+        bool ok;
+        Q_UNUSED (ok);
+        //QStringList fftstr = fftStrList[i].split(QString(" "));
+        QByteArray fftBuf (fftStrList[i].mid(0, fftStrList[i].count()-1).toUtf8());
+        if (i<=10)
+            qDebug () << __PRETTY_FUNCTION__ << fftBuf;
+        QTextStream strBuf (fftBuf);
+        double x, y;// = fftstr[0].toDouble (&ok);
+        QString sp;
+        strBuf >> x >> sp >> y ;
+///        strBuf >> y;
+        if (sp.contains("-"))
+            y *= -1.0;
+        if (i<=10)
+            qDebug () << __PRETTY_FUNCTION__ << x << sp << y;
+        fftcStr << x << " " << y << endl;
+        v001.append (x);
+        v001.append (y);
+    }
+
+//    for (int i=0; i<v001.size(); i++)
+//        qDebug () << __PRETTY_FUNCTION__ << v001[i];
+
+    int n2 = FFT_Transform::pow2roundup(v001.size()/2);//1024;
+    complex<double> * x = new complex<double>[n2];
+    //double * x = new double [n2];
+    for (int i=0; i<n2; i++)
+        x[i] = complex<double>(0.0, 0.0);
+
+    for (int i=0; i<n; i++)
+    {
+        x[i] = complex<double>(v001[2*i], v001[2*i+1]);
+        fftcStr << real (x[i]) << " " << imag (x[i]) << endl;
+    }
+    FFT_Transform fft;// = new FFT_Transform;
+    complex<double> * xfft = new complex<double> [n2];
+    xfft = fft (x, n2, n2, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
+    QString fSaveName = QFileDialog::getSaveFileName (this, tr("Save File"), QDir::currentPath(), tr("All files (*.*)"));
+    if (fSaveName.isEmpty())
+    {
+        delete [] xfft;
+        delete [] x;
+        return;
+    }
+    QFile fSave(fSaveName);
+    fSave.open (QIODevice::WriteOnly);
+    QTextStream fftRes (&fSave);
+    complex<double> * xfftrev = new complex<double> [n2];
+    xfftrev = fft (xfft, n2, n2, FFTW_FORWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
+    fftRes.setRealNumberNotation (QTextStream::FixedNotation);
+
+    for (int i=0; i<n2; i++)
+    {
+        double r = real (xfft[i])/n2;
+        double im = imag (xfft[i])/n2;
+        fftRes << qSetFieldWidth(10) << qSetRealNumberPrecision(16) << real (x[i]) << " "
+               << qSetFieldWidth(10) << qSetRealNumberPrecision(16) << imag (x[i]) << "i ";
+        scientific (fftRes);
+        fftRes
+               << qSetFieldWidth(10) << qSetRealNumberPrecision(16) << r << " "
+               << qSetFieldWidth(10) << qSetRealNumberPrecision(16) << im << "i ";
+        fixed (fftRes);
+        fftRes
+               << qSetFieldWidth(10) << qSetRealNumberPrecision(16) << real (xfftrev[i]) << " "
+               << qSetFieldWidth(10) << qSetRealNumberPrecision(16) << imag (xfftrev[i]) << "i"
+               << endl;
+    }
+    delete [] xfft;
+    delete [] x;
+}
+
 void RadMainWindow :: stcFFTTest (void)
 {
     if (fileName.isEmpty())
@@ -584,6 +721,8 @@ void RadMainWindow :: stcFFTTest (void)
     {
         st [i] = 0;
     }
+    complex<double>* stc = new complex<double> [nd];
+    complex<double>* stc1 = new complex<double> [nd];
     for (int i=0; i<nd; i++)
     {
         stc[i] = complex<double> (0.0, 0.0);
@@ -615,8 +754,8 @@ void RadMainWindow :: stcFFTTest (void)
         //if (i<1)
         //{
         //}
-        if (st[ii] > 128)
-            st[ii] -= 256;
+        //if (st[ii] > 128)
+        //    st[ii] -= 256;
         QModelIndex wcIndex = radModel->index (nr, 0);
         radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
         nr++;
@@ -652,6 +791,7 @@ void RadMainWindow :: stcFFTTest (void)
     subW->setAttribute (Qt::WA_DeleteOnClose);
 
     FFT_Transform fft;// = new FFT_Transform;
+    complex<double>* stc4 = new complex<double> [nd];
     stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i=0; i<nd; i++)
     {
@@ -661,4 +801,5 @@ void RadMainWindow :: stcFFTTest (void)
     QMdiSubWindow * subWStcFFT = m_mdiArea->addSubWindow (wStcFFT);
     wStcFFT->show ();
     subWStcFFT->setAttribute (Qt::WA_DeleteOnClose);
+    delete [] stc4;
 }

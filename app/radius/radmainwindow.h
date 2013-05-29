@@ -26,6 +26,7 @@ private slots:
     void openConvFile (void);
     void fftTest (void);
     void stcFFTTest (void);
+    void stc1FFTTest (void);
     void oporTest (void);
     void slotTest1 (void);
     void slotTest2 (void);
@@ -48,11 +49,11 @@ private:
     QAction * actCalc1;
     QAction * actCalc2;
 
-    complex<double> * stc;// = new complex<double> [nd];
-    complex<double> * stc1;/// = new complex<double> [nd];
-    double * stc2;
-    complex<double> * stc3;
-    complex<double> * stc4;// = new complex<double> [nd];
+    //complex<double> * stc;// = new complex<double> [nd];
+    //complex<double> * stc1;/// = new complex<double> [nd];
+    //double * stc2;
+    //complex<double> * stc3;
+    //complex<double> * stc4;// = new complex<double> [nd];
 private:
     Q_OBJECT
 };

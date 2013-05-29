@@ -37,7 +37,10 @@ complex<double> * FFT_Transform :: operator () (complex<double> * src, int nsrc,
     fftw_execute (p);
     for (int i=0; i<n2; i++)
     {
-        res[i] = complex<double> (out[i][0]/n2, out[i][1]/n2);
+        if (sign == FFTW_FORWARD)
+            res[i] = complex<double> (out[i][0]/n2, out[i][1]/n2);
+        else
+            res[i] = complex<double> (out[i][0], out[i][1]);
         //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
     fftw_destroy_plan (p);
