@@ -275,7 +275,7 @@ void RadMainWindow :: slotTest1 (void)
     QFile fileStc2 ("stc2.dat");
     fileStc2.open (QIODevice::WriteOnly);
     QTextStream stc2Op (&fileStc2);
-    for (int i0=0; i0<50/*na*/; i0++)
+    for (int i0=0; i0<2048/*na*/; i0++)
     {
         int n2 = FFT_Transform::pow2roundup(nd);//1024;
         complex<double> * xConv = new complex<double>[n2];
@@ -384,7 +384,7 @@ void RadMainWindow :: openConvFile (void)
 void RadMainWindow :: slotTest2 (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    QString fileName = QFileDialog::getOpenFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
+    QString fileName = QFileDialog::getOpenFileName (this, tr("Open convolution data"), QDir::currentPath(), tr("All files (*)"));
     if (fileName.isEmpty())
         return;
 
@@ -400,38 +400,62 @@ void RadMainWindow :: slotTest2 (void)
     }
     int read (0);
     CMatrix rgg1 (0.0, ndrz, na2);
+    complex<double>* rgg1Vec = new complex<double> [ndrz*na2];
     for (int i=0; i<na2; i++)
     {
         double stlb[2*nd];
         double stlb2[ndrz*2];
-        fread (stlb, 32, nd*2, fid6);
+        int cr = fread (stlb, sizeof (quint8), nd*2, fid6);
         for (int j=0; j<ndrz*2;j++)
-            stlb2[j]=stlb[j+2*ndv];
+            stlb2[j]=stlb[j];//+2*ndv];
         for (int j=0; j<ndrz;j++)
+        {
             rgg1(j, i) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
-        //qDebug () << __PRETTY_FUNCTION__ << i << na2;
+            rgg1Vec[j*ndrz+i] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
+        }
+        qDebug () << __PRETTY_FUNCTION__ << i << na2 << cr << ndv << stlb[0] << stlb[2*ndv];
         read++;
     }
+//    for (int i=0; i<ndrz*na2; i++)
+//        rgg1Vec[i] = rgg1.getData()[i];
+/*    for (int i=0; i<ndrz*nas/2; i++)
+    {
+        double xr = real (rgg1Vec[i]);//.getData()[i]);
+        double yr = imag (rgg1Vec[i]);//.getData()[i]);
+        qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
+    }*/
     CMatrix rgg  (0.0, ndrz, na2);
-    qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set");
+    qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set") << ndrz << nas << na2;
 
-    CMatrix corf (complex<double>(0.0), ndrz, na2);
     CMatrix corf2 (complex<double>(0.0), ndrz, na2);
     CMatrix corf3 (complex<double>(0.0), ndrz, nas);
+    QFile corfCont ("ctest.dat");
+    corfCont.open (QIODevice::WriteOnly);
+    QTextStream stCorf (&corfCont);
     int from_opor (0);
+    complex<double> * corfVec = new complex<double> [ndrz*na2];
+    CMatrix corf (complex<double>(0.0), ndrz, na2);
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<nas; j++)
         {
-            double x = (-nas/2+i)*dx;
+            double x = (-nas/2+j)*dx;
             double rt = sqrt (R*R+x*x+H*H);
             double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamp;
             corf3(N0, i) = complex<double>(cos(phase), sin(phase));
-            qDebug () << __PRETTY_FUNCTION__ << x << phase << (double)real (corf3(N0, i)) << (double)imag (corf3(N0, i));
+            //stCorf << (double)real (corf3(N0, i)) << " " << (double)imag (corf3(N0, i)) << " " << N0 << " " << i << endl;
+            //qDebug () << __PRETTY_FUNCTION__ << x << phase << (double)real (corf3(N0, i)) << (double)imag (corf3(N0, i)) << N0 << i;
         }
         from_opor++;
+    }
+//    corfVec = corf3.getData();
+    for (int i=0; i<ndrz*na2; i++)
+    {
+        corfVec[i] = corf3.getData()[i];
+//        if (real(corfVec[i]) > 0.1e-15 || imag (corfVec[i]) > 0.1e-15)
+//            qDebug () << __PRETTY_FUNCTION__ << real(corfVec[i]) << imag (corfVec[i]);
     }
 
     int cor_func (0);
@@ -439,31 +463,86 @@ void RadMainWindow :: slotTest2 (void)
     {
         for (int j=0; j<ndrz; j++)
         {
-            corf(j, i) = corf3(j, i+nas/2);
-            corf(j, i+na2-nas/2) = corf3 (j, i);
+            corf(j, i) = corfVec[j*ndrz+i+nas/2];//corf3(j, i+nas/2);
+            corf(j, i+na2-nas/2) = corfVec[j*ndrz+i];// corf3(j, i);
+//            if (sqrt (real (corf3(j, i+nas/2))*real (corf3(j, i+nas/2)) + imag (corf3(j, i+nas/2))*imag (corf3(j, i+nas/2))) > 0.1e-15 )
+//            {
+//                qDebug () << __PRETTY_FUNCTION__ << i << " " << j << real (corf(j, i+na2-nas/2)) << imag (corf(j, i+na2-nas/2)) << real (corf3(j, i)) << imag (corf3(j, i)) << real (corf.getData()[i*ndrz+j]) << imag (corf.getData()[i*ndrz+j]);
+//            }
         }
         cor_func++;
     }
 
+    stCorf << QString("Row matrix") << endl;
+    for (int i=0; i < ndrz*na2; i++)
+    {
+        double xr = real (corfVec[i]);
+        double yr = imag (corfVec[i]);
+        stCorf << xr << " " << yr << endl;
+    }
+    stCorf << QString("Matrix for FFT") << endl;
+
+    for (int i=0; i<ndrz; i++)
+    {
+        for (int j=0; j<nas; j++)
+        {
+            double x = real (corf(i,j));
+            double y = imag (corf(i,j));
+            stCorf << x << " " << y << " ";
+        }
+        stCorf << endl;
+    }
+    stCorf << endl;
+
     FFT2_Transform fft2;// = new FFT2_Transform;
     complex<double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
-    Q_UNUSED (corfw);
-/*    for (int i=0; i<ndrz*nas/2; i++)
+    stCorf << QString("Results of FFT") << endl;
+    for (int i=0; i<ndrz*nas/2; i++)
     {
-        double xr = real (corf3.getData()[i]);
-        double yr = imag (corf3.getData()[i]);
+        stCorf << qSetFieldWidth(4) << qSetRealNumberPrecision(2) << real (corfw[i]) << " " 
+               << qSetFieldWidth(4) << qSetRealNumberPrecision(2) << imag (corfw[i]);
+        stCorf << endl;
+    }
+/*    for (int i=0; i<100; i++)
+    {
+        double xr = real (rgg1Vec[i]);//.getData()[i]);
+        double yr = imag (rgg1Vec[i]);//.getData()[i]);
         qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
     }*/
-    complex<double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
-    Q_UNUSED (rggD);
+    complex<double> * rggD = fft2(rgg1Vec, ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+//    Q_UNUSED (rggD);
     int cor_volfr (0);
     for (int i=0; i<na2; i++)
     {
         for (int j=0; j<ndrz; j++)
-            rgg(j, i) *= conj (corf2(j, i));
+        {
+            rggD[j*ndrz+i] *= conj (corfw[j*ndrz+i]);
+            rggD[j*ndrz+i] /= na2*ndrz;
+        }
         cor_volfr++;
     }
-    complex<double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+/*    for (int i=0; i<100; i++)
+    {
+        double xr = real (rggD[i]);//.getData()[i]);
+        double yr = imag (rggD[i]);//.getData()[i]);
+        qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
+    }*/
+    complex<double> * rggBD = fft2(rggD/*rgg.getData()*/, ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    double maxVal = 0.0;
+//    double minVal = 0.0;//sqrt (real(rggBD[0])*real(rggBD[0])+imag(rggBD[0])*imag(rggBD[0]));
+    for (int i=0; i<ndrz*nas/2; i++)
+    {
+        rggBD[i] /= (ndrz*nas)/2.0;
+        rggBD[i] /= (ndrz*nas)/2.0;
+        maxVal = qMax (maxVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
+//        minVal = qMin (minVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
+    }
+    for (int i=0; i<100; i++)
+    {
+        double xr = real (rggBD[i]);//.getData()[i]);
+        double yr = imag (rggBD[i]);//.getData()[i]);
+        qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
+    }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
     uchar * imData = new uchar [ndrz*nas/2];
@@ -472,16 +551,18 @@ void RadMainWindow :: slotTest2 (void)
     {
         for (int j=0; j<nas/2;j++)
         {
-            imData[ii] = abs (rggBD[ii])*8000;
+            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*8000;
             uint val = (uint)(256*imData[ii]);
             QRgb v = qRgb (val, val, val);
             hIm->setPixel (i, j, v);
-            qDebug () << __PRETTY_FUNCTION__ << ii << imData[ii];
+            //if (val > 0)
+            qDebug () << __PRETTY_FUNCTION__ << ii << imData[ii] << val;
             ii++;
         }
     }
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
     //qDebug () << __PRETTY_FUNCTION__ << isLoaded;
+    hIm->save("rgg2a.png", "PNG");
     QPixmap pIm = QPixmap::fromImage (*hIm);
     QLabel * lIm = new QLabel ;
     QWidget * wImage = new QWidget;
@@ -489,6 +570,8 @@ void RadMainWindow :: slotTest2 (void)
     lIm->setPixmap (pIm);
     hImLay->addWidget (lIm);
     m_mdiArea->addSubWindow (wImage);
+
+    delete [] corfVec;
 
     fclose (fid6);
 }

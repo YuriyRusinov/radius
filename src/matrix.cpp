@@ -27,6 +27,15 @@ CMatrix :: CMatrix (complex<double> cval, int nrows, int ncols) :
         matr[i] = cval;
 }
 
+CMatrix :: CMatrix (const CMatrix& CM) :
+    nRows (CM.nRows),
+    nCols (CM.nCols),
+    matr (new complex<double> [CM.nRows*CM.nCols])
+{
+    for (int i=0; i<nRows*nCols; i++)
+        matr[i] = CM.matr[i];
+}
+
 CMatrix :: ~CMatrix (void)
 {
     delete [] matr;
@@ -37,7 +46,7 @@ complex<double>& CMatrix :: operator() (int i, int j)
     if (i<0 || i>=nRows || j<0 || j>=nCols)
         throw std::out_of_range ("Invalid indices");
 
-    return matr[i*nRows+j];
+    return matr[i*nCols+j];
 }
 
 const complex<double>& CMatrix :: operator() (int i, int j) const
@@ -45,10 +54,17 @@ const complex<double>& CMatrix :: operator() (int i, int j) const
     if (i<0 || i>=nRows || j<0 || j>=nCols)
         throw std::out_of_range ("Invalid indices");
 
-    return matr[i*nRows+j];
+    return matr[i*nCols+j];
 }
 
 complex<double> * CMatrix :: getData (void) const
 {
     return matr;
+}
+
+void CMatrix :: setData (int i, int j, complex<double> cval)
+{
+    if (i<0 || i>=nRows || j<0 || j>=nCols)
+        throw std::out_of_range ("Invalid indices");
+    matr[i*nCols+j] = cval;
 }

@@ -15,11 +15,14 @@ public:
     CMatrix (int nrows=0, int ncols=0);
     CMatrix (double value, int nrows, int ncols);
     CMatrix (complex<double> cval, int nrows, int ncols);
+    CMatrix (const CMatrix& CM);
     ~CMatrix (void);
 
     complex<double>& operator() (int i, int j);
     const complex<double>& operator() (int i, int j) const;
     complex<double> * getData (void) const;
+
+    void setData (int i, int j, complex<double> cval);
 private:
     int nRows;
     int nCols;
