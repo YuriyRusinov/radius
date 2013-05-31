@@ -19,6 +19,7 @@
 #include <QWidget>
 #include <QVector>
 #include <QHBoxLayout>
+#include <QColor>
 
 #include <radDataWidget.h>
 #include <rggImageWidget.h>
@@ -405,15 +406,15 @@ void RadMainWindow :: slotTest2 (void)
     {
         double stlb[2*nd];
         double stlb2[ndrz*2];
-        int cr = fread (stlb, sizeof (quint8), nd*2, fid6);
+        int cr = fread (stlb, sizeof (quint32), nd*2, fid6);
         for (int j=0; j<ndrz*2;j++)
-            stlb2[j]=stlb[j];//+2*ndv];
+            stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
         {
             rgg1(j, i) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
             rgg1Vec[j*ndrz+i] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
-        qDebug () << __PRETTY_FUNCTION__ << i << na2 << cr << ndv << stlb[0] << stlb[2*ndv];
+        qDebug () << __PRETTY_FUNCTION__ << i << na2 << cr << ndv << stlb[0] << stlb[2*ndv] << sizeof (quint32);
         read++;
     }
 //    for (int i=0; i<ndrz*na2; i++)
@@ -427,7 +428,7 @@ void RadMainWindow :: slotTest2 (void)
     CMatrix rgg  (0.0, ndrz, na2);
     qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set") << ndrz << nas << na2;
 
-    CMatrix corf2 (complex<double>(0.0), ndrz, na2);
+//    CMatrix corf2 (complex<double>(0.0), ndrz, na2);
     CMatrix corf3 (complex<double>(0.0), ndrz, nas);
     QFile corfCont ("ctest.dat");
     corfCont.open (QIODevice::WriteOnly);
@@ -450,12 +451,17 @@ void RadMainWindow :: slotTest2 (void)
         }
         from_opor++;
     }
-//    corfVec = corf3.getData();
-    for (int i=0; i<ndrz*na2; i++)
+//    complex<double>* c = corf3.getData();
+    int num(0);
+    for (int i=0; i<ndrz; i++)
     {
-        corfVec[i] = corf3.getData()[i];
-//        if (real(corfVec[i]) > 0.1e-15 || imag (corfVec[i]) > 0.1e-15)
-//            qDebug () << __PRETTY_FUNCTION__ << real(corfVec[i]) << imag (corfVec[i]);
+        for (int j=0; j<nas; j++)
+        {
+            corfVec[num] = corf3(i, j);
+            if (real(corfVec[num]) > 0.1e-15 || imag (corfVec[num]) > 0.1e-15)
+                qDebug () << __PRETTY_FUNCTION__ << real(corfVec[num]) << imag (corfVec[num]);
+            num++;
+        }
     }
 
     int cor_func (0);
@@ -545,23 +551,31 @@ void RadMainWindow :: slotTest2 (void)
     }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
+//    qDebug () << __PRETTY_FUNCTION__ << hIm->colorCount ();
     uchar * imData = new uchar [ndrz*nas/2];
     int ii (0);
+    quint32 maxvalim = 0;
+    QVector<QRgb> colors;
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<nas/2;j++)
         {
             imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*8000;
-            uint val = (uint)(256*imData[ii]);
+            uint val = (uint)(256*imData[ii]/512/0.3);
+            maxvalim = qMax (maxvalim, val);
             QRgb v = qRgb (val, val, val);
-            hIm->setPixel (i, j, v);
-            //if (val > 0)
-            qDebug () << __PRETTY_FUNCTION__ << ii << imData[ii] << val;
+            if (!colors.contains(v))
+                colors.append (v);
+            QColor vCol (v);
+            //int pIndex = hIm->pixelIndex (i, j);
+            hIm->setPixel (i, j, v);//qRgb(255, 255, 255));
+            if (val > 0)
+                qDebug () << __PRETTY_FUNCTION__ << i<< j << ii << imData[ii] << val << vCol ;
             ii++;
         }
     }
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
-    //qDebug () << __PRETTY_FUNCTION__ << isLoaded;
+    qDebug () << __PRETTY_FUNCTION__ << maxvalim;//isLoaded;
     hIm->save("rgg2a.png", "PNG");
     QPixmap pIm = QPixmap::fromImage (*hIm);
     QLabel * lIm = new QLabel ;
