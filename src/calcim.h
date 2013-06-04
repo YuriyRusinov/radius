@@ -34,4 +34,18 @@ public:
     virtual double * operator () (const double* st, int nd);
 };
 
+class _FFTMATR_EXPORT_ CalcOpor1
+{
+public:
+    CalcOpor1 (int _nd);
+    virtual ~CalcOpor1 ();
+
+    complex<double>* calc ();
+    complex<double>* data () const;
+
+private:
+    complex<double>* opor;
+    int nd;
+};
+
 #endif

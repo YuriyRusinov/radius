@@ -32,6 +32,7 @@
 
 #include "matrix.h"
 #include "fft_c.h"
+#include "calcim.h"
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -127,7 +128,28 @@ void RadMainWindow :: slotTest1 (void)
     if (fileName.isEmpty())
         return;
 
-    radDataWidget * w = new radDataWidget();
+    CalcOpor1 * cop = new CalcOpor1 (nd);
+    complex<double> * opor = cop->calc();//new complex<double> [nd];
+    qDebug () << __PRETTY_FUNCTION__ << N1;
+    QFile fContData (QString ("stc4.dat"));
+    fContData.open (QIODevice::WriteOnly);
+    QTextStream stCont (&fContData);
+    FFT_Transform fft;// = new FFT_Transform;
+    radDataWidget * wOpFFT = new radDataWidget (opor, N1);
+    QMdiSubWindow * subWopFFT = m_mdiArea->addSubWindow (wOpFFT);
+    wOpFFT->show ();
+    subWopFFT->setAttribute (Qt::WA_DeleteOnClose);
+    QFile contOp ("opor_after_FFT.dat");
+    contOp.open (QIODevice::WriteOnly);
+    QTextStream stOp (&contOp);
+    for (int i=0; i<N1; i++)
+    {
+        double re = real (opor[i])*nd;
+        double im = imag (opor[i])*nd;
+        stOp << re << " " << im << "i" << endl;
+    }
+    contOp.close ();
+
     QFile fData (fileName);
     quint8 * st = new quint8 [nd2];
     for (int i=0; i<nd2; i++)
@@ -149,6 +171,10 @@ void RadMainWindow :: slotTest1 (void)
     if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
         return;
 
+    fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
+
+    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "w+");
+
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
     QAbstractItemModel * radModel = new QStandardItemModel (nd2, 1, 0);// (nd2, na);
 
@@ -156,113 +182,108 @@ void RadMainWindow :: slotTest1 (void)
     QFile fContStData (QString ("stc.dat"));
     fContStData.open (QIODevice::WriteOnly);
     QTextStream stContSt (&fContStData);
-/*    for (int i=0; i<na; i++)
+    for (int i=0; i<na; i++)
     {
+        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
+        int cr = fread (st, sizeof (quint8), nd2, fid5);
+        if (cr <= 0)
+            return;
+        for (int ii=0; ii< nd2; ii++)
+        {
+            if (i<1)
+            {
+                QModelIndex wcIndex = radModel->index (nr, 0);
+                radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
+                nr++;
+            }
+        }
+
+
+        for (int ii=0; ii<128; ii++)
+            st[ii] = 0.0;
+
+        for (int ii=0; ii<ndn; ii++)
+        {
+            double re = st[2*ii+1];
+            double im = st[2*ii];
+            if (re > 128)
+                re -= 256;
+            if (im > 128)
+                im -= 256;
+            if (i==0)
+                stContSt << re << " " << im << endl;
+            stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
+        }
+        complex<double> * stc4 = 0;//new complex<double> [nd];
+        if (i >= 5779)
+            qDebug () << __PRETTY_FUNCTION__ << QString ("Forward fft");
+        stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
+        qDebug () << __PRETTY_FUNCTION__ << i << na;
+        for (int ii=0; ii<nd; ii++)
+        {
+            double re = real (stc4[ii])*nd;
+            double im = imag (stc4[ii])*nd;
+            stc4[ii] = complex<double> (re, im);
+            if (i==0)
+                stCont << re << (im >= 0 ? "+" : " ") << im << "i" << endl;
+        }
+        int n2 = FFT_Transform::pow2roundup(nd);//1024;
+        qDebug () << __PRETTY_FUNCTION__ << n2;//QString ("Reverse fft");
+        //complex<double> * xConv = new complex<double>[n2];
+        for (int ii=0; ii<nd; ii++)
+        {
+            double rstc4 = real (stc4[ii])/nd;
+            double imstc4 = imag (stc4[ii])/nd;
+            double ropor = real (opor[ii]);
+            double imopor = imag (opor[ii]);
+            complex<double> res = complex<double> ((rstc4 * ropor - imstc4*imopor), (rstc4*imopor+imstc4*ropor));
+            stc1[ii] = res;//stc4[i]*opor[i];///(nd*nd);
+            //qDebug () << __PRETTY_FUNCTION__ << ii << nd;
+            //if (i<10)
+            //    qDebug () << __PRETTY_FUNCTION__ << real (res) << imag(res) << real (xConv[i]) << imag (xConv[i]);
+        }
+        delete [] stc4;
+
+        complex<double> * xfft = 0;//new complex<double> [nd];
+        if (i >= 5779)
+            qDebug () << __PRETTY_FUNCTION__ << QString ("Reverse fft");
+        xfft = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
+        //delete [] xConv;
+        double * stc2 = new double [2*nd];
+        for (int ii=0; ii<nd; ii++)
+        {
+            int ind = (ii==0 ? nd-1 : ii-1);
+            stc2[2*ii] = real (xfft[ind])/nd;//stc3[i]);
+            stc2[2*ii+1] = imag (xfft[ind])/nd;
+/*            stc2Op << stc2[2*i] << " " << stc2[2*i+1] << endl;
+            stc2abs[i] = sqrt (stc2[2*i]*stc2[2*i] + stc2[2*i+1]*stc2[2*i+1]);
+            double gray (stc2abs[i]);
+            uint val = (uint)(256*gray);
+
+            QRgb v = qRgb (val, val, val);
+            Q_UNUSED (v);
+            ////qDebug ()  << __PRETTY_FUNCTION__ << v;
+            convImage->setPixel (i, i0/5, v);//qRgb(val, val, val));
+
+    ////        qDebug () << __PRETTY_FUNCTION__ << i << (double)stc2abs[i];
 */
-    int cr = fread (st, sizeof (quint8), nd2, fid5);
-    if (cr <= 0)
-        return;
-    for (int ii=0; ii< nd2; ii++)
-    {
-        //if (i<1)
-        //{
-        QModelIndex wcIndex = radModel->index (nr, 0);
-        radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
-        nr++;
-        //}
-//        if (st[ii] > 128)
-//            st[ii] -= 256;
-    }
-/*
-    }
-*/
+        }
+        if (fid6)
+        {
+            qDebug () << __PRETTY_FUNCTION__ << QString ("Write data");
+            size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fid6);
+            int ier = ferror (fid6);
+            qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
+            if (ier)
+                qDebug () << __PRETTY_FUNCTION__ << tr ("Write error");
+        }
+        delete [] xfft;
 
-    for (int ii=0; ii<128; ii++)
-        st[ii] = 0.0;
-
-    for (int ii=0; ii<ndn; ii++)
-    {
-        double re = st[2*ii+1];
-        double im = st[2*ii];
-        if (re > 128)
-            re -= 256;
-        if (im > 128)
-            im -= 256;
-        stContSt << re << " " << im << endl;
-        stc[ii-1] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
+        delete [] stc2;
     }
-//        qDebug () << __PRETTY_FUNCTION__ << i << " " << na;// << *(st+i-1);
-    QFile contOp ("opor.dat");
-    contOp.open (QIODevice::WriteOnly);
-
-    w->setModel (radModel);
-    fData.close ();
-    QMdiSubWindow * subW = m_mdiArea->addSubWindow (w);
-    w->show ();
-    subW->setAttribute (Qt::WA_DeleteOnClose);
-
-    delete [] st;
-    qDebug () << __PRETTY_FUNCTION__ << N1;
-    double * st1 = new double [nd];
-    complex<double> * opor = new complex<double> [nd];
-    complex<double> * opor2 = new complex<double> [nd];
-
-    for (int i=0; i<nd; i++)
-    {
-        st1[i] = 0.0;
-        opor[i] = complex<double>(0.0, 0.0);
-        opor2[i] = complex<double>(0.0, 0.0);
-    }
-
-    for (int n=0; n< N1; n++)
-    {
-        double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
-        double oc = cos (phase);
-        double os = sin (phase);
-        opor[n] = complex<double>(oc, os);
-    }
-    QTextStream stOp (&contOp);
-    for (int i=0; i<N1; i++)
-    {
-        double re = real (opor[i]);
-        double im = imag (opor[i]);
-        stOp << re << " " << im << "i" << endl;
-    }
-    contOp.close ();
-    radDataWidget * wOp = new radDataWidget (opor, N1);
-    QMdiSubWindow * subWop = m_mdiArea->addSubWindow (wOp);
-    wOp->show ();
-    subWop->setAttribute (Qt::WA_DeleteOnClose);
-    int N2 = (N1/2);
-    for (int i=0; i<N2; i++)
-    {
-        opor2[i] = opor[i+N2];
-        opor2[i+nd-N2] = opor[i];
-    }
-    QFile fContData (QString ("stc4.dat"));
-    fContData.open (QIODevice::WriteOnly);
-    QTextStream stCont (&fContData);
-    fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
-
-    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "wb");
-
-    FFT_Transform fft;// = new FFT_Transform;
-    opor = fft (opor2, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
-    radDataWidget * wOpFFT = new radDataWidget (opor, N1);
-    QMdiSubWindow * subWopFFT = m_mdiArea->addSubWindow (wOpFFT);
-    wOpFFT->show ();
-    subWopFFT->setAttribute (Qt::WA_DeleteOnClose);
-    complex<double> * stc4 = new complex<double> [nd];
-    stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-    for (int i=0; i<nd; i++)
-    {
-        double r = real (stc4[i])*nd;
-        double im = imag (stc4[i])*nd;
-        stc4[i] = complex<double> (r, im);
-        stCont << r << (im >= 0 ? "+" : " ") << im << "i" << endl;
-    }
+    qDebug () << __PRETTY_FUNCTION__ << QString ("Data were read and processed");
     fContData.close();
-    double * stc2abs = new double [nd];
+//    double * stc2abs = new double [nd];
     QSize imSize (nd, na/5);
     QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
     if (!convImage || convImage->size().isNull())
@@ -273,37 +294,11 @@ void RadMainWindow :: slotTest1 (void)
     }
     convImage->fill (0);
     qDebug () << __PRETTY_FUNCTION__ << convImage->size () << imSize;
-    QFile fileStc2 ("stc2.dat");
+/*    QFile fileStc2 ("stc2.dat");
     fileStc2.open (QIODevice::WriteOnly);
     QTextStream stc2Op (&fileStc2);
-    for (int i0=0; i0<2048/*na*/; i0++)
+    for (int i0=0; i0<na; i0++)
     {
-        int n2 = FFT_Transform::pow2roundup(nd);//1024;
-        complex<double> * xConv = new complex<double>[n2];
-        for (int i=0; i<nd; i++)
-        {
-            double rstc4 = real (stc4[i])/nd;
-            double imstc4 = imag (stc4[i])/nd;
-            double ropor = real (opor[i]);
-            double imopor = imag (opor[i]);
-            complex<double> res = complex<double> ((rstc4 * ropor - imstc4*imopor), (rstc4*imopor+imstc4*ropor));
-            xConv[i] = res;//stc4[i]*opor[i];///(nd*nd);
-            if (i<10)
-                qDebug () << __PRETTY_FUNCTION__ << real (res) << imag(res) << real (xConv[i]) << imag (xConv[i]);
-        }
-        //FFT_Transform fftRev;
-
-        complex<double> * xfft = new complex<double> [nd];
-        xfft = fft (xConv, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
-        qDebug () << __PRETTY_FUNCTION__ << "FFT" << nd << n2;
-        for (int i=0; i<nd; i++)
-        {
-            //stc3[i] = xfft[i];
-            if (i<10)
-                qDebug () << __PRETTY_FUNCTION__ << real (xfft[i])/nd << imag (xfft[i])/nd;
-        }
-        delete [] xConv;
-        double * stc2 = new double [2*nd];
         for (int i=0; i<nd; i++)
         {
             int ind = (i==0 ? nd-1 : i-1);
@@ -323,11 +318,6 @@ void RadMainWindow :: slotTest1 (void)
         }
         delete [] xfft;
 
-        if (fid6)
-        {
-            size_t h = fwrite (stc2, sizeof (double), 2*nd, fid6);
-            Q_UNUSED (h);
-        }
         if (i0==0)
         {
             radDataWidget * wStc2 = new radDataWidget();
@@ -350,11 +340,11 @@ void RadMainWindow :: slotTest1 (void)
             wStc2->show ();
             subWStc2->setAttribute (Qt::WA_DeleteOnClose);
         }
-        delete [] stc2;
 
     //    delete [] stc3;
     ////        qDebug () << __PRETTY_FUNCTION__ << h;
     }
+*/
     QString fileImageName = QString ("rgg.png");
     convImage->save (fileImageName, "PNG");
 
@@ -364,13 +354,13 @@ void RadMainWindow :: slotTest1 (void)
     imW->show ();
     subImW->setAttribute (Qt::WA_DeleteOnClose);
 
-    delete [] stc4;
-    delete [] opor;
-    delete [] opor2;
+//    delete [] stc4;
+//    delete [] opor;
+//    delete [] opor2;
     delete [] stc1;
 //    delete [] stc;
-//    delete [] st1;
-
+    delete [] st;
+    delete cop;
     if (fid6)
         fclose (fid6);
     actCalc2->setEnabled (true);
@@ -392,7 +382,7 @@ void RadMainWindow :: slotTest2 (void)
     FILE * fid6 = fopen (fileName.toAscii().constData(), "rb");
     if (!fid6)
         return;
-    qDebug () << __PRETTY_FUNCTION__ << fid6;
+    qDebug () << __PRETTY_FUNCTION__ << fid6 << na_ots;
     int h1 = fseek (fid6, nd*8*na_ots, SEEK_SET);
     if (h1 < 0)
     {
@@ -402,20 +392,38 @@ void RadMainWindow :: slotTest2 (void)
     int read (0);
     CMatrix rgg1 (0.0, ndrz, na2);
     complex<double>* rgg1Vec = new complex<double> [ndrz*na2];
-    for (int i=0; i<na2; i++)
+    QFile rggMatrC("rgg1.dat");
+    rggMatrC.open(QIODevice::WriteOnly);
+    QTextStream rggStr(&rggMatrC);
+
+    QFile stlb2C("stlb2.dat");
+    stlb2C.open(QIODevice::WriteOnly);
+    QTextStream stlb2Str (&stlb2C);
+    for (int i0=0; i0<1; i0++)
     {
         double stlb[2*nd];
         double stlb2[ndrz*2];
-        int cr = fread (stlb, sizeof (quint32), nd*2, fid6);
+        int cr = fread (stlb, sizeof (double)/2, nd*2, fid6);
         for (int j=0; j<ndrz*2;j++)
             stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
         {
-            rgg1(j, i) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
-            rgg1Vec[j*ndrz+i] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
+            rgg1(j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
+            rgg1Vec[j*ndrz+i0] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
-        qDebug () << __PRETTY_FUNCTION__ << i << na2 << cr << ndv << stlb[0] << stlb[2*ndv] << sizeof (quint32);
+        if (i0==0)
+        {
+            for (int j=0; j<ndrz*2;j++)
+                stlb2Str << stlb2[j] << endl;
+            qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;// << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
+        }
         read++;
+    }
+    for (int i=0; i<10; i++)
+    {
+        for (int j=0; j<10; j++)
+            rggStr << real (rgg1(i, j)) << " " << imag (rgg1(i, j)) << "i ";
+        rggStr << endl;
     }
 //    for (int i=0; i<ndrz*na2; i++)
 //        rgg1Vec[i] = rgg1.getData()[i];

@@ -1,3 +1,4 @@
+#include <QtDebug>
 #include <fftw3.h>
 
 #include "constants1.h"
@@ -160,4 +161,48 @@ double * Calc2 :: operator () (const double* stlb, int nd2)
     complex<double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
 
     return 0;
+}
+
+CalcOpor1 :: CalcOpor1 (int _nd)
+    : opor (new complex<double> [_nd]),
+    nd (_nd)
+{
+}
+
+CalcOpor1 :: ~CalcOpor1 ()
+{
+    delete [] opor;
+}
+
+complex<double>* CalcOpor1 :: calc ()
+{
+    complex<double> * opor2 = new complex<double> [nd];
+    for (int i=0; i<nd; i++)
+    {
+        opor[i] = complex<double>(0.0, 0.0);
+        opor2[i] = complex<double>(0.0, 0.0);
+    }
+    for (int n=0; n< N1; n++)
+    {
+        double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
+        double oc = cos (phase);
+        double os = sin (phase);
+        opor[n] = complex<double>(oc, os);
+    }
+    int N2 = (N1/2);
+    for (int i=0; i<N2; i++)
+    {
+        opor2[i] = opor[i+N2];
+        opor2[i+nd-N2] = opor[i];
+    }
+    FFT_Transform fft;
+    opor = fft (opor2, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
+
+    delete [] opor2;
+    return opor;
+}
+
+complex<double>* CalcOpor1 :: data () const
+{
+    return opor;
 }
