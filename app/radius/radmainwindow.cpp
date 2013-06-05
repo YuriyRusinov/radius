@@ -945,9 +945,10 @@ void RadMainWindow :: slotFFT2Test (void)
     {
         for (int j=i; j<nMatr; j++)
         {
-            double corr = 0.5*cos (2*pi/4*(j-i))*(0.1e1-(j-i)/((double) nMatr));
-            tMatr(i, j) = complex<double> (corr, 0.0);
-            tMatr(j, i) = complex<double> (corr, 0.0);
+            double rcorr = 0.5*cos (2*pi/4*(j-i))*(0.1e1-(j-i)/((double) nMatr));
+            double icorr = 0.5*sin (2*pi/4*(j-i))*(0.1e1-(j-i)/((double) nMatr));
+            tMatr(i, j) = complex<double> (rcorr, icorr);
+            tMatr(j, i) = complex<double> (rcorr, icorr);
         }
     }
 /*    complex<double> * cm = tMatr.getData();
@@ -978,6 +979,7 @@ void RadMainWindow :: slotFFT2Test (void)
 
     complex<double> * tMatrFFTRevData = fft2 (tMatrFFT.getData(), nMatr, nMatr, FFTW_BACKWARD, FFTW_ESTIMATE);
     radTableWidget * wMatrFFTRev = new radTableWidget (tMatrFFTRevData, nMatr, nMatr);
+    wMatrFFTRev->setWindowTitle (tr("Source matrix after forward and backward FFT"));
     QMdiSubWindow * subWMatrFFTRev = m_mdiArea->addSubWindow (wMatrFFTRev);
     wMatrFFTRev->show();
     subWMatrFFTRev->setAttribute (Qt::WA_DeleteOnClose);
