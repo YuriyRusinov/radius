@@ -13,7 +13,7 @@ const double dimp = 10.0*0.1e-5;
 const int N1 = (int)(dimp*fcvant2)+1;
 const double pi (3.14159265358979);
 const int ndcentre (6178);
-const int ndrazmer (256);
+const int ndrazmer (1024);
 
 const int ndv = ndcentre - ndrazmer/2;
 const int ndn2 = ndcentre + ndrazmer/2;

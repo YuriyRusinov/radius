@@ -20,9 +20,11 @@
 #include <QVector>
 #include <QHBoxLayout>
 #include <QColor>
+#include <QTime>
 
 #include <radDataWidget.h>
 #include <rggImageWidget.h>
+#include <ffttimewidget.h>
 #include <constants1.h>
 
 #include <complex>
@@ -128,6 +130,8 @@ void RadMainWindow :: slotTest1 (void)
     if (fileName.isEmpty())
         return;
 
+    QTime * fftTime = new QTime;
+    fftTime->start();
     CalcOpor1 * cop = new CalcOpor1 (nd);
     complex<double> * opor = cop->calc();//new complex<double> [nd];
     qDebug () << __PRETTY_FUNCTION__ << N1;
@@ -376,6 +380,13 @@ void RadMainWindow :: slotTest1 (void)
     imW->show ();
     subImW->setAttribute (Qt::WA_DeleteOnClose);
 
+    int msecs = fftTime->elapsed ();
+    FFTTimeWidget * fftWidget = new FFTTimeWidget;
+    fftWidget->setTimeElapsed (msecs);
+    QMdiSubWindow * subFFTW = m_mdiArea->addSubWindow (fftWidget);
+    fftWidget->show();
+    subFFTW->setAttribute (Qt::WA_DeleteOnClose);
+    delete fftTime;
 //    delete [] stc4;
 //    delete [] opor;
 //    delete [] opor2;
@@ -401,6 +412,8 @@ void RadMainWindow :: slotTest2 (void)
     if (fileName.isEmpty())
         return;
 
+    QTime * fftTime = new QTime;
+    fftTime->start();
     FILE * fid6 = fopen (fileName.toAscii().constData(), "rb");
     if (!fid6)
         return;
@@ -413,32 +426,31 @@ void RadMainWindow :: slotTest2 (void)
     }
     int read (0);
     CMatrix rgg1 (0.0, ndrz, na2);
-    complex<double>* rgg1Vec = new complex<double> [ndrz*na2];
+//    complex<double>* rgg1Vec = new complex<double> [ndrz*na2];
     QFile rggMatrC("rgg1.dat");
     rggMatrC.open(QIODevice::WriteOnly);
     QTextStream rggStr(&rggMatrC);
 
-    QFile stlb2C("stlb2.dat");
+    QFile stlb2C("stlb.dat");
     stlb2C.open(QIODevice::WriteOnly);
     QTextStream stlb2Str (&stlb2C);
-    for (int i0=0; i0<1; i0++)
+    for (int i0=0; i0<na2; i0++)
     {
-        double stlb[2*nd];
-        double stlb2[ndrz*2];
+        double * stlb = new double [2*nd];
+        double * stlb2 = new double [ndrz*2];
         int cr = fread (stlb, sizeof (double)/2, nd*2, fid6);
         for (int j=0; j<ndrz*2;j++)
             stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
         {
             rgg1(j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
-            rgg1Vec[j*ndrz+i0] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
+            //rgg1Vec[j*ndrz+i0] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
-        if (i0==0)
-        {
-            for (int j=0; j<ndrz*2;j++)
-                stlb2Str << stlb2[j] << endl;
-            qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;// << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
-        }
+        for (int j=0; j<nd*2;j++)
+            stlb2Str << stlb[j] << endl;
+        qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;// << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
+        delete [] stlb2;
+        delete [] stlb;
         read++;
     }
     for (int i=0; i<10; i++)
@@ -447,15 +459,6 @@ void RadMainWindow :: slotTest2 (void)
             rggStr << real (rgg1(i, j)) << " " << imag (rgg1(i, j)) << "i ";
         rggStr << endl;
     }
-//    for (int i=0; i<ndrz*na2; i++)
-//        rgg1Vec[i] = rgg1.getData()[i];
-/*    for (int i=0; i<ndrz*nas/2; i++)
-    {
-        double xr = real (rgg1Vec[i]);//.getData()[i]);
-        double yr = imag (rgg1Vec[i]);//.getData()[i]);
-        qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
-    }*/
-    CMatrix rgg  (0.0, ndrz, na2);
     qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set") << ndrz << nas << na2;
 
 //    CMatrix corf2 (complex<double>(0.0), ndrz, na2);
@@ -464,7 +467,7 @@ void RadMainWindow :: slotTest2 (void)
     corfCont.open (QIODevice::WriteOnly);
     QTextStream stCorf (&corfCont);
     int from_opor (0);
-    complex<double> * corfVec = new complex<double> [ndrz*na2];
+    //complex<double> * corfVec = new complex<double> [ndrz*na2];
     CMatrix corf (complex<double>(0.0), ndrz, na2);
     for (int i=0; i<ndrz; i++)
     {
@@ -482,12 +485,13 @@ void RadMainWindow :: slotTest2 (void)
         from_opor++;
     }
 //    complex<double>* c = corf3.getData();
+    complex<double> * corfVec = corf3.getData();
     int num(0);
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<nas; j++)
         {
-            corfVec[num] = corf3(i, j);
+            //corfVec[num] = corf3(i, j);
             if (real(corfVec[num]) > 0.1e-15 || imag (corfVec[num]) > 0.1e-15)
                 qDebug () << __PRETTY_FUNCTION__ << real(corfVec[num]) << imag (corfVec[num]);
             num++;
@@ -499,8 +503,8 @@ void RadMainWindow :: slotTest2 (void)
     {
         for (int j=0; j<ndrz; j++)
         {
-            corf(j, i) = corfVec[j*ndrz+i+nas/2];//corf3(j, i+nas/2);
-            corf(j, i+na2-nas/2) = corfVec[j*ndrz+i];// corf3(j, i);
+            corf(j, i) = corf3(j, i+nas/2);// corfVec[j*ndrz+i+nas/2];
+            corf(j, i+na2-nas/2) = corf3(j, i);// corfVec[j*ndrz+i];
 //            if (sqrt (real (corf3(j, i+nas/2))*real (corf3(j, i+nas/2)) + imag (corf3(j, i+nas/2))*imag (corf3(j, i+nas/2))) > 0.1e-15 )
 //            {
 //                qDebug () << __PRETTY_FUNCTION__ << i << " " << j << real (corf(j, i+na2-nas/2)) << imag (corf(j, i+na2-nas/2)) << real (corf3(j, i)) << imag (corf3(j, i)) << real (corf.getData()[i*ndrz+j]) << imag (corf.getData()[i*ndrz+j]);
@@ -545,7 +549,7 @@ void RadMainWindow :: slotTest2 (void)
         double yr = imag (rgg1Vec[i]);//.getData()[i]);
         qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
     }*/
-    complex<double> * rggD = fft2(rgg1Vec, ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * rggD = fft2(rgg1.getData(), ndrz, na2, FFTW_FORWARD, FFTW_ESTIMATE);
 //    Q_UNUSED (rggD);
     int cor_volfr (0);
     for (int i=0; i<na2; i++)
@@ -563,7 +567,7 @@ void RadMainWindow :: slotTest2 (void)
         double yr = imag (rggD[i]);//.getData()[i]);
         qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
     }*/
-    complex<double> * rggBD = fft2(rggD/*rgg.getData()*/, ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    complex<double> * rggBD = fft2(rggD/*.getData()*/, ndrz, na2, FFTW_BACKWARD, FFTW_ESTIMATE);
     double maxVal = 0.0;
 //    double minVal = 0.0;//sqrt (real(rggBD[0])*real(rggBD[0])+imag(rggBD[0])*imag(rggBD[0]));
     for (int i=0; i<ndrz*nas/2; i++)
@@ -590,8 +594,8 @@ void RadMainWindow :: slotTest2 (void)
     {
         for (int j=0; j<nas/2;j++)
         {
-            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*8000;
-            uint val = (uint)(256*imData[ii]/512/0.3);
+            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*16000;
+            uint val = (uint)(imData[ii]);///512/0.3);
             maxvalim = qMax (maxvalim, val);
             QRgb v = qRgb (val, val, val);
             if (!colors.contains(v))
@@ -615,9 +619,14 @@ void RadMainWindow :: slotTest2 (void)
     hImLay->addWidget (lIm);
     m_mdiArea->addSubWindow (wImage);
 
-    delete [] corfVec;
-
     fclose (fid6);
+    int msecs = fftTime->elapsed ();
+    FFTTimeWidget * fftWidget = new FFTTimeWidget;
+    fftWidget->setTimeElapsed (msecs);
+    QMdiSubWindow * subFFTW = m_mdiArea->addSubWindow (fftWidget);
+    fftWidget->show();
+    subFFTW->setAttribute (Qt::WA_DeleteOnClose);
+    delete fftTime;
 }
 
 void RadMainWindow :: fftTest (void)

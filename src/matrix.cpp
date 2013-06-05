@@ -44,7 +44,9 @@ CMatrix :: ~CMatrix (void)
 complex<double>& CMatrix :: operator() (int i, int j)
 {
     if (i<0 || i>=nRows || j<0 || j>=nCols)
+    {
         throw std::out_of_range ("Invalid indices");
+    }
 
     return matr[i*nCols+j];
 }

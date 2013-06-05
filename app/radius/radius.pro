@@ -27,10 +27,12 @@ win32{
 
 INCLUDEPATH *= ../../src \
                ../../src/gui \
+               ../../src/gui/ui \
                ../../src/misc
 
 DEPENDPATH *= ../../src \
                ../../src/gui \
+               ../../src/gui/ui \
                ../../src/misc
 
 LIBS += -L$$DESTDIR -lfft_matrix
