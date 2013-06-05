@@ -23,6 +23,7 @@
 #include <QTime>
 
 #include <radDataWidget.h>
+#include <radTableWidget.h>
 #include <rggImageWidget.h>
 #include <ffttimewidget.h>
 #include <constants1.h>
@@ -123,6 +124,9 @@ void RadMainWindow :: init (void)
 
     QAction * actStc1Test = calcMenu->addAction (tr("Test FFT for stc1"));
     connect (actStc1Test, SIGNAL (triggered()), this, SLOT (stc1FFTTest()) );
+
+    QAction * actFFT2Test = calcMenu->addAction (tr("Test 2D FFT"));
+    connect (actFFT2Test, SIGNAL (triggered()), this, SLOT (slotFFT2Test()) );
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -431,9 +435,10 @@ void RadMainWindow :: slotTest2 (void)
     rggMatrC.open(QIODevice::WriteOnly);
     QTextStream rggStr(&rggMatrC);
 
-    QFile stlb2C("stlb.dat");
+/*    QFile stlb2C("stlb.dat");
     stlb2C.open(QIODevice::WriteOnly);
     QTextStream stlb2Str (&stlb2C);
+*/
     for (int i0=0; i0<na2; i0++)
     {
         double * stlb = new double [2*nd];
@@ -444,18 +449,18 @@ void RadMainWindow :: slotTest2 (void)
         for (int j=0; j<ndrz;j++)
         {
             rgg1(j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
-            //rgg1Vec[j*ndrz+i0] = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
-        for (int j=0; j<nd*2;j++)
+/*        for (int j=0; j<nd*2;j++)
             stlb2Str << stlb[j] << endl;
+*/
         qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;// << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
         delete [] stlb2;
         delete [] stlb;
         read++;
     }
-    for (int i=0; i<10; i++)
+    for (int i=0; i<20; i++)
     {
-        for (int j=0; j<10; j++)
+        for (int j=0; j<20; j++)
             rggStr << real (rgg1(i, j)) << " " << imag (rgg1(i, j)) << "i ";
         rggStr << endl;
     }
@@ -882,27 +887,15 @@ void RadMainWindow :: stcFFTTest (void)
     QFile fContStData (QString ("stc.dat"));
     fContStData.open (QIODevice::WriteOnly);
     QTextStream stContSt (&fContStData);
-/*    for (int i=0; i<na; i++)
-    {
-*/
     int cr = fread (st, sizeof (quint8), nd2, fid5);
     if (cr <= 0)
         return;
     for (int ii=0; ii< nd2; ii++)
     {
-        //if (i<1)
-        //{
-        //}
-        //if (st[ii] > 128)
-        //    st[ii] -= 256;
         QModelIndex wcIndex = radModel->index (nr, 0);
         radModel->setData (wcIndex, QString::number (st[ii]), Qt::DisplayRole);
         nr++;
     }
-/*
-    }
-*/
-
     for (int ii=0; ii<128; ii++)
         st[ii] = 0.0;
 
@@ -941,4 +934,52 @@ void RadMainWindow :: stcFFTTest (void)
     wStcFFT->show ();
     subWStcFFT->setAttribute (Qt::WA_DeleteOnClose);
     delete [] stc4;
+}
+
+void RadMainWindow :: slotFFT2Test (void)
+{
+    int nMatr (8);
+    CMatrix tMatr (0.0, nMatr, nMatr);
+    FFT2_Transform fft2;
+    for (int i=0; i<nMatr; i++)
+    {
+        for (int j=i; j<nMatr; j++)
+        {
+            double corr = 0.5*cos (2*pi/4*(j-i))*(0.1e1-(j-i)/((double) nMatr));
+            tMatr(i, j) = complex<double> (corr, 0.0);
+            tMatr(j, i) = complex<double> (corr, 0.0);
+        }
+    }
+/*    complex<double> * cm = tMatr.getData();
+    for (int i=0; i<nMatr*nMatr; i++)
+        qDebug () << __PRETTY_FUNCTION__ << real (cm[i]) << imag (cm[i]);
+*/
+    radTableWidget * wMatr = new radTableWidget (tMatr.getData(), nMatr, nMatr);
+    wMatr->setWindowTitle (tr("Source matrix"));
+    QMdiSubWindow * subWMatr = m_mdiArea->addSubWindow (wMatr);
+    wMatr->show();
+    subWMatr->setAttribute (Qt::WA_DeleteOnClose);
+    complex<double> * tMatrFFTData = fft2 (tMatr.getData(), nMatr, nMatr, FFTW_FORWARD, FFTW_ESTIMATE);
+    CMatrix tMatrFFT (nMatr, nMatr);
+    for (int i=0; i<nMatr; i++)
+    {
+        for (int j=0; j<nMatr; j++)
+        {
+            tMatrFFT(i, j) = tMatrFFTData[j+nMatr*i];
+        }
+    }
+    delete [] tMatrFFTData;
+    radTableWidget * wMatrFFT = new radTableWidget (tMatrFFT.getData(), nMatr, nMatr);
+    wMatrFFT->setWindowTitle (tr("Source matrix after FFT"));
+
+    QMdiSubWindow * subWMatrFFT = m_mdiArea->addSubWindow (wMatrFFT);
+    wMatrFFT->show();
+    subWMatrFFT->setAttribute (Qt::WA_DeleteOnClose);
+
+    complex<double> * tMatrFFTRevData = fft2 (tMatrFFT.getData(), nMatr, nMatr, FFTW_BACKWARD, FFTW_ESTIMATE);
+    radTableWidget * wMatrFFTRev = new radTableWidget (tMatrFFTRevData, nMatr, nMatr);
+    QMdiSubWindow * subWMatrFFTRev = m_mdiArea->addSubWindow (wMatrFFTRev);
+    wMatrFFTRev->show();
+    subWMatrFFTRev->setAttribute (Qt::WA_DeleteOnClose);
+    delete [] tMatrFFTRevData;
 }

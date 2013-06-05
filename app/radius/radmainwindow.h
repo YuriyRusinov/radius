@@ -30,6 +30,7 @@ private slots:
     void oporTest (void);
     void slotTest1 (void);
     void slotTest2 (void);
+    void slotFFT2Test (void);
 
 private:
     //

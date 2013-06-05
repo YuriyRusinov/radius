@@ -75,6 +75,7 @@ FFT_RealTransform :: ~FFT_RealTransform (void)
 complex<double> * FFT_RealTransform :: operator () (double * src, int nsrc, int n2, int sign, unsigned flags)
 {
     double * in;
+    Q_UNUSED (sign);
     fftw_complex * out;
     fftw_plan p;
     if (n2 <=0 || nsrc > n2)
@@ -146,6 +147,13 @@ complex<double> * FFT2_Transform :: operator () (complex<double> * src, int nr, 
     //fftw_complex * out = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
     p = fftw_plan_dft_2d (nr, nc, reinterpret_cast<fftw_complex*>(in), reinterpret_cast<fftw_complex*>(res), sign, flags);
     fftw_execute (p);
+    if (sign == FFTW_FORWARD)
+        for (int i=0; i<nr*nc; i++)
+        {
+            res[i] /= nr*nc;//complex<double> (out[i][0]/n2, out[i][1]/n2);
+            //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
+        }
     fftw_destroy_plan (p);
+    fftw_free (in);
     return res;
 }
