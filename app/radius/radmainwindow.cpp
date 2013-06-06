@@ -631,7 +631,9 @@ void RadMainWindow :: slotTest2 (void)
     QHBoxLayout * hImLay = new QHBoxLayout (wImage);
     lIm->setPixmap (pIm);
     hImLay->addWidget (lIm);
-    m_mdiArea->addSubWindow (wImage);
+    QMdiSubWindow * subIm = m_mdiArea->addSubWindow (wImage);
+    wImage->show ();
+    subIm->setAttribute (Qt::WA_DeleteOnClose);
 
     fclose (fid6);
     int msecs = fftTime->elapsed ();
