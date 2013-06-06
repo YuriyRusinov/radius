@@ -445,10 +445,6 @@ void RadMainWindow :: slotTest2 (void)
     rggMatrC.open(QIODevice::WriteOnly);
     QTextStream rggStr(&rggMatrC);
 
-/*    QFile stlb2C("stlb.dat");
-    stlb2C.open(QIODevice::WriteOnly);
-    QTextStream stlb2Str (&stlb2C);
-*/
     for (int i0=0; i0<na2; i0++)
     {
         double * stlb = new double [2*nd];
@@ -460,9 +456,6 @@ void RadMainWindow :: slotTest2 (void)
         {
             rgg1(j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
-/*        for (int j=0; j<nd*2;j++)
-            stlb2Str << stlb[j] << endl;
-*/
         qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;// << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
         delete [] stlb2;
         delete [] stlb;
@@ -545,8 +538,8 @@ void RadMainWindow :: slotTest2 (void)
         {
             double x = real (corf(i,j));
             double y = imag (corf(i,j));
-            if ((i==0 && fabs (x + 0.50376075247194) <= 0.1e-5))// || fabs (xd) > 0.1e-15 || fabs (yd) > 0.1e-15)
-                qDebug() << __PRETTY_FUNCTION__ << "Debug indices" << i << j;
+            //if ((i==0 && fabs (x + 0.50376075247194) <= 0.1e-5))// || fabs (xd) > 0.1e-15 || fabs (yd) > 0.1e-15)
+            //    qDebug() << __PRETTY_FUNCTION__ << "Debug indices" << i << j;
             stCorf << qSetRealNumberPrecision(16) << x << " " << qSetRealNumberPrecision(16) << y << " ";
         }
         stCorf << endl;
@@ -579,7 +572,7 @@ void RadMainWindow :: slotTest2 (void)
         for (int j=0; j<na2; j++)
         {
             rgg (i, j) = rggD[i*na2+j];
-            rgg (i, j) /= conj (corf2 (i, j));
+            rgg (i, j) *= conj (corf2 (i, j));
             //rggD[j+i*na2] *= conj (corfw[j+i*na2]);
             //rggD[j+i*na2] /= na2*ndrz;
         }
@@ -591,8 +584,8 @@ void RadMainWindow :: slotTest2 (void)
 //    double minVal = 0.0;//sqrt (real(rggBD[0])*real(rggBD[0])+imag(rggBD[0])*imag(rggBD[0]));
     for (int i=0; i<ndrz*nas/2; i++)
     {
-        rggBD[i] /= (ndrz*nas)/2.0;
-        rggBD[i] /= (ndrz*nas)/2.0;
+        //rggBD[i] /= (ndrz*nas)/2.0;
+        //rggBD[i] /= (ndrz*nas)/2.0;
         maxVal = qMax (maxVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
 //        minVal = qMin (minVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
     }
@@ -605,7 +598,7 @@ void RadMainWindow :: slotTest2 (void)
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
 //    qDebug () << __PRETTY_FUNCTION__ << hIm->colorCount ();
-    uchar * imData = new uchar [ndrz*nas/2];
+    double * imData = new double [ndrz*nas/2];
     int ii (0);
     quint32 maxvalim = 0;
     QVector<QRgb> colors;
@@ -613,8 +606,8 @@ void RadMainWindow :: slotTest2 (void)
     {
         for (int j=0; j<nas/2;j++)
         {
-            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*8000;
-            uint val = (uint)(imData[ii]);///512/0.3);
+            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*4000;
+            uint val = (uint)(256*imData[ii]);///512/0.3);
             maxvalim = qMax (maxvalim, val);
             QRgb v = qRgb (val, val, val);
             if (!colors.contains(v))
@@ -622,14 +615,15 @@ void RadMainWindow :: slotTest2 (void)
             QColor vCol (v);
             //int pIndex = hIm->pixelIndex (i, j);
             hIm->setPixel (i, j, v);//qRgb(255, 255, 255));
-            if (val > 0)
-                qDebug () << __PRETTY_FUNCTION__ << i<< j << ii << imData[ii] << val << vCol ;
+            //if (val > 0)
+            //    qDebug () << __PRETTY_FUNCTION__ << i<< j << ii << imData[ii] << val << vCol ;
             ii++;
         }
     }
+    delete [] imData;
     delete [] rggBD;
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
-    qDebug () << __PRETTY_FUNCTION__ << maxvalim;//isLoaded;
+    qDebug () << __PRETTY_FUNCTION__ << maxvalim << maxVal;//isLoaded;
     hIm->save("rgg2a.png", "PNG");
     QPixmap pIm = QPixmap::fromImage (*hIm);
     QLabel * lIm = new QLabel ;
