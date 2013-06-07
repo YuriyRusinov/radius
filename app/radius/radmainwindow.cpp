@@ -561,7 +561,8 @@ void RadMainWindow :: slotTest2 (void)
                        << /*qSetFieldWidth(19) <<*/ qSetRealNumberPrecision(16) << imag (corfw[i*na2+j])*ndrz*na2 << "i ";
             numMatr++;
         }
-        stCorf << endl;
+        if (i<10)
+            stCorf << endl;
     }
     delete [] corfw;
     complex<double> * rggD = fft2(rgg1.getData(), ndrz, na2, FFTW_FORWARD, FFTW_ESTIMATE);
@@ -594,6 +595,16 @@ void RadMainWindow :: slotTest2 (void)
         double xr = real (rggBD[i]);//.getData()[i]);
         double yr = imag (rggBD[i]);//.getData()[i]);
         qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
+    }
+    stCorf << tr("Results ") << endl;
+    for (int i=0; i<5; i++)
+    {
+        for (int j=0; j<na2; j++)
+        {
+            stCorf << qSetRealNumberPrecision(16) << real (rggBD[i*na2+j])*na2*ndrz << " "
+                   << qSetRealNumberPrecision(16) << imag (rggBD[i*na2+j])*na2*ndrz << "i ";
+        }
+        stCorf << endl;
     }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_ARGB32);
