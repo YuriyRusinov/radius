@@ -21,6 +21,7 @@
 #include <QHBoxLayout>
 #include <QColor>
 #include <QTime>
+#include <QMessageBox>
 
 #include <radDataWidget.h>
 #include <radTableWidget.h>
@@ -450,13 +451,19 @@ void RadMainWindow :: slotTest2 (void)
         double * stlb = new double [2*nd];
         double * stlb2 = new double [ndrz*2];
         int cr = fread (stlb, sizeof (double)/2, nd*2, fid6);
+        if (cr == 0)
+        {
+            QMessageBox::warning(this, tr("Read data"), tr("Cannot read convolution data"), QMessageBox::Ok);
+            return;
+        }
         for (int j=0; j<ndrz*2;j++)
             stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
         {
             rgg1(j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
-        qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;// << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
+        //qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;
+        // << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
         delete [] stlb2;
         delete [] stlb;
         read++;
@@ -504,7 +511,7 @@ void RadMainWindow :: slotTest2 (void)
 //                qDebug () << __PRETTY_FUNCTION__ << i << j << real(corf3(i, j)) << imag (corf3(i, j));
         }
         stCorf << endl;
-        qDebug () << __PRETTY_FUNCTION__ << i;
+        //qDebug () << __PRETTY_FUNCTION__ << i;
     }
 
     int cor_func (0);
@@ -514,22 +521,14 @@ void RadMainWindow :: slotTest2 (void)
         {
             corf(j, i) = corf3(j, i+nas/2); //corfVec[j+(i+nas/2)*ndrz];//
             corf(j, i+na2-nas/2) = corf3(j, i); // corfVec[j + i*ndrz]; 
-            if (sqrt (real (corf3(j, i+nas/2))*real (corf3(j, i+nas/2)) + imag (corf3(j, i+nas/2))*imag (corf3(j, i+nas/2))) > 0.1e-15 )
+            /*if (sqrt (real (corf3(j, i+nas/2))*real (corf3(j, i+nas/2)) + imag (corf3(j, i+nas/2))*imag (corf3(j, i+nas/2))) > 0.1e-15 )
             {
                 qDebug () << __PRETTY_FUNCTION__ << i << " " << j << real (corf(j, i+na2-nas/2)) << imag (corf(j, i+na2-nas/2)) << real (corf(j, i)) << imag (corf(j, i));// << real (corf.getData()[i*ndrz+j]) << imag (corf.getData()[i*ndrz+j]);
-            }
+            }*/
         }
         cor_func++;
     }
 
-/*    stCorf << QString("Row matrix") << endl;
-    for (int i=0; i < ndrz*na2; i++)
-    {
-        double xr = real (corfVec[i]);
-        double yr = imag (corfVec[i]);
-        stCorf << xr << " " << yr << endl;
-    }
-*/
     stCorf << QString("Matrix for FFT") << endl;
 
     for (int i=0; i<2; i++)
@@ -585,16 +584,7 @@ void RadMainWindow :: slotTest2 (void)
 //    double minVal = 0.0;//sqrt (real(rggBD[0])*real(rggBD[0])+imag(rggBD[0])*imag(rggBD[0]));
     for (int i=0; i<ndrz*nas/2; i++)
     {
-        //rggBD[i] /= (ndrz*nas)/2.0;
-        //rggBD[i] /= (ndrz*nas)/2.0;
         maxVal = qMax (maxVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
-//        minVal = qMin (minVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
-    }
-    for (int i=0; i<100; i++)
-    {
-        double xr = real (rggBD[i]);//.getData()[i]);
-        double yr = imag (rggBD[i]);//.getData()[i]);
-        qDebug () << __PRETTY_FUNCTION__ << (double)xr << (double)yr;
     }
     stCorf << tr("Results ") << endl;
     for (int i=0; i<5; i++)
@@ -618,7 +608,7 @@ void RadMainWindow :: slotTest2 (void)
         for (int j=0; j<nas/2;j++)
         {
             imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*4000;
-            uint val = (uint)(256*imData[ii]);///512/0.3);
+            uint val = (uint)(256*imData[ii])/50*50;///512/0.3);
             maxvalim = qMax (maxvalim, val);
             QRgb v = qRgb (val, val, val);
             if (!colors.contains(v))
