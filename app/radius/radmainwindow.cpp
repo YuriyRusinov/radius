@@ -608,7 +608,7 @@ void RadMainWindow :: slotTest2 (void)
         for (int j=0; j<nas/2;j++)
         {
             imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*4000;
-            uint val = (uint)(256*imData[ii])/50*50;///512/0.3);
+            uint val = (uint)(256*imData[ii])/20*20;///512/0.3);
             maxvalim = qMax (maxvalim, val);
             QRgb v = qRgb (val, val, val);
             if (!colors.contains(v))

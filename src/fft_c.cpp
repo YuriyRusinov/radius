@@ -137,15 +137,15 @@ complex<double> * FFT2_Transform :: operator () (complex<double> * src, int nr, 
 {
     complex<double> * res = new complex<double> [nr*nc];
 
-    complex<double> * in = new complex<double> [nr*nc];
+//    complex<double> * in = new complex<double> [nr*nc];
 
-    for (int i=0; i<nr*nc; i++)
-        in[i] = src[i];
+//    for (int i=0; i<nr*nc; i++)
+//        in[i] = src[i];
 
 
     fftw_plan p;
     //fftw_complex * out = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
-    p = fftw_plan_dft_2d (nr, nc, reinterpret_cast<fftw_complex*>(in), reinterpret_cast<fftw_complex*>(res), sign, flags);
+    p = fftw_plan_dft_2d (nr, nc, reinterpret_cast<fftw_complex*>(src), reinterpret_cast<fftw_complex*>(res), sign, flags);
     fftw_execute (p);
     if (sign == FFTW_FORWARD)
         for (int i=0; i<nr*nc; i++)
@@ -154,6 +154,6 @@ complex<double> * FFT2_Transform :: operator () (complex<double> * src, int nr, 
             //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
         }
     fftw_destroy_plan (p);
-    fftw_free (in);
+    //fftw_free (in);
     return res;
 }
