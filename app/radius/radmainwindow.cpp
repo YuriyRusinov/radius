@@ -27,6 +27,7 @@
 #include <radTableWidget.h>
 #include <rggImageWidget.h>
 #include <ffttimewidget.h>
+#include <convdistancewidget.h>
 #include <constants1.h>
 
 #include <complex>
@@ -37,6 +38,7 @@
 #include "matrix.h"
 #include "fft_c.h"
 #include "calcim.h"
+#include "radar_conv_image.h"
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -97,10 +99,6 @@ void RadMainWindow :: init (void)
     connect (actOpenConvFile, SIGNAL (triggered()), this, SLOT (openConvFile()) );
 
     UI->menuFile->addSeparator ();
-    QAction * actFFTTest = openMenu->addAction (tr("Test &FFT"));
-    connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
-
-    UI->menuFile->addSeparator ();
     QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
     QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
     actQuit->setShortcut (keyQuit);
@@ -108,6 +106,11 @@ void RadMainWindow :: init (void)
 
     QMenu * calcMenu = new QMenu (tr ("&Calculate"), this);
     UI->menuBar->addMenu (calcMenu);
+
+    QAction * actInitConvDist = calcMenu->addAction (tr("&Init convolution by distance"));
+    connect (actInitConvDist, SIGNAL (triggered()), this, SLOT (initConvDist()) );
+    QAction * actFFTTest = calcMenu->addAction (tr("Test &FFT"));
+    connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
 
     calcMenu->addAction (actCalc1);
     connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
@@ -996,4 +999,15 @@ void RadMainWindow :: slotFFT2Test (void)
     wMatrFFTRev->show();
     subWMatrFFTRev->setAttribute (Qt::WA_DeleteOnClose);
     delete [] tMatrFFTRevData;
+}
+
+void RadMainWindow :: initConvDist (void)
+{
+    RadarImageProc * rdConv = RadarImageProc::getRadarImage();
+    if (!rdConv)
+        return;
+    ConvDistanceWidget * cW = rdConv->getCDistWidget();
+    QMdiSubWindow * subCW = m_mdiArea->addSubWindow (cW);
+    cW->show();
+    subCW->setAttribute (Qt::WA_DeleteOnClose);
 }

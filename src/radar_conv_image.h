@@ -5,10 +5,13 @@
 
 #include "src_config.h"
 
+class ConvDistanceWidget;
+
 class _FFTMATR_EXPORT_ RadarImageProc : public QObject
 {
 public:
     static RadarImageProc * getRadarImage (QObject * parent=0);
+    ConvDistanceWidget * getCDistWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
 
 private:
     //

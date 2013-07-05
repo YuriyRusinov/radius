@@ -1,3 +1,4 @@
+#include "gui/ui/convdistancewidget.h"
 #include "radar_conv_image.h"
 
 RadarImageProc * RadarImageProc::instance=0;
@@ -34,4 +35,11 @@ RadarImageProc::~RadarImageProc (void)
 RadarImageProc& RadarImageProc::operator= (const RadarImageProc&)
 {
     return *this;
+}
+
+ConvDistanceWidget * RadarImageProc::getCDistWidget (QWidget * parent, Qt::WindowFlags flags)
+{
+    ConvDistanceWidget * cW = new ConvDistanceWidget (parent, flags);
+
+    return cW;
 }

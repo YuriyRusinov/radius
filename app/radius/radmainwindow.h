@@ -22,6 +22,8 @@ public:
     virtual ~RadMainWindow (void);
 
 private slots:
+    void initConvDist (void);
+
     void openDataFile (void);
     void openConvFile (void);
     void fftTest (void);

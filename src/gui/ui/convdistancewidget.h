@@ -10,6 +10,8 @@ namespace Ui
     class conv_distance_widget;
 };
 
+class QCloseEvent;
+
 class _FFTMATR_EXPORT_ ConvDistanceWidget : public QWidget
 {
 public:
@@ -20,6 +22,15 @@ private slots:
     void loadDataFile (void);
     void setSaveFile (void);
     void startConv (void);
+
+protected:
+     void closeEvent(QCloseEvent *event);
+
+private:
+    //
+    // Functions
+    //
+    void init (void);
 
 private:
     //
