@@ -23,6 +23,8 @@ private slots:
     void setSaveFile (void);
     void startConv (void);
 
+    void calcFQuant (const QString& text);
+
 protected:
      void closeEvent(QCloseEvent *event);
 

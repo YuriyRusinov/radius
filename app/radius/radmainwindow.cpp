@@ -38,8 +38,7 @@
 #include <matrix.h>
 #include <fft_c.h>
 #include <calcim.h>
-#include <ConvolSingleton.h>
-#include <radar_conv_image.h>
+#include <radarConvIm.h>
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -139,8 +138,6 @@ void RadMainWindow :: slotTest1 (void)
     if (fileName.isEmpty())
         return;
 
-    ConvSingleton * cConv = ConvSingleton::getConv();
-    qDebug () << __PRETTY_FUNCTION__ << cConv;
     QTime * fftTime = new QTime;
     fftTime->start();
     CalcOpor1 * cop = new CalcOpor1 (nd);

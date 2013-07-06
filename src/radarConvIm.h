@@ -1,5 +1,5 @@
-#ifndef _Radar_Conv_Image_H
-#define _Radar_Conv_Image_H
+#ifndef _RadarConvImage_H
+#define _RadarConvImage_H
 
 #include <QObject>
 

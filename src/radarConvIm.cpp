@@ -1,14 +1,12 @@
 #include "gui/ui/convdistancewidget.h"
-#include "radar_conv_image.h"
+#include "radarConvIm.h"
 
 RadarImageProc * RadarImageProc::instance=0;
 
 RadarImageProc * RadarImageProc::getRadarImage (QObject * parent)
 {
     if (!instance)
-    {
         instance = new RadarImageProc (parent);
-    }
     return instance;
 }
 
