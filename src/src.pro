@@ -35,12 +35,14 @@ HEADERS += fft_c.h \
            matrix.h \
            calcim.h \
            ConvolSingleton.h \
+           radar_conv_image.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
            matrix.cpp \
            calcim.cpp \
-           ConvolSingleton.cpp
+           ConvolSingleton.cpp \
+           radar_conv_image.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
