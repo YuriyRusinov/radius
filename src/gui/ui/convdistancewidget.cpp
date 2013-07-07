@@ -5,7 +5,11 @@
 #include <QDoubleValidator>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QDir>
 #include <QtDebug>
+
+#include "ConvDistPhys.h"
 #include "constants1.h"
 #include "convdistancewidget.h"
 #include "ui_conv_distance_widget.h"
@@ -19,6 +23,7 @@ ConvDistanceWidget :: ConvDistanceWidget (QWidget * parent, Qt::WindowFlags flag
 
     connect (UI->lELightSpeed, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
     connect (UI->lEDistanceStep, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
+    connect (UI->lEImpulseDuration, SIGNAL (textChanged (const QString &)), this, SLOT (calcNumbImp (const QString&)) );
     connect (UI->tbRggFileName, SIGNAL (clicked()), this, SLOT (loadDataFile()) );
     connect (UI->tbConvDFileName, SIGNAL (clicked()), this, SLOT (setSaveFile()) );
     connect (UI->pbStart, SIGNAL (clicked()), this, SLOT (startConv()) );
@@ -32,14 +37,40 @@ ConvDistanceWidget :: ~ConvDistanceWidget (void)
 
 void ConvDistanceWidget :: loadDataFile (void)
 {
+    QString fileName = QFileDialog::getOpenFileName (this, tr("Select source file"), QDir::currentPath(), tr("All files (*)"));
+    if (fileName.isEmpty())
+        return;
+
+    UI->lERggFileName->setText (fileName);
+    bool isStart (!UI->lEConvDistFileName->text().isEmpty());
+    UI->pbStart->setEnabled (isStart);
 }
 
 void ConvDistanceWidget :: setSaveFile (void)
 {
+    QString fileConvName = QFileDialog::getSaveFileName (this, tr("Save convolution by distance data"), QDir::currentPath(), tr("All files (*)"));
+    if (fileConvName.isEmpty())
+        return;
+
+    UI->lEConvDistFileName->setText (fileConvName);
+    bool isStart (!UI->lERggFileName->text().isEmpty());
+    UI->pbStart->setEnabled (isStart);
 }
 
 void ConvDistanceWidget :: startConv (void)
 {
+    int ndn = UI->lEReadingsNumber->text().toInt();
+    int nch = UI->lEReadingsNumber->text().toInt();
+    double cl = UI->lELightSpeed->text().toDouble();
+    double bw = UI->lEBandwidth->text().toDouble();
+    double dnr = UI->lEDistanceStep->text().toDouble();
+    double dimp = UI->lEImpulseDuration->text().toDouble()*0.1e-5;
+    QString fName = UI->lERggFileName->text();
+    QString fConvName = UI->lEConvDistFileName->text();
+    int nCal = UI->lECalibration->text().toInt();
+    ConvDistPhysParameters * cParams = new ConvDistPhysParameters (ndn, nch, cl, bw, dnr, dimp, fName, fConvName, nCal);
+    qDebug () << __PRETTY_FUNCTION__ << cParams;
+    emit setParams (cParams);
 }
 
 void ConvDistanceWidget :: init (void)
@@ -48,7 +79,7 @@ void ConvDistanceWidget :: init (void)
     UI->lECalibration->setValidator (calVal);
     UI->lECalibration->setText (QString::number (20000));
 
-    QValidator * iReadVal = new QIntValidator (this);
+    QValidator * iReadVal = new QIntValidator (1, 100000, this);
     UI->lEReadingsNumber->setValidator (iReadVal);
     UI->lEReadingsNumber->setText (QString::number (ndn));
 
@@ -56,19 +87,19 @@ void ConvDistanceWidget :: init (void)
     UI->lENumberOfDistanceChannels->setValidator (iChannelsNubVal);
     UI->lENumberOfDistanceChannels->setText (QString::number (na));
 
-    QValidator * dBandVal = new QDoubleValidator (this);
+    QValidator * dBandVal = new QDoubleValidator (0, 1e10, 6,this);
     UI->lEBandwidth->setValidator (dBandVal);
-    UI->lEBandwidth->setText (QString::number (fsp));
+    UI->lEBandwidth->setText (QString::number (fsp, 'f', 3));
 
     QValidator * dDnrVal = new QDoubleValidator (0.1e-15, 1e20, 12, this);
     UI->lEDistanceStep->setValidator (dDnrVal);
     UI->lEDistanceStep->setText (QString::number (dnr));
 
-    QValidator * dLightSpVal = new QDoubleValidator (this);
+    QValidator * dLightSpVal = new QDoubleValidator (2e8, 3e8, 3, this);
     UI->lELightSpeed->setValidator (dLightSpVal);
-    UI->lELightSpeed->setText (QString::number (c));
+    UI->lELightSpeed->setText (QString::number (c, 'f', 3));
 
-    UI->lEQuantizationFrequency->setText (QString::number (fcvant2));
+    UI->lEQuantizationFrequency->setText (QString::number (fcvant2, 'f', 3));
 
     QValidator * dImpVal = new QDoubleValidator (this);
     UI->lEImpulseDuration->setValidator (dImpVal);
@@ -130,5 +161,20 @@ void ConvDistanceWidget :: calcFQuant (const QString& text)
         }
     }
 
-    UI->lEQuantizationFrequency->setText (QString::number (clight/(2*dnrw)));
+    UI->lEQuantizationFrequency->setText (QString::number (clight/(2*dnrw), 'f', 3));
+}
+
+void ConvDistanceWidget :: calcNumbImp (const QString& text)
+{
+    bool ok;
+    double Dimp = text.toDouble (&ok);
+    if (!ok)
+    {
+        QMessageBox::warning (this, tr("Set parameters"), tr ("Incorrect parameters"), QMessageBox::Ok);
+        return;
+    }
+    Dimp *= 0.1e-5;
+    double fCvant2 = UI->lEQuantizationFrequency->text().toDouble();
+    int NImp = (int)Dimp*fCvant2+1;
+    UI->lENumberOfReadingsInImpulse->setText (QString::number (NImp));
 }

@@ -7,11 +7,16 @@
 
 class ConvDistanceWidget;
 
+class ConvDistPhysParameters;
+
 class _FFTMATR_EXPORT_ RadarImageProc : public QObject
 {
 public:
     static RadarImageProc * getRadarImage (QObject * parent=0);
     ConvDistanceWidget * getCDistWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
+
+public slots:
+    void procConvDist (ConvDistPhysParameters * cParams);
 
 private:
     //
@@ -27,6 +32,9 @@ private:
     // Variables
     //
     static RadarImageProc * instance;
+
+private:
+    Q_OBJECT
 };
 
 #endif

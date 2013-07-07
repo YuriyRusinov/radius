@@ -10,6 +10,8 @@ namespace Ui
     class conv_distance_widget;
 };
 
+class ConvDistPhysParameters;
+
 class QCloseEvent;
 
 class _FFTMATR_EXPORT_ ConvDistanceWidget : public QWidget
@@ -24,9 +26,13 @@ private slots:
     void startConv (void);
 
     void calcFQuant (const QString& text);
+    void calcNumbImp (const QString& text);
 
 protected:
      void closeEvent(QCloseEvent *event);
+
+signals:
+     void setParams (ConvDistPhysParameters * CParams);
 
 private:
     //

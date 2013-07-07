@@ -1,4 +1,7 @@
+#include <QtDebug>
+
 #include "gui/ui/convdistancewidget.h"
+#include "ConvDistPhys.h"
 #include "radarConvIm.h"
 
 RadarImageProc * RadarImageProc::instance=0;
@@ -39,5 +42,14 @@ ConvDistanceWidget * RadarImageProc::getCDistWidget (QWidget * parent, Qt::Windo
 {
     ConvDistanceWidget * cW = new ConvDistanceWidget (parent, flags);
 
+    qDebug ()  << __PRETTY_FUNCTION__;
+    connect (cW, SIGNAL (setParams (ConvDistPhysParameters *)), this, SLOT (procConvDist (ConvDistPhysParameters *)) );
+
     return cW;
+}
+
+void RadarImageProc::procConvDist (ConvDistPhysParameters * cParams)
+{
+    Q_UNUSED (cParams);
+    qDebug () << __PRETTY_FUNCTION__;
 }

@@ -35,12 +35,14 @@ HEADERS += fft_c.h \
            matrix.h \
            calcim.h \
            radarConvIm.h \
+           ConvDistPhys.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
            matrix.cpp \
            calcim.cpp \
-           radarConvIm.cpp
+           radarConvIm.cpp \
+           ConvDistPhys.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
@@ -50,6 +52,7 @@ headers.files += \
                  matrix.h \
                  calcim.h \
                  radarConvIm.h \
+                 ConvDistPhys.h \
                  src_config.h
 
 headers.path = $$RAD_INCLUDE_DIR
