@@ -60,7 +60,7 @@ void ConvDistanceWidget :: setSaveFile (void)
 void ConvDistanceWidget :: startConv (void)
 {
     int ndn = UI->lEReadingsNumber->text().toInt();
-    int nch = UI->lEReadingsNumber->text().toInt();
+    int nch = UI->lENumberOfDistanceChannels->text().toInt();
     double cl = UI->lELightSpeed->text().toDouble();
     double bw = UI->lEBandwidth->text().toDouble();
     double dnr = UI->lEDistanceStep->text().toDouble();

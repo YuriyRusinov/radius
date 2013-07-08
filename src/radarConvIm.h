@@ -18,6 +18,9 @@ public:
 public slots:
     void procConvDist (ConvDistPhysParameters * cParams);
 
+signals:
+    void sendWidget (QWidget * w);
+
 private:
     //
     // Functions
