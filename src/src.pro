@@ -25,10 +25,12 @@ win32{
 
 INCLUDEPATH *= . \
                gui \
+               gui/ui \
                misc
 
 DEPENDPATH *= . \
                gui \
+               gui/ui \
                misc
 
 HEADERS += fft_c.h \

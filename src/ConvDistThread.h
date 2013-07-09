@@ -8,6 +8,8 @@
 #include "matrix.h"
 #include "src_config.h"
 
+class QWidget;
+
 class ConvDistPhysParameters;
 
 using std::complex;
@@ -20,6 +22,9 @@ public:
 
 protected:
     void run (void);
+
+signals:
+    void sendWidget (QWidget * w, QThread * pThread);
 
 private:
     //

@@ -1006,8 +1006,19 @@ void RadMainWindow :: initConvDist (void)
     RadarImageProc * rdConv = RadarImageProc::getRadarImage();
     if (!rdConv)
         return;
+    connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     ConvDistanceWidget * cW = rdConv->getCDistWidget();
     QMdiSubWindow * subCW = m_mdiArea->addSubWindow (cW);
     cW->show();
     subCW->setAttribute (Qt::WA_DeleteOnClose);
+}
+
+void RadMainWindow :: addWidget (QWidget * w)
+{
+    qDebug () << __PRETTY_FUNCTION__ << w;
+    if (!w)
+        return;
+    QMdiSubWindow * m_subW = m_mdiArea->addSubWindow (w);
+    w->show();
+    m_subW->setAttribute (Qt::WA_DeleteOnClose);
 }

@@ -5,8 +5,9 @@
 
 #include "src_config.h"
 
-class ConvDistanceWidget;
+class QThread;
 
+class ConvDistanceWidget;
 class ConvDistPhysParameters;
 
 class _FFTMATR_EXPORT_ RadarImageProc : public QObject
@@ -17,6 +18,9 @@ public:
 
 public slots:
     void procConvDist (ConvDistPhysParameters * cParams);
+
+private slots:
+    void getWidget (QWidget * w, QThread * pThread);
 
 signals:
     void sendWidget (QWidget * w);

@@ -55,8 +55,19 @@ void RadarImageProc::procConvDist (ConvDistPhysParameters * cParams)
     if (!cParams)
         return;
     ConvDistThread * cdThread = new ConvDistThread (cParams);
+    connect (cdThread, SIGNAL (sendWidget (QWidget *, QThread *)), this, SLOT (getWidget (QWidget *, QThread *)), Qt::DirectConnection);
     cdThread->start();
     while (!cdThread->isFinished())
         ;
     qDebug () << __PRETTY_FUNCTION__;
+    delete cdThread;
+}
+
+void RadarImageProc::getWidget (QWidget * w, QThread * pThread)
+{
+    qDebug () << __PRETTY_FUNCTION__ << w << pThread;
+    if (!w)
+        return;
+    w->setParent (0);
+    emit sendWidget (w);
 }

@@ -34,6 +34,8 @@ private slots:
     void slotTest2 (void);
     void slotFFT2Test (void);
 
+    void addWidget (QWidget * w);
+
 private:
     //
     // Functions
