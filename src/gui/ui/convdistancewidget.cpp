@@ -174,7 +174,7 @@ void ConvDistanceWidget :: calcNumbImp (const QString& text)
         return;
     }
     Dimp *= 0.1e-5;
-    double fCvant2 = UI->lEQuantizationFrequency->text().toDouble();
-    int NImp = (int)Dimp*fCvant2+1;
+    double fQuant2 = UI->lEQuantizationFrequency->text().toDouble();
+    int NImp = (int)(Dimp*fQuant2)+1;
     UI->lENumberOfReadingsInImpulse->setText (QString::number (NImp));
 }

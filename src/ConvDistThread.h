@@ -4,9 +4,13 @@
 #include <QThread>
 #include <QMutex>
 
+#include <complex>
+#include "matrix.h"
 #include "src_config.h"
 
 class ConvDistPhysParameters;
+
+using std::complex;
 
 class _FFTMATR_EXPORT_ ConvDistThread : public QThread
 {
@@ -23,6 +27,7 @@ private:
     //
     ConvDistPhysParameters * convParameters;
     QMutex mFile;
+    double* stc2MatrAbs;
 
 private:
     Q_OBJECT
