@@ -1,6 +1,12 @@
+#include <QImage>
 #include <QtDebug>
 
-#include "gui/ui/convdistancewidget.h"
+#include <radDataWidget.h>
+#include <radTableWidget.h>
+#include <rggImageWidget.h>
+#include <ffttimewidget.h>
+#include <convdistancewidget.h>
+
 #include "ConvDistPhys.h"
 #include "ConvDistThread.h"
 #include "radarConvIm.h"
@@ -55,19 +61,32 @@ void RadarImageProc::procConvDist (ConvDistPhysParameters * cParams)
     if (!cParams)
         return;
     ConvDistThread * cdThread = new ConvDistThread (cParams);
-    connect (cdThread, SIGNAL (sendWidget (QWidget *, QThread *)), this, SLOT (getWidget (QWidget *, QThread *)), Qt::DirectConnection);
+    connect (cdThread, SIGNAL (sendData (complex<double> *, int)), this, SLOT (receiveData (complex<double> *, int)) );
+    connect (cdThread, SIGNAL (sendImage (QImage *)), this, SLOT (receiveImage (QImage *)) );
+    connect (cdThread, SIGNAL (finished()), this, SLOT (convFinished()) );
     cdThread->start();
-    while (!cdThread->isFinished())
-        ;
     qDebug () << __PRETTY_FUNCTION__;
-    delete cdThread;
+    //delete cdThread;
 }
 
-void RadarImageProc::getWidget (QWidget * w, QThread * pThread)
+void RadarImageProc::receiveData (complex<double> * cData, int n)
 {
-    qDebug () << __PRETTY_FUNCTION__ << w << pThread;
-    if (!w)
-        return;
+    qDebug () << __PRETTY_FUNCTION__;
+    radDataWidget * w = new radDataWidget (cData, n);
     w->setParent (0);
     emit sendWidget (w);
+}
+
+void RadarImageProc::receiveImage (QImage * im)
+{
+    rggImageWidget * imW = new rggImageWidget;
+    imW->setImage (*im);
+    emit sendWidget (imW);
+}
+
+void RadarImageProc::convFinished (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+    QObject * thr = sender();
+    thr->deleteLater();
 }

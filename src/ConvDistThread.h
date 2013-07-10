@@ -9,6 +9,7 @@
 #include "src_config.h"
 
 class QWidget;
+class QImage;
 
 class ConvDistPhysParameters;
 
@@ -24,7 +25,8 @@ protected:
     void run (void);
 
 signals:
-    void sendWidget (QWidget * w, QThread * pThread);
+    void sendData (complex<double> * cData, int n);
+    void sendImage (QImage * im);
 
 private:
     //

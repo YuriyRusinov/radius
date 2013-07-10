@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QAbstractItemModel>
 #include <QStandardItemModel>
+#include <QImage>
 #include <QtDebug>
 
 #include <complex>
@@ -16,13 +17,6 @@
 #include "calcim.h"
 #include "ConvDistPhys.h"
 #include "ConvDistThread.h"
-
-#include <radDataWidget.h>
-#include <radTableWidget.h>
-#include <rggImageWidget.h>
-#include <ffttimewidget.h>
-#include <convdistancewidget.h>
-
 
 ConvDistThread :: ConvDistThread (ConvDistPhysParameters * cParams, QObject * parent)
     : QThread (parent),
@@ -53,8 +47,9 @@ void ConvDistThread :: run (void)
     fContData.open (QIODevice::WriteOnly);
     QTextStream stCont (&fContData);
     FFT_Transform fft;// = new FFT_Transform;
-    radDataWidget * wOpFFT = new radDataWidget (opor, N1);
-    emit sendWidget (wOpFFT, this);
+    emit sendData (opor, N1);
+    //radDataWidget * wOpFFT = new radDataWidget (opor, N1);
+    //emit sendWidget (wOpFFT, this);
 /*    QMdiSubWindow * subWopFFT = m_mdiArea->addSubWindow (wOpFFT);
     wOpFFT->show ();
     subWopFFT->setAttribute (Qt::WA_DeleteOnClose);
@@ -239,9 +234,10 @@ void ConvDistThread :: run (void)
     qDebug () << __PRETTY_FUNCTION__ << convImage->size () << imSize;
     QString fileImageName = QString ("rgg.png");
     convImage->save (fileImageName, "PNG");
-    rggImageWidget * imW = new rggImageWidget;
-    imW->setImage (*convImage);
-    emit sendWidget (imW, this);
+    //rggImageWidget * imW = new rggImageWidget;
+    //imW->setImage (*convImage);
+    //emit sendWidget (imW, this);
+    emit sendImage (convImage);
 
     delete [] stc1;
     delete [] st;

@@ -3,12 +3,16 @@
 
 #include <QObject>
 
+#include <complex>
 #include "src_config.h"
 
 class QThread;
+class QImage;
 
 class ConvDistanceWidget;
 class ConvDistPhysParameters;
+
+using std::complex;
 
 class _FFTMATR_EXPORT_ RadarImageProc : public QObject
 {
@@ -20,7 +24,10 @@ public slots:
     void procConvDist (ConvDistPhysParameters * cParams);
 
 private slots:
-    void getWidget (QWidget * w, QThread * pThread);
+    void receiveData (complex<double> * cData, int n);
+    void receiveImage (QImage * im);
+
+    void convFinished (void);
 
 signals:
     void sendWidget (QWidget * w);
