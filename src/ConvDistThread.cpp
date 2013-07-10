@@ -245,5 +245,5 @@ void ConvDistThread :: run (void)
     if (fid6)
         fclose (fid6);
     mFile.unlock();
-    exec();
+//    exec();
 }
