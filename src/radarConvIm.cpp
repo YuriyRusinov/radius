@@ -6,7 +6,9 @@
 #include <rggImageWidget.h>
 #include <ffttimewidget.h>
 #include <convdistancewidget.h>
+#include <convazimuthwidget.h>
 
+#include "ConvAzimuthPhys.h"
 #include "ConvDistPhys.h"
 #include "ConvDistThread.h"
 #include "radarConvIm.h"
@@ -89,4 +91,19 @@ void RadarImageProc::convFinished (void)
     qDebug () << __PRETTY_FUNCTION__;
     QObject * thr = sender();
     thr->deleteLater();
+}
+
+ConvAzimuthWidget * RadarImageProc::getCAzWidget (QWidget * parent, Qt::WindowFlags flags)
+{
+    ConvAzimuthWidget * cW = new ConvAzimuthWidget (parent, flags);
+
+    connect (cW, SIGNAL (sendParameters (ConvAzimuthPhysParameters *)), this, SLOT (procConvAzimuth (ConvAzimuthPhysParameters *)) );
+
+    return cW;
+}
+
+void RadarImageProc::procConvAzimuth (ConvAzimuthPhysParameters * cParams)
+{
+    Q_UNUSED (cParams);
+    qDebug () << __PRETTY_FUNCTION__;
 }

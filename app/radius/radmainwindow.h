@@ -23,6 +23,7 @@ public:
 
 private slots:
     void initConvDist (void);
+    void initConvAz (void);
 
     void openDataFile (void);
     void openConvFile (void);

@@ -28,6 +28,7 @@
 #include <rggImageWidget.h>
 #include <ffttimewidget.h>
 #include <convdistancewidget.h>
+#include <convazimuthwidget.h>
 #include <constants1.h>
 
 #include <complex>
@@ -109,6 +110,8 @@ void RadMainWindow :: init (void)
 
     QAction * actInitConvDist = calcMenu->addAction (tr("&Init convolution by distance"));
     connect (actInitConvDist, SIGNAL (triggered()), this, SLOT (initConvDist()) );
+    QAction * actInitConvAz = calcMenu->addAction (tr("&Init convolution by azimuth"));
+    connect (actInitConvAz, SIGNAL (triggered()), this, SLOT (initConvAz()) );
     QAction * actFFTTest = calcMenu->addAction (tr("Test &FFT"));
     connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
 
@@ -1008,6 +1011,18 @@ void RadMainWindow :: initConvDist (void)
         return;
     connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     ConvDistanceWidget * cW = rdConv->getCDistWidget();
+    QMdiSubWindow * subCW = m_mdiArea->addSubWindow (cW);
+    cW->show();
+    subCW->setAttribute (Qt::WA_DeleteOnClose);
+}
+
+void RadMainWindow :: initConvAz (void)
+{
+    RadarImageProc * rdConv = RadarImageProc::getRadarImage();
+    if (!rdConv)
+        return;
+    connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
+    ConvAzimuthWidget * cW = rdConv->getCAzWidget();
     QMdiSubWindow * subCW = m_mdiArea->addSubWindow (cW);
     cW->show();
     subCW->setAttribute (Qt::WA_DeleteOnClose);
