@@ -130,7 +130,7 @@ double * Calc2 :: operator () (const double* stlb, int nd2)
             double rt = sqrt (R*R+x*x+H*H);
             double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
-            double phase = -4*pi*rt/lamp;
+            double phase = -4*pi*rt/lamb;
             corf3(N0, i) = complex<double>(cos(phase), sin(phase));
         }
         from_opor++;

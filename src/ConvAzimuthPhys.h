@@ -1,0 +1,58 @@
+#ifndef _ConvAzimuthPhysPars_H
+#define _ConvAzimuthPhysPars_H
+
+#include <QString>
+
+#include "src_config.h"
+
+class _FFTMATR_EXPORT_ ConvAzimuthPhysParameters
+{
+public:
+    ConvAzimuthPhysParameters (int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal);
+    ConvAzimuthPhysParameters (const ConvAzimuthPhysParameters& CPars);
+    ~ConvAzimuthPhysParameters (void);
+
+    int getCenter (void) const;
+    int getDimension (void) const;
+    int getShift (void) const;
+    double cLightSpeed (void) const;
+    double radius (void) const;
+    double height (void) const;
+    double getBandWidth (void) const;
+    double getDistStep (void) const;
+    double getFQuant (void) const;
+    double getDimp (void) const;
+    int getImpNumb (void) const;
+    double getAzimuthStep (void) const;
+    double getLambda (void) const;
+
+    const QString& getInputFileName (void) const;
+    const QString& getConvFileName (void) const;
+
+    int getNCalibration (void) const;
+
+private:
+    //
+    // Variables
+    //
+    int NdCentre;
+    int NdDimension;
+    int NShift;
+    double cSpeedOfLight;
+    double R;
+    double H;
+    double FreqSp;
+    double Dnr;
+    double FQuant2;
+    double Dimp;
+    int NImp;
+    double AzimuthStep;
+    double ALamb;
+
+    QString m_fileName;
+    QString m_fileConvName;
+
+    int nCalibration;
+};
+
+#endif

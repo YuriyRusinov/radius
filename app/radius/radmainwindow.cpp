@@ -496,7 +496,7 @@ void RadMainWindow :: slotTest2 (void)
             double rt = sqrt (R*R+x*x+H*H);
             double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
-            double phase = -4*pi*rt/lamp;
+            double phase = -4*pi*rt/lamb;
             corf3(N0, j) = complex<double>(cos(phase), sin(phase));
             //stCorf << (double)real (corf3(N0, i)) << " " << (double)imag (corf3(N0, i)) << " " << N0 << " " << i << endl;
             //qDebug () << __PRETTY_FUNCTION__ << x << phase << (double)real (corf3(N0, i)) << (double)imag (corf3(N0, i)) << N0 << i;

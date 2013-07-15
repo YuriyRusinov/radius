@@ -28,6 +28,6 @@ const long double R (5396);
 const long double H (3964);
 
 const long double dx (0.058);
-const long double lamp (0.03450);
+const long double lamb (0.03450);
 
 #endif

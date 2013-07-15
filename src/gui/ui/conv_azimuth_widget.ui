@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>371</width>
-    <height>356</height>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lEConvDistFileName"/>
+           <widget class="QLineEdit" name="lEConvDistFileName">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="1" column="2">
            <widget class="QToolButton" name="tbConvDFileName">
@@ -147,10 +151,10 @@
           <string>Physician parameters</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QLineEdit" name="lEDistanceStep"/>
           </item>
-          <item row="6" column="0">
+          <item row="9" column="0">
            <widget class="QLabel" name="lAzimuthStep">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by azimuth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -160,10 +164,10 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
+          <item row="9" column="1">
            <widget class="QLineEdit" name="lEAzimuthStep"/>
           </item>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="lBandWidth">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bandwidth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -173,10 +177,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QLineEdit" name="lEBandwidth"/>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="lDistanceStep">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by distance :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -186,7 +190,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="lLightSpeed">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Light speed :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -196,17 +200,17 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QLineEdit" name="lELightSpeed"/>
           </item>
-          <item row="3" column="1">
+          <item row="6" column="1">
            <widget class="QLineEdit" name="lEQuantizationFrequency">
             <property name="readOnly">
              <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="6" column="0">
            <widget class="QLabel" name="lQuantFrequency">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quantization frequency :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -216,7 +220,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="7" column="0">
            <widget class="QLabel" name="lImpulseDuration">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Impulse duration, microseconds :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -226,10 +230,10 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="7" column="1">
            <widget class="QLineEdit" name="lEImpulseDuration"/>
           </item>
-          <item row="5" column="0">
+          <item row="8" column="0">
            <widget class="QLabel" name="lNumberofReadingsInImpulse">
             <property name="text">
              <string>Number of readings in impulse :</string>
@@ -239,14 +243,14 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="8" column="1">
            <widget class="QLineEdit" name="lENumberOfReadingsInImpulse">
             <property name="readOnly">
              <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="7" column="0">
+          <item row="10" column="0">
            <widget class="QLabel" name="lAlamb">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lambda :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -256,8 +260,38 @@
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
+          <item row="10" column="1">
            <widget class="QLineEdit" name="lEAlamb"/>
+          </item>
+          <item row="4" column="0" alignment="Qt::AlignRight">
+           <widget class="QLabel" name="lHorizontalComponent">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Horizontal component :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lEHorizontalComponent"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lEShift"/>
+          </item>
+          <item row="0" column="0" alignment="Qt::AlignRight">
+           <widget class="QLabel" name="lNShift">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Image shift :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" alignment="Qt::AlignRight">
+           <widget class="QLabel" name="lVerticalComonent">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vertical component :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lEVerticalComponent"/>
           </item>
          </layout>
         </widget>

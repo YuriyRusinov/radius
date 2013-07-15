@@ -18,7 +18,7 @@ public:
     double getBandWidth (void) const;
     double getDistStep (void) const;
     double getFQuant (void) const;
-    double getDImp (void) const;
+    double getDimp (void) const;
     int getImpNumb (void) const;
 
     const QString& getInputFileName (void) const;

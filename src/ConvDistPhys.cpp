@@ -66,7 +66,7 @@ double ConvDistPhysParameters :: getFQuant (void) const
     return FQuant2;
 }
 
-double ConvDistPhysParameters :: getDImp (void) const
+double ConvDistPhysParameters :: getDimp (void) const
 {
     return Dimp;
 }

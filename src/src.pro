@@ -39,6 +39,7 @@ HEADERS += fft_c.h \
            radarConvIm.h \
            ConvDistPhys.h \
            ConvDistThread.h \
+           ConvAzimuthPhys.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -46,7 +47,8 @@ SOURCES += fft_c.cpp \
            calcim.cpp \
            radarConvIm.cpp \
            ConvDistPhys.cpp \
-           ConvDistThread.cpp
+           ConvDistThread.cpp \
+           ConvAzimuthPhys.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
