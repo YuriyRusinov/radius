@@ -27,6 +27,7 @@ protected:
 signals:
     void sendData (complex<double> * cData, int n);
     void sendImage (QImage * im);
+    void sendTime (int mSeconds);
 
 private:
     //

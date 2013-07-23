@@ -8,10 +8,11 @@
 class _FFTMATR_EXPORT_ ConvAzimuthPhysParameters
 {
 public:
-    ConvAzimuthPhysParameters (int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal);
+    ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal);
     ConvAzimuthPhysParameters (const ConvAzimuthPhysParameters& CPars);
     ~ConvAzimuthPhysParameters (void);
 
+    int getFFTDim (void) const;
     int getCenter (void) const;
     int getDimension (void) const;
     int getShift (void) const;
@@ -35,6 +36,7 @@ private:
     //
     // Variables
     //
+    int nFFT;
     int NdCentre;
     int NdDimension;
     int NShift;

@@ -11,6 +11,7 @@
 #include "ConvAzimuthPhys.h"
 #include "ConvDistPhys.h"
 #include "ConvDistThread.h"
+#include "ConvAzimuthThread.h"
 #include "radarConvIm.h"
 
 RadarImageProc * RadarImageProc::instance=0;
@@ -104,6 +105,10 @@ ConvAzimuthWidget * RadarImageProc::getCAzWidget (QWidget * parent, Qt::WindowFl
 
 void RadarImageProc::procConvAzimuth (ConvAzimuthPhysParameters * cParams)
 {
-    Q_UNUSED (cParams);
+    qDebug () << __PRETTY_FUNCTION__;
+    ConvAzimuthThread * caThread = new ConvAzimuthThread (cParams);
+    connect (caThread, SIGNAL (sendImage (QImage *)), this, SLOT (receiveImage (QImage *)) );
+    connect (caThread, SIGNAL (finished()), this, SLOT (convFinished()) );
+    caThread->start();
     qDebug () << __PRETTY_FUNCTION__;
 }

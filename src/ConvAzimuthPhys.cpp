@@ -1,7 +1,8 @@
 #include "ConvAzimuthPhys.h"
 
-ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal)
-    : NdCentre (ndc),
+ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal)
+    : nFFT (nfft),
+    NdCentre (ndc),
     NdDimension (ndim),
     NShift (nshift),
     cSpeedOfLight (c),
@@ -21,7 +22,8 @@ ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int ndc, int ndim, int n
 }
 
 ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (const ConvAzimuthPhysParameters& CPars)
-    : NdCentre (CPars.NdCentre),
+    : nFFT (CPars.nFFT),
+    NdCentre (CPars.NdCentre),
     NdDimension (CPars.NdDimension),
     NShift (CPars.NShift),
     cSpeedOfLight (CPars.cSpeedOfLight),
@@ -42,6 +44,11 @@ ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (const ConvAzimuthPhysPar
 
 ConvAzimuthPhysParameters :: ~ConvAzimuthPhysParameters (void)
 {
+}
+
+int ConvAzimuthPhysParameters :: getFFTDim (void) const
+{
+    return nFFT;
 }
 
 int ConvAzimuthPhysParameters :: getCenter (void) const

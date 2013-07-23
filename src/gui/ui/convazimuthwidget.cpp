@@ -59,6 +59,7 @@ void ConvAzimuthWidget :: setSaveFile (void)
 
 void ConvAzimuthWidget :: startConv (void)
 {
+    int nfft = UI->lEFFT->text().toInt();
     int ndc = UI->lEImageCenter->text().toInt();
     int ndim = UI->lEImageSize->text().toInt();
     int nshift = UI->lEShift->text().toInt();
@@ -73,7 +74,7 @@ void ConvAzimuthWidget :: startConv (void)
     int nCal = UI->lECalibration->text().toInt();
     QString fName = UI->lERggFileName->text();
     QString fConvName = UI->lEConvDistFileName->text();
-    ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal);
+    ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (nfft, ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal);
     emit sendParameters (cParams);
 }
 
@@ -151,6 +152,10 @@ void ConvAzimuthWidget :: init (void)
     QValidator * imDimVal = new QIntValidator (1, na2, this);
     UI->lEImageSize->setValidator (imDimVal);
     UI->lEImageSize->setText (QString::number (ndrazmer));
+
+    QValidator * nFFTVal = new QIntValidator (1, 2*na2, this);
+    UI->lEFFT->setValidator (nFFTVal);
+    UI->lEFFT->setText (QString::number (na2));
 
     QValidator * shiftVal = new QIntValidator (0, na2, this);
     UI->lEShift->setValidator (shiftVal);
