@@ -35,6 +35,8 @@ void ConvDistThread :: run (void)
 {
     if (!convParameters)
         return;
+    QTime * fftTime = new QTime;
+    fftTime->start();
     mFile.lock ();
     int ndn = convParameters->getNRChannels();
     int nd = FFT_Transform::pow2roundup (ndn);
@@ -117,7 +119,7 @@ void ConvDistThread :: run (void)
     stc2MatrAbs = new double (na*nd);
     for (int i0=0; i0<na; i0++)
     {
-        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
+//        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
         int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
@@ -147,9 +149,9 @@ void ConvDistThread :: run (void)
             stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
         }
         complex<double> * stc4 = 0;//new complex<double> [nd];
-        qDebug () << __PRETTY_FUNCTION__ << QString ("Forward fft");
+        //qDebug () << __PRETTY_FUNCTION__ << QString ("Forward fft");
         stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-        qDebug () << __PRETTY_FUNCTION__ << i0 << na;
+        //qDebug () << __PRETTY_FUNCTION__ << i0 << na;
         for (int ii=0; ii<nd; ii++)
         {
             double re = real (stc4[ii])*nd;
@@ -158,8 +160,8 @@ void ConvDistThread :: run (void)
             if (i0==0)
                 stCont << re << (im >= 0 ? "+" : " ") << im << "i" << endl;
         }
-        int n2 = FFT_Transform::pow2roundup(nd);//1024;
-        qDebug () << __PRETTY_FUNCTION__ << n2;//QString ("Reverse fft");
+        //int n2 = FFT_Transform::pow2roundup(nd);//1024;
+        //qDebug () << __PRETTY_FUNCTION__ << n2;//QString ("Reverse fft");
         //complex<double> * xConv = new complex<double>[n2];
         for (int ii=0; ii<nd; ii++)
         {
@@ -176,7 +178,7 @@ void ConvDistThread :: run (void)
         delete [] stc4;
 
         complex<double> * xfft = 0;//new complex<double> [nd];
-        qDebug () << __PRETTY_FUNCTION__ << QString ("Reverse fft");
+        //qDebug () << __PRETTY_FUNCTION__ << QString ("Reverse fft");
         xfft = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
         //delete [] xConv;
         double * stc2 = new double [2*nd];
@@ -184,15 +186,8 @@ void ConvDistThread :: run (void)
         for (int ii=0; ii<nd; ii++)
         {
             int ind = ii;//(ii==0 ? nd-1 : ii-1);
-            //complex<double> zfft = complex<double>(real (xfft[ind])/nd, imag (xfft[ind])/nd);
-            //QMutex matrMutex;
-            //matrMutex.lock();
-            //stc2MatrAbs[i0*na+ii] = sqrt (real (zfft*conj (zfft)));
-            //matrMutex.unlock();
-            //qDebug () << __PRETTY_FUNCTION__ << ii << nd;
             stc2[2*ii] = real (xfft[ind])/nd;//stc3[i]);
             stc2[2*ii+1] = imag (xfft[ind])/nd;
-//            stc2Op << stc2[2*i] << " " << stc2[2*i+1] << endl;
             stc2abs[ii] = sqrt (stc2[2*ii]*stc2[2*ii] + stc2[2*ii+1]*stc2[2*ii+1]);
             if (i0==0)
                 maxval = qMax (maxval, stc2abs[ii]);
@@ -215,10 +210,10 @@ void ConvDistThread :: run (void)
         }
         if (fid6)
         {
-            qDebug () << __PRETTY_FUNCTION__ << QString ("Write data");
+            //qDebug () << __PRETTY_FUNCTION__ << QString ("Write data");
             size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fid6);
             int ier = ferror (fid6);
-            qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
+            //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
             if (ier)
                 qDebug () << __PRETTY_FUNCTION__ << tr ("Write error");
         }
@@ -238,6 +233,9 @@ void ConvDistThread :: run (void)
     //imW->setImage (*convImage);
     //emit sendWidget (imW, this);
     emit sendImage (convImage);
+    int msecs = fftTime->elapsed ();
+    emit sendTime (msecs);
+    delete fftTime;
 
     delete [] stc1;
     delete [] st;

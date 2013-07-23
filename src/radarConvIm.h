@@ -30,6 +30,7 @@ public slots:
 private slots:
     void receiveData (complex<double> * cData, int n);
     void receiveImage (QImage * im);
+    void receiveElapsedTime (int msec);
 
     void convFinished (void);
 

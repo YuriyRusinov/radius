@@ -215,11 +215,12 @@ void ConvAzimuthThread :: run (void)
     int ii (0);
     quint32 maxvalim = 0;
     QVector<QRgb> colors;
+    int nCal = convAzParameters->getNCalibration();
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<nas/2;j++)
         {
-            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*4000;
+            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*nCal;
             uint val = (uint)(256*imData[ii])/20*20;///512/0.3);
             maxvalim = qMax (maxvalim, val);
             QRgb v = qRgb (val, val, val);
@@ -237,7 +238,8 @@ void ConvAzimuthThread :: run (void)
     delete [] rggBD;
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
     qDebug () << __PRETTY_FUNCTION__ << maxvalim << maxVal;//isLoaded;
-    hIm->save("rgg2a.png", "PNG");
+    QString fileImage = convAzParameters->getConvFileName();
+    hIm->save(fileImage, "PNG");
     emit sendImage (hIm);
 //    QPixmap pIm = QPixmap::fromImage (*hIm);
 //    QLabel * lIm = new QLabel ;

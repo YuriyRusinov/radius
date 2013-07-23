@@ -66,6 +66,7 @@ void RadarImageProc::procConvDist (ConvDistPhysParameters * cParams)
     ConvDistThread * cdThread = new ConvDistThread (cParams);
     connect (cdThread, SIGNAL (sendData (complex<double> *, int)), this, SLOT (receiveData (complex<double> *, int)) );
     connect (cdThread, SIGNAL (sendImage (QImage *)), this, SLOT (receiveImage (QImage *)) );
+    connect (cdThread, SIGNAL (sendTime(int)), this, SLOT (receiveElapsedTime(int)) );
     connect (cdThread, SIGNAL (finished()), this, SLOT (convFinished()) );
     cdThread->start();
     qDebug () << __PRETTY_FUNCTION__;
@@ -109,6 +110,14 @@ void RadarImageProc::procConvAzimuth (ConvAzimuthPhysParameters * cParams)
     ConvAzimuthThread * caThread = new ConvAzimuthThread (cParams);
     connect (caThread, SIGNAL (sendImage (QImage *)), this, SLOT (receiveImage (QImage *)) );
     connect (caThread, SIGNAL (finished()), this, SLOT (convFinished()) );
+    connect (caThread, SIGNAL (sendTime(int)), this, SLOT (receiveElapsedTime(int)) );
     caThread->start();
     qDebug () << __PRETTY_FUNCTION__;
+}
+
+void RadarImageProc::receiveElapsedTime (int msec)
+{
+    FFTTimeWidget * fftWidget = new FFTTimeWidget;
+    fftWidget->setTimeElapsed (msec);
+    emit sendWidget (fftWidget);
 }
