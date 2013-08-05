@@ -4,9 +4,10 @@
 #include "src_config.h"
 
 #include <QWidget>
+#include <QImage>
 
 class QLabel;
-class QImage;
+class QScrollArea;
 
 class _FFTMATR_EXPORT_ rggImageWidget : public QWidget
 {
@@ -17,7 +18,12 @@ public:
     void setImage (const QImage& image);
 
 private:
+    //
+    // Variables
+    //
+    QImage im;
     QLabel * lImage;
+    QScrollArea * lImScroll;
 
 private:
     Q_OBJECT
