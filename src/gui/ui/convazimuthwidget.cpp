@@ -42,8 +42,7 @@ void ConvAzimuthWidget :: loadDataFile (void)
         return;
 
     UI->lERggFileName->setText (fileName);
-    bool isStart (!UI->lEConvDistFileName->text().isEmpty());
-    UI->pbStart->setEnabled (isStart);
+    UI->pbStart->setEnabled (true);
 }
 
 void ConvAzimuthWidget :: setSaveFile (void)
@@ -53,8 +52,6 @@ void ConvAzimuthWidget :: setSaveFile (void)
         return;
 
     UI->lEConvDistFileName->setText (fileConvName);
-    bool isStart (!UI->lERggFileName->text().isEmpty());
-    UI->pbStart->setEnabled (isStart);
 }
 
 void ConvAzimuthWidget :: startConv (void)
