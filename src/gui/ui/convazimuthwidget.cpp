@@ -47,7 +47,7 @@ void ConvAzimuthWidget :: loadDataFile (void)
 
 void ConvAzimuthWidget :: setSaveFile (void)
 {
-    QString fileConvName = QFileDialog::getSaveFileName (this, tr("Save convolution by distance data"), QDir::currentPath(), tr("All files (*)"));
+    QString fileConvName = QFileDialog::getSaveFileName (this, tr("Save convolution image by azimuth data"), QDir::currentPath(), tr("All files (*)"));
     if (fileConvName.isEmpty())
         return;
 
