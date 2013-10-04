@@ -107,8 +107,6 @@ void ConvAzimuthThread :: run (void)
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamb;
             corf3(N0, j) = complex<double>(cos(phase), sin(phase));
-            //stCorf << (double)real (corf3(N0, i)) << " " << (double)imag (corf3(N0, i)) << " " << N0 << " " << i << endl;
-            //qDebug () << __PRETTY_FUNCTION__ << x << phase << (double)real (corf3(N0, i)) << (double)imag (corf3(N0, i)) << N0 << i;
         }
         from_opor++;
     }
@@ -120,7 +118,6 @@ void ConvAzimuthThread :: run (void)
         for (int j=0; j<nas; j++)
         {
             stCorf << qSetRealNumberPrecision(14) << real(corf3(i, j)) << " " << qSetRealNumberPrecision(14) << imag (corf3(i, j)) << "i ";
-//                qDebug () << __PRETTY_FUNCTION__ << i << j << real(corf3(i, j)) << imag (corf3(i, j));
         }
         stCorf << endl;
         //qDebug () << __PRETTY_FUNCTION__ << i;
@@ -133,10 +130,6 @@ void ConvAzimuthThread :: run (void)
         {
             corf(j, i) = corf3(j, i+nas/2); //corfVec[j+(i+nas/2)*ndrz];//
             corf(j, i+na2-nas/2) = corf3(j, i); // corfVec[j + i*ndrz]; 
-            /*if (sqrt (real (corf3(j, i+nas/2))*real (corf3(j, i+nas/2)) + imag (corf3(j, i+nas/2))*imag (corf3(j, i+nas/2))) > 0.1e-15 )
-            {
-                qDebug () << __PRETTY_FUNCTION__ << i << " " << j << real (corf(j, i+na2-nas/2)) << imag (corf(j, i+na2-nas/2)) << real (corf(j, i)) << imag (corf(j, i));// << real (corf.getData()[i*ndrz+j]) << imag (corf.getData()[i*ndrz+j]);
-            }*/
         }
         cor_func++;
     }

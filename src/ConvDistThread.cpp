@@ -104,7 +104,7 @@ void ConvDistThread :: run (void)
     QFile fContStData (QString ("stc.dat"));
     fContStData.open (QIODevice::WriteOnly);
     QTextStream stContSt (&fContStData);
-    QSize imSize (nd, FFT_Transform::pow2roundup(na/50));
+    QSize imSize (nd, FFT_Transform::pow2roundup(na));
     QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
     if (!convImage || convImage->size().isNull())
     {
@@ -114,7 +114,6 @@ void ConvDistThread :: run (void)
         return;
     }
     convImage->fill (0);
-    double * vals = new double [50*nd];
     double maxval = 0.0;
     stc2MatrAbs = new double (na*nd);
     for (int i0=0; i0<na; i0++)
@@ -160,9 +159,7 @@ void ConvDistThread :: run (void)
             if (i0==0)
                 stCont << re << (im >= 0 ? "+" : " ") << im << "i" << endl;
         }
-        //int n2 = FFT_Transform::pow2roundup(nd);//1024;
-        //qDebug () << __PRETTY_FUNCTION__ << n2;//QString ("Reverse fft");
-        //complex<double> * xConv = new complex<double>[n2];
+
         for (int ii=0; ii<nd; ii++)
         {
             double rstc4 = real (stc4[ii])/nd;
@@ -171,9 +168,6 @@ void ConvDistThread :: run (void)
             double imopor = imag (opor[ii]);
             complex<double> res = complex<double> ((rstc4 * ropor - imstc4*imopor), (rstc4*imopor+imstc4*ropor));
             stc1[ii] = res;//stc4[i]*opor[i];///(nd*nd);
-            //qDebug () << __PRETTY_FUNCTION__ << ii << nd;
-            //if (i<10)
-            //    qDebug () << __PRETTY_FUNCTION__ << real (res) << imag(res) << real (xConv[i]) << imag (xConv[i]);
         }
         delete [] stc4;
 
@@ -182,31 +176,14 @@ void ConvDistThread :: run (void)
         xfft = fft (stc1, nd, nd, FFTW_BACKWARD, FFTW_ESTIMATE );//| FFTW_MEASURE);
         //delete [] xConv;
         double * stc2 = new double [2*nd];
-        double * stc2abs = new double [nd];
+        //double * stc2abs = new double [nd];
         for (int ii=0; ii<nd; ii++)
         {
             int ind = ii;//(ii==0 ? nd-1 : ii-1);
             stc2[2*ii] = real (xfft[ind])/nd;//stc3[i]);
             stc2[2*ii+1] = imag (xfft[ind])/nd;
-            stc2abs[ii] = sqrt (stc2[2*ii]*stc2[2*ii] + stc2[2*ii+1]*stc2[2*ii+1]);
-            if (i0==0)
-                maxval = qMax (maxval, stc2abs[ii]);
-            double gray (i0==0 ? 0.0 : (stc2abs[ii]/maxval)*convParameters->getNCalibration());
-            vals [(i0+1)%50+ii] = gray;
-            if ((i0+1)/50*50 == i0+1)
-            {
-                double gray_ave (0.0);
-                for (int iii=0; iii<50; iii++)
-                    gray_ave += vals [iii];
-                uint val = (uint)(256*(gray_ave/5.0e1));
-
-                QRgb v = qRgb (val, val, val);
-                ////qDebug ()  << __PRETTY_FUNCTION__ << v;
-                convImage->setPixel (ii, i0/50, v);//qRgb(val, val, val));
-            }
-
-            //qDebug () << __PRETTY_FUNCTION__ << ii << (double)stc2abs[ii];
-
+            double vmod = sqrt (stc2[2*ii]*stc2[2*ii] + stc2[2*ii+1]*stc2[2*ii+1]);
+            maxval = qMax (maxval, vmod);
         }
         if (fid6)
         {
@@ -215,14 +192,51 @@ void ConvDistThread :: run (void)
             int ier = ferror (fid6);
             //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
             if (ier)
-                qDebug () << __PRETTY_FUNCTION__ << tr ("Write error");
+            {
+                qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
+                return;
+            }
         }
         delete [] xfft;
 
-        delete [] stc2abs;
+        //delete [] stc2abs;
         delete [] stc2;
     }
-    delete [] vals;
+    delete cop;
+    if (fid6)
+        fclose (fid6);
+    mFile.unlock();
+    fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "r+");
+    if (fid6)
+    {
+        //double * vals = new double [50*nd];
+
+        for (int i0 = 0; i0 < na; i0++)
+        {
+            double * stc2c = new double [2*nd];
+            size_t h = fread (stc2c, sizeof (double)/2, 2*nd, fid6);
+            for (int ii=0; ii<nd; ii++)
+            {
+                double vmod = sqrt (stc2c[2*ii]*stc2c[2*ii] + stc2c[2*ii+1]*stc2c[2*ii+1]);
+                
+                double gray = (vmod/maxval)*convParameters->getNCalibration();
+                //vals [(i0+1)%50+ii] = gray;
+                //if ((i0+1)/50*50 == i0+1)
+                //{
+                //    double gray_ave (0.0);
+                //    for (int iii=0; iii<50; iii++)
+                //        gray_ave += vals [iii];
+                uint val = (uint)(256*(gray));
+
+                QRgb v = qRgb (val, val, val);
+                convImage->setPixel (ii, i0, v);//qRgb(val, val, val));
+                //}
+            }
+            delete [] stc2c;
+        }
+    }
+    
+    //delete [] vals;
     qDebug () << __PRETTY_FUNCTION__ << QString ("Data were read and processed");
     fContData.close();
 //    double * stc2abs = new double [nd];
@@ -239,9 +253,5 @@ void ConvDistThread :: run (void)
 
     delete [] stc1;
     delete [] st;
-    delete cop;
-    if (fid6)
-        fclose (fid6);
-    mFile.unlock();
 //    exec();
 }
