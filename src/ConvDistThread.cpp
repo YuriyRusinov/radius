@@ -27,8 +27,8 @@ ConvDistThread :: ConvDistThread (ConvDistPhysParameters * cParams, QObject * pa
 
 ConvDistThread :: ~ConvDistThread (void)
 {
-    if (stc2MatrAbs)
-        delete [] stc2MatrAbs;
+//    if (stc2MatrAbs)
+//        delete [] stc2MatrAbs;
 }
 
 void ConvDistThread :: run (void)
@@ -104,7 +104,7 @@ void ConvDistThread :: run (void)
     QFile fContStData (QString ("stc.dat"));
     fContStData.open (QIODevice::WriteOnly);
     QTextStream stContSt (&fContStData);
-    QSize imSize (nd, FFT_Transform::pow2roundup(na));
+    QSize imSize (nd, FFT_Transform::pow2roundup(na/50));
     QImage * convImage = new QImage (imSize, QImage::Format_RGB32);//QImage::Format_Mono);
     if (!convImage || convImage->size().isNull())
     {
@@ -115,7 +115,7 @@ void ConvDistThread :: run (void)
     }
     convImage->fill (0);
     double maxval = 0.0;
-    stc2MatrAbs = new double (na*nd);
+//    stc2MatrAbs = new double (na*nd);
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
@@ -191,7 +191,7 @@ void ConvDistThread :: run (void)
             size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fid6);
             int ier = ferror (fid6);
             //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
-            if (ier)
+            if (h ==0 || ier)
             {
                 qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
                 return;
@@ -207,17 +207,37 @@ void ConvDistThread :: run (void)
         fclose (fid6);
     mFile.unlock();
     fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "r+");
+    qDebug () << __PRETTY_FUNCTION__ << maxval;
     if (fid6)
     {
-        //double * vals = new double [50*nd];
-
-        for (int i0 = 0; i0 < na; i0++)
+        double * vals = new double [nd];
+        int * nums = new int [nd];
+        for (int i=0; i<nd; i++)
         {
-            double * stc2c = new double [2*nd];
-            size_t h = fread (stc2c, sizeof (double)/2, 2*nd, fid6);
+            vals[i] = 0.0;
+            nums[i] = 0;
+        }
+
+        for (int i0 = 0; i0 < FFT_Transform::pow2roundup(na/50); i0++)
+        {
+            for (int i=0; i<50; i++)
+            {
+                double * stc2c = new double [2*nd];
+                size_t h = fread (stc2c, sizeof (double)/2, 2*nd, fid6);
+                //qDebug () << __PRETTY_FUNCTION__ << h;
+                if (h > 0)
+                {
+                    for (int ii=0; ii<nd; ii++)
+                    {
+                        vals [ii] += sqrt (stc2c[2*ii]*stc2c[2*ii] + stc2c[2*ii+1]*stc2c[2*ii+1]);
+                        nums[ii]++;
+                    }
+                }
+                delete [] stc2c;
+            }
             for (int ii=0; ii<nd; ii++)
             {
-                double vmod = sqrt (stc2c[2*ii]*stc2c[2*ii] + stc2c[2*ii+1]*stc2c[2*ii+1]);
+                double vmod = vals[ii]/nums[ii];//sqrt (stc2c[2*ii]*stc2c[2*ii] + stc2c[2*ii+1]*stc2c[2*ii+1]);
                 
                 double gray = (vmod/maxval)*convParameters->getNCalibration();
                 //vals [(i0+1)%50+ii] = gray;
@@ -232,8 +252,8 @@ void ConvDistThread :: run (void)
                 convImage->setPixel (ii, i0, v);//qRgb(val, val, val));
                 //}
             }
-            delete [] stc2c;
         }
+        delete [] vals;
     }
     
     //delete [] vals;
