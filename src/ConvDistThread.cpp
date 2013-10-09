@@ -116,6 +116,7 @@ void ConvDistThread :: run (void)
     convImage->fill (0);
     double maxval = 0.0;
 //    stc2MatrAbs = new double (na*nd);
+    qDebug () << __PRETTY_FUNCTION__ << fftTime->elapsed ();
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
@@ -150,6 +151,7 @@ void ConvDistThread :: run (void)
         complex<double> * stc4 = 0;//new complex<double> [nd];
         //qDebug () << __PRETTY_FUNCTION__ << QString ("Forward fft");
         stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
+        qDebug () << __PRETTY_FUNCTION__ << tr ("FFT of data, elapsed time %1").arg (fftTime->elapsed ()/1000);
         //qDebug () << __PRETTY_FUNCTION__ << i0 << na;
         for (int ii=0; ii<nd; ii++)
         {
