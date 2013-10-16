@@ -228,12 +228,28 @@ void ConvAzimuthThread :: run (void)
         }
     }
     delete [] imData;
-    delete [] rggBD;
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
     qDebug () << __PRETTY_FUNCTION__ << maxvalim << maxVal;//isLoaded;
     QString fileImage = convAzParameters->getConvFileName();
-    hIm->save(fileImage, "PNG");
+    FILE * fid7 = fopen (fileImage.toAscii().constData(), "wb");
+    //hIm->save(fileImage, "PNG");
     emit sendImage (hIm);
+    fwrite ("FLT=", sizeof (char), 4, fid7);
+    fwrite (&ndrz, sizeof (int), 1, fid7);
+    ii = 0;
+    for (int i=0; i<ndrz; i++)
+    {
+        for (int j=0; j<nas/2;j++)
+        {
+            float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]));
+            fwrite (&w, sizeof (float), 1, fid7);
+
+            ii++;
+        }
+    }
+    delete [] rggBD;
+
+    fclose (fid7);
 //    QPixmap pIm = QPixmap::fromImage (*hIm);
 //    QLabel * lIm = new QLabel ;
 //    QWidget * wImage = new QWidget;
