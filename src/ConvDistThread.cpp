@@ -149,10 +149,8 @@ void ConvDistThread :: run (void)
             stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
         }
         complex<double> * stc4 = 0;//new complex<double> [nd];
-        //qDebug () << __PRETTY_FUNCTION__ << QString ("Forward fft");
         stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-        qDebug () << __PRETTY_FUNCTION__ << tr ("FFT of data, elapsed time %1").arg (fftTime->elapsed ()/1000);
-        //qDebug () << __PRETTY_FUNCTION__ << i0 << na;
+        //qDebug () << __PRETTY_FUNCTION__ << tr ("FFT of data, elapsed time %1").arg (fftTime->elapsed ()/1.0e3);
         for (int ii=0; ii<nd; ii++)
         {
             double re = real (stc4[ii])*nd;

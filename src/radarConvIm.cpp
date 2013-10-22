@@ -85,6 +85,7 @@ void RadarImageProc::receiveImage (QImage * im)
 {
     rggImageWidget * imW = new rggImageWidget;
     imW->setImage (*im);
+    imW->setWindowTitle(tr("Result image"));
     emit sendWidget (imW);
 }
 
