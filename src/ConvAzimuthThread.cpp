@@ -238,7 +238,7 @@ void ConvAzimuthThread :: run (void)
     {
         for (int j=0; j<nas/2;j++)
         {
-            float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]));
+            float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*256;//*6.6e11;
             fwrite (&w, sizeof (float), 1, fid7);
 
             ii++;
