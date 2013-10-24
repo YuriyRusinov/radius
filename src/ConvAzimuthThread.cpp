@@ -202,9 +202,9 @@ void ConvAzimuthThread :: run (void)
         stCorf << endl;
     }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
-    QImage * hIm = new QImage (ndrz, nas/2, QImage::Format_Indexed8);//QImage::Format_ARGB32);
-    double * imData = new double [ndrz*nas/2];
     int nCal = convAzParameters->getNCalibration();
+    QImage * hIm = new QImage (ndrz, nas/2/nCal, QImage::Format_Indexed8);//QImage::Format_ARGB32);
+    //double * imData = new double [ndrz*nas/2/nCal];
     int ii (0);
     quint32 maxvalim = 0;
     QVector<QRgb> colors;
@@ -214,17 +214,24 @@ void ConvAzimuthThread :: run (void)
     //qDebug () << __PRETTY_FUNCTION__ << hIm->colorCount ();
     for (int i=0; i<ndrz; i++)
     {
-        for (int j=0; j<nas/2;j++)
+        for (int j=0; j<nas/2/nCal;j++)
         {
-            imData[ii] = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;
-            uint val = (uint)(256*imData[ii])/nCal*nCal;///512/0.3);
+            double sum = 0.0;
+            for (int iii=0; iii<nCal; iii++)
+            {
+                complex<double> arg (rggBD[ii]);
+                sum += sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal;
+                ii++;
+            }
+            //ii++;
+            //imData[ii] = sum/nCal;//sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;
+            uint val = (uint)(256*sum/nCal);///512/0.3);
             maxvalim = qMax (maxvalim, val);
             uint ind = colors.indexOf (qRgb (val, val, val));
             hIm->setPixel (i, j, ind);//qGray (val, val, val));//qRgb(255, 255, 255));
-            ii++;
         }
     }
-    delete [] imData;
+    //delete [] imData;
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
     qDebug () << __PRETTY_FUNCTION__ << maxvalim << maxVal;//isLoaded;
     QString fileImage = convAzParameters->getConvFileName();
