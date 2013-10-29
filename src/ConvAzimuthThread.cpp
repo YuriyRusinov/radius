@@ -211,7 +211,7 @@ void ConvAzimuthThread :: run (void)
     for (int i=0; i<=255; i++)//=nCal)
         colors.append (qRgb(i, i, i));
     hIm->setColorTable (colors);
-    //qDebug () << __PRETTY_FUNCTION__ << hIm->colorCount ();
+    qDebug () << __PRETTY_FUNCTION__ << hIm->size();
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<nas/2/nCal;j++)
@@ -241,15 +241,17 @@ void ConvAzimuthThread :: run (void)
     fwrite ("FLT=", sizeof (char), 4, fid7);
     fwrite (&ndrz, sizeof (int), 1, fid7);
     ii = 0;
-    for (int i=0; i<ndrz; i++)
+    for (int i=0; i<ndrz*nas/2/nCal; i++)
     {
-        for (int j=0; j<nas/2;j++)
+        float wSum (0.0);
+        for (int iii=0; iii<nCal; iii++)
         {
             float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*256;//*6.6e11;
-            fwrite (&w, sizeof (float), 1, fid7);
-
+            wSum += w;
             ii++;
         }
+        wSum /= nCal;
+        fwrite (&wSum, sizeof (float), 1, fid7);
     }
     delete [] rggBD;
 
