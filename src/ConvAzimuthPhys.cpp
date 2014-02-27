@@ -1,6 +1,6 @@
 #include "ConvAzimuthPhys.h"
 
-ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal)
+ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal, double sc, double off)
     : nFFT (nfft),
     NdCentre (ndc),
     NdDimension (ndim),
@@ -17,7 +17,9 @@ ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int n
     ALamb (alamb),
     m_fileName (fileName),
     m_fileConvName (fileConvName),
-    nCalibration (nCal)
+    nCalibration (nCal),
+    imScale (sc),
+    imOffset (off)
 {
 }
 
@@ -38,7 +40,9 @@ ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (const ConvAzimuthPhysPar
     ALamb (CPars.ALamb),
     m_fileName (CPars.m_fileName),
     m_fileConvName (CPars.m_fileConvName),
-    nCalibration (CPars.nCalibration)
+    nCalibration (CPars.nCalibration),
+    imScale (CPars.imScale),
+    imOffset (CPars.imOffset)
 {
 }
 
@@ -129,4 +133,14 @@ double ConvAzimuthPhysParameters :: radius (void) const
 double ConvAzimuthPhysParameters :: height (void) const
 {
     return H;
+}
+
+double ConvAzimuthPhysParameters :: getImScale (void) const
+{
+    return imScale;
+}
+
+double ConvAzimuthPhysParameters :: getImOffset (void) const
+{
+    return imOffset;
 }

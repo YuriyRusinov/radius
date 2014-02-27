@@ -71,7 +71,9 @@ void ConvAzimuthWidget :: startConv (void)
     int nCal = UI->lECalibration->text().toInt();
     QString fName = UI->lERggFileName->text();
     QString fConvName = UI->lEConvDistFileName->text();
-    ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (nfft, ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal);
+    double sc = UI->lEScaleFactor->text().toDouble();
+    double off = UI->lEOffset->text().toDouble();
+    ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (nfft, ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal, sc, off);
     emit sendParameters (cParams);
 }
 
@@ -192,6 +194,14 @@ void ConvAzimuthWidget :: init (void)
     QValidator * dLambVal = new QDoubleValidator (0.0, 1.0, 6, this);
     UI->lEAlamb->setValidator (dLambVal);
     UI->lEAlamb->setText (QString::number (lamb, 'f', 5));
+
+    QValidator * dScaleVal = new QDoubleValidator (this);
+    UI->lEScaleFactor->setValidator (dScaleVal);
+    UI->lEScaleFactor->setText (QString::number (1.0, 'f', 5));
+
+    QValidator * dOffsetVal = new QDoubleValidator (this);
+    UI->lEOffset->setValidator (dOffsetVal);
+    UI->lEOffset->setText (QString::number (0.0, 'f', 5));
 
     UI->pbStart->setEnabled (false);
 }
