@@ -220,12 +220,15 @@ void ConvAzimuthThread :: run (void)
             for (int iii=0; iii<nCal; iii++)
             {
                 complex<double> arg (rggBD[ii]);
-                sum += sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal;
+                if (!convAzParameters->getLogarithm())
+                    sum += convAzParameters->getImScale() * sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal+convAzParameters->getImOffset();
+                else
+                    sum += sqrt (real(arg)*real(arg)+imag(arg)*imag(arg));///maxVal;
                 ii++;
             }
             //ii++;
             //imData[ii] = sum/nCal;//sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;
-            uint val = (uint)(256*sum/nCal);///512/0.3);
+            uint val = convAzParameters->getLogarithm() ? (uint)(256*log(1.+sum/nCal)/log(1.+maxVal)) : (uint)(256*sum/nCal);///512/0.3);
             maxvalim = qMax (maxvalim, val);
             uint ind = colors.indexOf (qRgb (val, val, val));
             hIm->setPixel (i, j, ind);//qGray (val, val, val));//qRgb(255, 255, 255));
@@ -246,11 +249,12 @@ void ConvAzimuthThread :: run (void)
         float wSum (0.0);
         for (int iii=0; iii<nCal; iii++)
         {
-            float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal*256;//*6.6e11;
+            float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*6.6e11;
             wSum += w;
             ii++;
         }
         wSum /= nCal;
+        wSum *= 256;
         fwrite (&wSum, sizeof (float), 1, fid7);
     }
     delete [] rggBD;

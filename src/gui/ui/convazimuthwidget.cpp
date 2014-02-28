@@ -73,7 +73,9 @@ void ConvAzimuthWidget :: startConv (void)
     QString fConvName = UI->lEConvDistFileName->text();
     double sc = UI->lEScaleFactor->text().toDouble();
     double off = UI->lEOffset->text().toDouble();
-    ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (nfft, ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal, sc, off);
+    Qt::CheckState chLog = UI->chLogarithm->checkState ();
+    bool isLog = (chLog == Qt::Checked);
+    ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (nfft, ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal, sc, off, isLog);
     emit sendParameters (cParams);
 }
 

@@ -8,7 +8,7 @@
 class _FFTMATR_EXPORT_ ConvAzimuthPhysParameters
 {
 public:
-    ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal, double sc, double off);
+    ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal=1, double sc=1.0, double off=0.0, bool isLogarithm=false);
     ConvAzimuthPhysParameters (const ConvAzimuthPhysParameters& CPars);
     ~ConvAzimuthPhysParameters (void);
 
@@ -33,6 +33,8 @@ public:
     int getNCalibration (void) const;
     double getImScale (void) const;
     double getImOffset (void) const;
+
+    bool getLogarithm (void) const;
 
 private:
     //
@@ -59,6 +61,8 @@ private:
     int nCalibration;
     double imScale;
     double imOffset;
+
+    bool isLogC;
 };
 
 #endif

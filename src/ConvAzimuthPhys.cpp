@@ -1,6 +1,6 @@
 #include "ConvAzimuthPhys.h"
 
-ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal, double sc, double off)
+ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int ndim, int nshift, double c, double r, double h, double bw, double dnr, double dimp, double aStep, double alamb, const QString& fileName, const QString& fileConvName, int nCal, double sc, double off, bool isLogarithm)
     : nFFT (nfft),
     NdCentre (ndc),
     NdDimension (ndim),
@@ -19,7 +19,8 @@ ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (int nfft, int ndc, int n
     m_fileConvName (fileConvName),
     nCalibration (nCal),
     imScale (sc),
-    imOffset (off)
+    imOffset (off),
+    isLogC (isLogarithm)
 {
 }
 
@@ -42,7 +43,8 @@ ConvAzimuthPhysParameters :: ConvAzimuthPhysParameters (const ConvAzimuthPhysPar
     m_fileConvName (CPars.m_fileConvName),
     nCalibration (CPars.nCalibration),
     imScale (CPars.imScale),
-    imOffset (CPars.imOffset)
+    imOffset (CPars.imOffset),
+    isLogC (CPars.isLogC)
 {
 }
 
@@ -143,4 +145,9 @@ double ConvAzimuthPhysParameters :: getImScale (void) const
 double ConvAzimuthPhysParameters :: getImOffset (void) const
 {
     return imOffset;
+}
+
+bool ConvAzimuthPhysParameters :: getLogarithm (void) const
+{
+    return isLogC;
 }
