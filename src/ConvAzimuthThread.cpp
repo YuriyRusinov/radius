@@ -203,13 +203,20 @@ void ConvAzimuthThread :: run (void)
     }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     int nCal = convAzParameters->getNCalibration();
-    QImage * hIm = new QImage (ndrz, nas/2/nCal, QImage::Format_Indexed8);//QImage::Format_ARGB32);
+    QImage * hIm = new QImage (ndrz, nas/2/nCal, QImage::Format_ARGB32);// QImage::Format_Indexed8);
     //double * imData = new double [ndrz*nas/2/nCal];
     int ii (0);
     quint32 maxvalim = 0;
     QVector<QRgb> colors;
-    for (int i=0; i<=255; i++)//=nCal)
-        colors.append (qRgb(i, i, i));
+    for (int i=0; i<ndrz*nas/2; i++)//=nCal)
+    {
+        QColor c;
+        complex<double> arg (rggBD[i]);
+        double argAbs = sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])) / maxVal;
+        c.setRgbF (argAbs, argAbs, argAbs);
+        //qDebug () << __PRETTY_FUNCTION__ << c.rgb();
+        colors.append (c.rgb());
+    }
     hIm->setColorTable (colors);
     qDebug () << __PRETTY_FUNCTION__ << hIm->size();
     for (int i=0; i<ndrz; i++)
@@ -230,7 +237,7 @@ void ConvAzimuthThread :: run (void)
             //imData[ii] = sum/nCal;//sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;
             uint val = convAzParameters->getLogarithm() ? (uint)(256*log(1.+sum/nCal)/log(1.+maxVal)) : (uint)(256*sum/nCal);///512/0.3);
             maxvalim = qMax (maxvalim, val);
-            uint ind = colors.indexOf (qRgb (val, val, val));
+            uint ind = colors[(ii-1)/nCal];//colors.indexOf (qRgb (val, val, val));
             hIm->setPixel (i, j, ind);//qGray (val, val, val));//qRgb(255, 255, 255));
         }
     }
