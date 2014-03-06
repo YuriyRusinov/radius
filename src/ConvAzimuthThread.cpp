@@ -208,17 +208,25 @@ void ConvAzimuthThread :: run (void)
     int ii (0);
     quint32 maxvalim = 0;
     QVector<QRgb> colors;
-    for (int i=0; i<ndrz*nas/2; i++)//=nCal)
+    for (int i=0; i<ndrz*nas/2/nCal; i++)//=nCal)
     {
         QColor c;
-        complex<double> arg (rggBD[i]);
-        double argAbs = sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])) / maxVal;
-        c.setRgbF (argAbs, argAbs, argAbs);
-        //qDebug () << __PRETTY_FUNCTION__ << c.rgb();
+//        int ii (0);
+        double sum = 0.0;
+        for (int iii=0; iii<nCal; iii++)
+        {
+            complex<double> arg (rggBD[ii]);
+            double argAbs = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii])) / maxVal;
+            sum += argAbs;
+            ii++;
+        }
+        c.setRgbF (sum/nCal, sum/nCal, sum/nCal);
+        //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
         colors.append (c.rgb());
     }
     hIm->setColorTable (colors);
     qDebug () << __PRETTY_FUNCTION__ << hIm->size();
+    ii = 0;
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<nas/2/nCal;j++)
