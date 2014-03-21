@@ -220,7 +220,7 @@ void ConvAzimuthThread :: run (void)
             sum += argAbs;
             ii++;
         }
-        c.setRgbF (sum/nCal, sum/nCal, sum/nCal);
+        c.setRgbF (qMin (convAzParameters->getImScale()*sum/nCal, 1.0), qMin (convAzParameters->getImScale()*sum/nCal, 1.), qMin (convAzParameters->getImScale() * sum/nCal, 1.0));
         //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
         colors.append (c.rgb());
     }
@@ -235,10 +235,10 @@ void ConvAzimuthThread :: run (void)
             for (int iii=0; iii<nCal; iii++)
             {
                 complex<double> arg (rggBD[ii]);
-                if (!convAzParameters->getLogarithm())
-                    sum += convAzParameters->getImScale() * sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal+convAzParameters->getImOffset();
-                else
-                    sum += sqrt (real(arg)*real(arg)+imag(arg)*imag(arg));///maxVal;
+                //if (!convAzParameters->getLogarithm())
+                sum += convAzParameters->getImScale() * sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal+convAzParameters->getImOffset();
+                //else
+                //    sum += sqrt (real(arg)*real(arg)+imag(arg)*imag(arg));///maxVal;
                 ii++;
             }
             //ii++;
