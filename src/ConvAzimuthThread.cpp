@@ -269,7 +269,7 @@ void ConvAzimuthThread :: run (void)
             ii++;
         }
         wSum /= nCal;
-        wSum *= 256;
+        //wSum *= 256;
         fwrite (&wSum, sizeof (float), 1, fid7);
     }
     delete [] rggBD;
