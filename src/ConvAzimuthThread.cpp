@@ -208,6 +208,8 @@ void ConvAzimuthThread :: run (void)
     int ii (0);
     quint32 maxvalim = 0;
     QVector<QRgb> colors;
+    double aScale = convAzParameters->getImScale();
+    double bShift = convAzParameters->getImOffset();
     for (int i=0; i<ndrz*nas/2/nCal; i++)//=nCal)
     {
         QColor c;
@@ -220,7 +222,8 @@ void ConvAzimuthThread :: run (void)
             sum += argAbs;
             ii++;
         }
-        c.setRgbF (qMin (convAzParameters->getImScale()*sum/nCal, 1.0), qMin (convAzParameters->getImScale()*sum/nCal, 1.), qMin (convAzParameters->getImScale() * sum/nCal, 1.0));
+        sum = ((int)(sum*aScale))/((int)aScale);
+        c.setRgbF (qMin (aScale*sum/nCal, 1.0), qMin (aScale*sum/nCal, 1.), qMin (aScale * sum/nCal, 1.0));
         //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
         colors.append (c.rgb());
     }
@@ -236,7 +239,7 @@ void ConvAzimuthThread :: run (void)
             {
                 complex<double> arg (rggBD[ii]);
                 //if (!convAzParameters->getLogarithm())
-                sum += convAzParameters->getImScale() * sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal+convAzParameters->getImOffset();
+                sum += aScale * sqrt (real(arg)*real(arg)+imag(arg)*imag(arg))/maxVal+bShift;
                 //else
                 //    sum += sqrt (real(arg)*real(arg)+imag(arg)*imag(arg));///maxVal;
                 ii++;
