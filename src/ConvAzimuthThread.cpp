@@ -222,8 +222,8 @@ void ConvAzimuthThread :: run (void)
             sum += argAbs;
             ii++;
         }
-        sum = ((int)(sum*aScale))/((int)aScale);
-        c.setRgbF (qMin (aScale*sum/nCal, 1.0), qMin (aScale*sum/nCal, 1.), qMin (aScale * sum/nCal, 1.0));
+        //sum = (int)(((int)(sum/aScale))*(aScale));
+        c.setRgbF (qMin (qMax (aScale*sum/nCal+bShift, 0.0), 1.0), qMin (qMax (aScale*sum/nCal+bShift 0.0), 1.), qMin (qMax (aScale * sum/nCal+bShift, 0.0), 1.0));
         //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
         colors.append (c.rgb());
     }
