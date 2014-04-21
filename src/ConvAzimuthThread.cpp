@@ -210,6 +210,7 @@ void ConvAzimuthThread :: run (void)
     QVector<QRgb> colors;
     double aScale = convAzParameters->getImScale();
     double bShift = convAzParameters->getImOffset();
+    bool isLog = convAzParameters->getLogarithm();
     for (int i=0; i<ndrz*nas/2/nCal; i++)//=nCal)
     {
         QColor c;
@@ -223,7 +224,8 @@ void ConvAzimuthThread :: run (void)
             ii++;
         }
         //sum = (int)(((int)(sum/aScale))*(aScale));
-        c.setRgbF (qMin (qMax (aScale*sum/nCal+bShift, 0.0), 1.0), qMin (qMax (aScale*sum/nCal+bShift 0.0), 1.), qMin (qMax (aScale * sum/nCal+bShift, 0.0), 1.0));
+        double cVal = aScale*sum/nCal+bShift;
+        c.setRgbF (qMin (qMax (cVal, 0.0), 1.0), qMin (qMax (cVal, 0.0), 1.), qMin (qMax (cVal, 0.0), 1.0));
         //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
         colors.append (c.rgb());
     }
@@ -246,7 +248,7 @@ void ConvAzimuthThread :: run (void)
             }
             //ii++;
             //imData[ii] = sum/nCal;//sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;
-            uint val = convAzParameters->getLogarithm() ? (uint)(256*log(1.+sum/nCal)/log(1.+maxVal)) : (uint)(256*sum/nCal);///512/0.3);
+            uint val = isLog ? (uint)(256*log(1.+sum/nCal)/log(1.+maxVal)) : (uint)(256*sum/nCal);///512/0.3);
             maxvalim = qMax (maxvalim, val);
             uint ind = colors[(ii-1)/nCal];//colors.indexOf (qRgb (val, val, val));
             hIm->setPixel (i, j, ind);//qGray (val, val, val));//qRgb(255, 255, 255));
