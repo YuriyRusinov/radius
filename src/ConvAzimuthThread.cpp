@@ -219,8 +219,10 @@ void ConvAzimuthThread :: run (void)
         for (int iii=0; iii<nCal; iii++)
         {
             complex<double> arg (rggBD[ii]);
-            double argAbs = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii])) / maxVal;
-            sum += argAbs;
+            //complex<double> argc (rggBD[ii+nas/2]);
+            double argAbs = sqrt (real(arg)*real(arg)+imag(arg)*imag(arg)) / maxVal;
+            //double argAbsC = sqrt (real(argc)*real(argc)+imag(argc)*imag(argc)) / maxVal;
+            sum += argAbs;//+argAbsC;
             ii++;
         }
         //sum = (int)(((int)(sum/aScale))*(aScale));
