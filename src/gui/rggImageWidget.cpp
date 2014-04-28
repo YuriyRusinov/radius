@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QFileDialog>
 #include <QDir>
+#include <QImageWriter>
 #include <QtDebug>
 
 #include "rggImageWidget.h"
@@ -58,5 +59,10 @@ void rggImageWidget :: saveImage (void)
     QString fImName = QFileDialog :: getSaveFileName (this, tr("Save image"), QDir::currentPath(), tr("Images (*.png *.xpm *.jpg);;All files (*)"));
     if (fImName.isEmpty())
         return;
-    im.save (fImName);
+    QImageWriter imW (fImName);
+    imW.setQuality (100);
+    //lImage->pixmap()->save (fImName);
+    //im.save (fImName);
+    bool isW = imW.write (im);
+    qDebug () << __PRETTY_FUNCTION__ << isW;
 }
