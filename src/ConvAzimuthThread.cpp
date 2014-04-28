@@ -264,9 +264,11 @@ void ConvAzimuthThread :: run (void)
     //hIm->save(fileImage, "PNG");
     emit sendImage (hIm);
     fwrite ("FLT=", sizeof (char), 4, fid7);
-    fwrite (&ndrz, sizeof (int), 1, fid7);
+    //qDebug () << __PRETTY_FUNCTION__ << ndrz;
+    float ndrzf = ndrz;
+    fwrite (&ndrzf, sizeof (float), 1, fid7);
     ii = 0;
-    for (int i=1; i<ndrz*nas/2/nCal; i++)
+    for (int i=2; i<ndrz*nas/2/nCal; i++)
     {
         float wSum (0.0);
         for (int iii=0; iii<nCal; iii++)
