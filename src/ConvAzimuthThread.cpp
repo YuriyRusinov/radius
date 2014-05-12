@@ -187,7 +187,7 @@ void ConvAzimuthThread :: run (void)
     complex<double> * rggBD = fft2(rgg.getData(), ndrz, na2, FFTW_BACKWARD, FFTW_ESTIMATE);
     double maxVal = 0.0;
 //    double minVal = 0.0;//sqrt (real(rggBD[0])*real(rggBD[0])+imag(rggBD[0])*imag(rggBD[0]));
-    for (int i=0; i<ndrz*nas/2; i++)
+    for (int i=0; i<ndrz*nas; i++)
     {
         maxVal = qMax (maxVal, sqrt (real(rggBD[i])*real(rggBD[i])+imag(rggBD[i])*imag(rggBD[i])));
     }
@@ -203,7 +203,7 @@ void ConvAzimuthThread :: run (void)
     }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     int nCal = convAzParameters->getNCalibration();
-    QImage * hIm = new QImage (ndrz, nas/2/nCal, QImage::Format_ARGB32);// QImage::Format_Indexed8);
+    QImage * hIm = new QImage (ndrz, nas/nCal, QImage::Format_ARGB32);// QImage::Format_Indexed8);
     //double * imData = new double [ndrz*nas/2/nCal];
     int ii (0);
     quint32 maxvalim = 0;
@@ -211,7 +211,7 @@ void ConvAzimuthThread :: run (void)
     double aScale = convAzParameters->getImScale();
     double bShift = convAzParameters->getImOffset();
     bool isLog = convAzParameters->getLogarithm();
-    for (int i=0; i<ndrz*nas/2/nCal; i++)//=nCal)
+    for (int i=0; i<ndrz*nas/nCal; i++)//=nCal)
     {
         QColor c;
 //        int ii (0);
@@ -236,7 +236,7 @@ void ConvAzimuthThread :: run (void)
     ii = 0;
     for (int i=0; i<ndrz; i++)
     {
-        for (int j=0; j<nas/2/nCal;j++)
+        for (int j=0; j<nas/nCal;j++)
         {
             double sum = 0.0;
             for (int iii=0; iii<nCal; iii++)
@@ -265,15 +265,15 @@ void ConvAzimuthThread :: run (void)
     emit sendImage (hIm);
     fwrite ("FLT=", sizeof (char), 4, fid7);
     //qDebug () << __PRETTY_FUNCTION__ << ndrz;
-    float ndrzf = ndrz;
+    float ndrzf = nas/nCal;// ndrz
     fwrite (&ndrzf, sizeof (float), 1, fid7);
     ii = 0;
-    for (int i=2; i<ndrz*nas/2/nCal; i++)
+    for (int i=2; i<ndrz*nas/nCal; i++)
     {
         float wSum (0.0);
         for (int iii=0; iii<nCal; iii++)
         {
-            float w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*6.6e11;
+            double w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*6.6e11;
             wSum += w;
             ii++;
         }
