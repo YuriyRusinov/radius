@@ -268,18 +268,37 @@ void ConvAzimuthThread :: run (void)
     float ndrzf = nas/nCal;// ndrz
     fwrite (&ndrzf, sizeof (float), 1, fid7);
     ii = 0;
-    for (int i=2; i<ndrz*nas/nCal; i++)
+/*    for (int i=2; i<ndrz*nas/nCal; i++)
     {
         float wSum (0.0);
         for (int iii=0; iii<nCal; iii++)
         {
-            double w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;//*6.6e11;
+            double w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;// *6.6e11;
             wSum += w;
             ii++;
         }
         wSum /= nCal;
         //wSum *= 256;
         fwrite (&wSum, sizeof (float), 1, fid7);
+    }
+*/
+    for (int j=0; j<nas/nCal; j++)
+    {
+        for (int i=0; i<ndrz; i++)
+        {
+            if (j==0 && i<2)
+                continue;
+            double wSum (0.0);
+            for (int iii=0; iii<nCal; iii++)
+            {
+                int ii = j*ndrz+i+iii;
+                double w = sqrt (real(rggBD[ii])*real(rggBD[ii])+imag(rggBD[ii])*imag(rggBD[ii]))/maxVal;
+                wSum += w;
+            };
+            wSum /= nCal;
+            float wf = wSum;
+            fwrite (&wf, sizeof (float), 1, fid7);
+        }
     }
     delete [] rggBD;
 

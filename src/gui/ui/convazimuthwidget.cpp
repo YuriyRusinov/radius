@@ -144,7 +144,7 @@ void ConvAzimuthWidget :: init (void)
 {
     QValidator * calVal = new QIntValidator (this);
     UI->lECalibration->setValidator (calVal);
-    UI->lECalibration->setText (QString::number (8));
+    UI->lECalibration->setText (QString::number (1));
 
     QValidator * imCenterVal = new QIntValidator (1, na2, this);
     UI->lEImageCenter->setValidator (imCenterVal);

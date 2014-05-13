@@ -22,7 +22,7 @@ const int ndrz = ndn2 - ndv;
 
 const int na2 (16384);
 const int nas (8192);
-const int na_ots (11000);
+const int na_ots (15000);
 
 const long double R (5396);
 const long double H (3964);
