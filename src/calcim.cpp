@@ -149,8 +149,9 @@ double * Calc2 :: operator () (const double* stlb, int nd2)
 
     FFT2_Transform fft2;// = new FFT2_Transform;
     complex<double> * corfw = fft2(corf.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
-//    Q_UNUSED (corfw);
+    Q_UNUSED (corfw);
     complex<double> * rggD = fft2(rgg1.getData(), ndrz, nas/2, FFTW_FORWARD, FFTW_ESTIMATE);
+    Q_UNUSED (rggD);
     int cor_volfr (0);
     for (int i=0; i<na; i++)
     {
@@ -159,6 +160,7 @@ double * Calc2 :: operator () (const double* stlb, int nd2)
         cor_volfr++;
     }
     complex<double> * rggBD = fft2(rgg.getData(), ndrz, nas/2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    Q_UNUSED (rggBD);
 
     return 0;
 }
