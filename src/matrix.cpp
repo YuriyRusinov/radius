@@ -130,3 +130,13 @@ CMatrix& CMatrix :: operator/= (double alamb)
 
     return *this;
 }
+
+CMatrix transp (const CMatrix& X)
+{
+    CMatrix XT (X.nCols, X.nRows);
+
+    for (int i=0; i<XT.nRows; i++)
+        for (int j=0; j<XT.nCols; j++)
+            XT(i, j) = X (j, i);
+    return XT;
+}

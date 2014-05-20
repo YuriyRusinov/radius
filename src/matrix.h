@@ -34,6 +34,8 @@ public:
 
     CMatrix& operator*= (double alamb);
     CMatrix& operator/= (double alamb);
+
+    friend CMatrix transp (const CMatrix& X);
 private:
     int nRows;
     int nCols;
