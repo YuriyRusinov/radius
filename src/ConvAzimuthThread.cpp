@@ -283,6 +283,8 @@ void ConvAzimuthThread :: run (void)
         fwrite (&wSum, sizeof (float), 1, fid7);
     }
 */
+    CMatrix CRggBD (rggBD, ndrz, nas/nCal);
+    CMatrix CRggBDT = transp (CRggBD);
     for (int j=0; j<nas/nCal; j++)
     {
         for (int i=0; i<ndrz; i++)
@@ -301,7 +303,7 @@ void ConvAzimuthThread :: run (void)
             fwrite (&wf, sizeof (float), 1, fid7);
         }
     }
-    delete [] rggBD;
+//    delete [] rggBD;
 
     fclose (fid7);
 //    QPixmap pIm = QPixmap::fromImage (*hIm);
