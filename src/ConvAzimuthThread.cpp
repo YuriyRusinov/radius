@@ -203,7 +203,7 @@ void ConvAzimuthThread :: run (void)
     }
     qDebug () << __PRETTY_FUNCTION__ << tr ("Image was calculated");
     int nCal = convAzParameters->getNCalibration();
-    QImage * hIm = new QImage (ndrz, nas/nCal, QImage::Format_ARGB32);// QImage::Format_Indexed8);
+    QImage * hIm = new QImage (nas/nCal, ndrz, QImage::Format_ARGB32);// QImage::Format_Indexed8);
     //double * imData = new double [ndrz*nas/2/nCal];
     int ii (0);
     quint32 maxvalim = 0;
@@ -211,26 +211,31 @@ void ConvAzimuthThread :: run (void)
     double aScale = convAzParameters->getImScale();
     double bShift = convAzParameters->getImOffset();
     bool isLog = convAzParameters->getLogarithm();
-    for (int i=0; i<ndrz*nas/nCal; i++)//=nCal)
+    CMatrix CRggBD (rggBD, ndrz, nas);
+    CMatrix CRggBDT = transp (CRggBD);
+    for (int i=0; i<ndrz/* *nas/nCal*/; i++)//=nCal)
     {
-        QColor c;
-//        int ii (0);
-        double sum = 0.0;
-        for (int iii=0; iii<nCal; iii++)
+        for (int j=0; j<nas/nCal;j++)
         {
-            complex<double> arg (rggBD[ii]);
-            //complex<double> argc (rggBD[ii+nas/2]);
-            double argAbs = sqrt (real(arg)*real(arg)+imag(arg)*imag(arg)) / maxVal;
-            //double argAbsC = sqrt (real(argc)*real(argc)+imag(argc)*imag(argc)) / maxVal;
-            sum += argAbs;//+argAbsC;
-            ii++;
+            QColor c;
+//            int ii (0);
+            double sum = 0.0;
+            for (int iii=0; iii<nCal; iii++)
+            {
+                complex<double> arg (CRggBDT(j, i));//(rggBD[ii]);
+                //complex<double> argc (rggBD[ii+nas/2]);
+                double argAbs = sqrt (real(arg)*real(arg)+imag(arg)*imag(arg)) / maxVal;
+                //double argAbsC = sqrt (real(argc)*real(argc)+imag(argc)*imag(argc)) / maxVal;
+                sum += argAbs;//+argAbsC;
+                ii++;
+            }
+            //sum = (int)(((int)(sum/aScale))*(aScale));
+            double cVal = aScale*sum/nCal+bShift;
+            //c.setRgbF (qMin (qMax (cVal, 0.0), 1.0), qMin (qMax (cVal, 0.0), 1.), qMin (qMax (cVal, 0.0), 1.0));
+            c.setRgbF (cVal, cVal, cVal);
+            //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
+            colors.append (c.rgb());
         }
-        //sum = (int)(((int)(sum/aScale))*(aScale));
-        double cVal = aScale*sum/nCal+bShift;
-        //c.setRgbF (qMin (qMax (cVal, 0.0), 1.0), qMin (qMax (cVal, 0.0), 1.), qMin (qMax (cVal, 0.0), 1.0));
-        c.setRgbF (cVal, cVal, cVal);
-        //qDebug () << __PRETTY_FUNCTION__ << c.rgb() << sum/nCal;
-        colors.append (c.rgb());
     }
     hIm->setColorTable (colors);
     qDebug () << __PRETTY_FUNCTION__ << hIm->size();
@@ -254,7 +259,7 @@ void ConvAzimuthThread :: run (void)
             uint val = isLog ? (uint)(256*log(1.+sum/nCal)/log(1.+maxVal)) : (uint)(256*sum/nCal);///512/0.3);
             maxvalim = qMax (maxvalim, val);
             uint ind = colors[(ii-1)/nCal];//colors.indexOf (qRgb (val, val, val));
-            hIm->setPixel (i, j, ind);//qGray (val, val, val));//qRgb(255, 255, 255));
+            hIm->setPixel (j, i, ind);//qGray (val, val, val));//qRgb(255, 255, 255));
         }
     }
     //delete [] imData;
@@ -283,8 +288,6 @@ void ConvAzimuthThread :: run (void)
         fwrite (&wSum, sizeof (float), 1, fid7);
     }
 */
-    CMatrix CRggBD (rggBD, ndrz, nas/nCal);
-    CMatrix CRggBDT = transp (CRggBD);
     for (int j=0; j<nas/nCal; j++)
     {
         for (int i=0; i<ndrz; i++)
