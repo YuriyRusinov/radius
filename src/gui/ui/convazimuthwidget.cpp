@@ -158,7 +158,7 @@ void ConvAzimuthWidget :: init (void)
     UI->lEFFT->setValidator (nFFTVal);
     UI->lEFFT->setText (QString::number (na2));
 
-    QValidator * shiftVal = new QIntValidator (0, na2, this);
+    QValidator * shiftVal = new QIntValidator (0, 2*na2, this);
     UI->lEShift->setValidator (shiftVal);
     UI->lEShift->setText (QString::number (na_ots));
     QValidator * dBandVal = new QDoubleValidator (0, 1e10, 6,this);
