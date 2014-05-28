@@ -37,6 +37,7 @@ rggImageWidget :: ~rggImageWidget (void)
 
 void rggImageWidget :: setImage (const QImage& image)
 {
+    qDebug () << __PRETTY_FUNCTION__ << image.colorCount();
     im = image;
     QPixmap pImage = QPixmap::fromImage (image);
     lImage->setPixmap (pImage);
