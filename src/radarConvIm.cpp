@@ -32,6 +32,7 @@ RadarImageProc::RadarImageProc (QObject * parent)
 RadarImageProc::RadarImageProc (const RadarImageProc&)
     : QObject ()
 {
+    qDebug () << __PRETTY_FUNCTION__;
 }
 
 RadarImageProc::~RadarImageProc (void)
@@ -92,8 +93,9 @@ void RadarImageProc::receiveImage (QImage * im)
 void RadarImageProc::convFinished (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    QObject * thr = sender();
-    thr->deleteLater();
+    QThread * thr = qobject_cast<QThread*>(sender());
+    thr->quit ();
+    delete thr;//thr->deleteLater();
 }
 
 ConvAzimuthWidget * RadarImageProc::getCAzWidget (QWidget * parent, Qt::WindowFlags flags)
