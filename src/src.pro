@@ -39,6 +39,7 @@ HEADERS += fft_c.h \
            radarConvIm.h \
            ConvDistPhys.h \
            ConvDistThread.h \
+           ConvDistColumnThread.h \
            ConvAzimuthPhys.h \
            ConvAzimuthThread.h \
            src_config.h
@@ -49,6 +50,7 @@ SOURCES += fft_c.cpp \
            radarConvIm.cpp \
            ConvDistPhys.cpp \
            ConvDistThread.cpp \
+           ConvDistColumnThread.cpp \
            ConvAzimuthPhys.cpp \
            ConvAzimuthThread.cpp
 
