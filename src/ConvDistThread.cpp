@@ -17,6 +17,7 @@
 #include "calcim.h"
 #include "ConvDistPhys.h"
 #include "ConvDistThread.h"
+#include "ConvDistColumnThread.h"
 
 ConvDistThread :: ConvDistThread (ConvDistPhysParameters * cParams, QObject * parent)
     : QThread (parent),
