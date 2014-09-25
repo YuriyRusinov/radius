@@ -100,8 +100,10 @@ void ConvDistThread :: run (void)
     int na = convParameters->getChannelsNumb ();
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
     QAbstractItemModel * radModel = new QStandardItemModel (nd2, 1, 0);// (nd2, na);
+    Q_UNUSED (radModel);
 
     int nr (0);
+    Q_UNUSED (nr);
     QFile fContStData (QString ("stc.dat"));
     fContStData.open (QIODevice::WriteOnly);
     QTextStream stContSt (&fContStData);
@@ -121,7 +123,12 @@ void ConvDistThread :: run (void)
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
-        int cr = fread (st, sizeof (quint8), nd2, fid5);
+        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
+        thrCol->start();
+        while (!thrCol->isFinished())
+            ;
+        delete thrCol;
+/*        int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
         for (int ii=0; ii< nd2; ii++)
@@ -202,6 +209,7 @@ void ConvDistThread :: run (void)
 
         //delete [] stc2abs;
         delete [] stc2;
+*/
     }
     delete cop;
     if (fid6)

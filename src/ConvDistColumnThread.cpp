@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QTime>
 #include <QtDebug>
 
 #include <complex>
@@ -27,6 +28,7 @@ ConvDistColumnThread :: ~ConvDistColumnThread (void)
 
 void ConvDistColumnThread :: run (void)
 {
+    QTime * fftTime = new QTime;
     if (!fInput || !fOutput || iColumn < 0)
         exit (-1);
 
@@ -85,18 +87,17 @@ void ConvDistColumnThread :: run (void)
             stContSt << re << " " << im << endl;
         stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
     }
-    Q_UNUSED (opor);
-#if 0
     complex<double> * stc4 = 0;//new complex<double> [nd];
+    FFT_Transform fft;// = new FFT_Transform;
     stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-    //qDebug () << __PRETTY_FUNCTION__ << tr ("FFT of data, elapsed time %1").arg (fftTime->elapsed ()/1.0e3);
+    delete [] stc;
+    qDebug () << __PRETTY_FUNCTION__ << tr ("FFT of data, elapsed time %1").arg (fftTime->elapsed ()/1.0e3);
     for (int ii=0; ii<nd; ii++)
     {
         double re = real (stc4[ii])*nd;
         double im = imag (stc4[ii])*nd;
         stc4[ii] = complex<double> (re, im);
-        if (i0==0)
-            stCont << re << (im >= 0 ? "+" : " ") << im << "i" << endl;
+        stCont << re << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
 
     for (int ii=0; ii<nd; ii++)
@@ -116,6 +117,7 @@ void ConvDistColumnThread :: run (void)
     //delete [] xConv;
     double * stc2 = new double [2*nd];
     //double * stc2abs = new double [nd];
+    double maxval = 0.0;
     for (int ii=0; ii<nd; ii++)
     {
         int ind = ii;//(ii==0 ? nd-1 : ii-1);
@@ -124,22 +126,20 @@ void ConvDistColumnThread :: run (void)
         double vmod = sqrt (stc2[2*ii]*stc2[2*ii] + stc2[2*ii+1]*stc2[2*ii+1]);
         maxval = qMax (maxval, vmod);
     }
-    if (fid6)
+    if (fOutput)
     {
         //qDebug () << __PRETTY_FUNCTION__ << QString ("Write data");
-        size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fid6);
-        int ier = ferror (fid6);
-            //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
-            if (h ==0 || ier)
-            {
-                qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
-                return;
-            }
+        size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fOutput);
+        int ier = ferror (fOutput);
+        //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
+        if (h ==0 || ier)
+        {
+            qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
+            return;
         }
-        delete [] xfft;
-
-        //delete [] stc2abs;
-        delete [] stc2;
     }
-#endif
+    delete [] xfft;
+
+    delete [] stc2;
+    delete fftTime;
 }
