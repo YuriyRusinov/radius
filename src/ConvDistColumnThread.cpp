@@ -31,14 +31,15 @@ void ConvDistColumnThread :: run (void)
     QTime * fftTime = new QTime;
     if (!fInput || !fOutput || iColumn < 0)
         exit (-1);
-
     int ndn = convParameters->getNRChannels();
     int nd = FFT_Transform::pow2roundup (ndn);
     int nd2 = 2*ndn;
     CalcOpor1 * cop = new CalcOpor1 (nd);
-    complex<double> * opor = cop->calc();//new complex<double> [nd];
+    complex<double> * opor = cop->calc();// new complex<double> [nd];
     int N1 = convParameters->getImpNumb();
-    qDebug () << __PRETTY_FUNCTION__ << N1;
+    qDebug () << __PRETTY_FUNCTION__ << iColumn << N1;
+    Q_UNUSED (nd2);
+#if 0
     QFile fContData (QString ("stc4_%1.dat").arg (iColumn));
     fContData.open (QIODevice::WriteOnly);
     QTextStream stCont (&fContData);
@@ -141,5 +142,8 @@ void ConvDistColumnThread :: run (void)
     delete [] xfft;
 
     delete [] stc2;
+#endif
+    delete cop;
+    delete opor;
     delete fftTime;
 }
