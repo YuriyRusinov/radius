@@ -37,8 +37,9 @@ void ConvDistColumnThread :: run (void)
     CalcOpor1 * cop = new CalcOpor1 (nd);
     complex<double> * opor = cop->calc();// new complex<double> [nd];
     int N1 = convParameters->getImpNumb();
-    qDebug () << __PRETTY_FUNCTION__ << iColumn << N1;
+    qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor << cop->data();
     Q_UNUSED (nd2);
+    Q_UNUSED (opor);
 #if 0
     QFile fContData (QString ("stc4_%1.dat").arg (iColumn));
     fContData.open (QIODevice::WriteOnly);

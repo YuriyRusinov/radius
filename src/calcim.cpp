@@ -189,19 +189,19 @@ complex<double>* CalcOpor1 :: calc ()
         double phase = pi*fsp*n*n/(N1*fcvant2) - pi*fsp*n/fcvant2 ; 
         double oc = cos (phase);
         double os = sin (phase);
-        opor[n] = complex<double>(oc, os);
+        opor2[n] = complex<double>(oc, os);
     }
     int N2 = (N1/2);
     for (int i=0; i<N2; i++)
     {
-        opor2[i] = opor[i+N2];
-        opor2[i+nd-N2] = opor[i];
+        opor[i] = opor2[i+N2];
+        opor[i+nd-N2] = opor2[i];
     }
     FFT_Transform fft;
-    opor = fft (opor2, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
+    opor2 = fft (opor, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
 
-    delete [] opor2;
-    return opor;
+    //delete [] opor2;
+    return opor2;
 }
 
 complex<double>* CalcOpor1 :: data () const
