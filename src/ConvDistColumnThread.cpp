@@ -38,12 +38,13 @@ void ConvDistColumnThread :: run (void)
     complex<double> * opor = cop->calc();// new complex<double> [nd];
     int N1 = convParameters->getImpNumb();
     qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor << cop->data();
-    Q_UNUSED (nd2);
-    Q_UNUSED (opor);
-#if 0
-    QFile fContData (QString ("stc4_%1.dat").arg (iColumn));
-    fContData.open (QIODevice::WriteOnly);
-    QTextStream stCont (&fContData);
+//    if (iColumn == 0)
+//        for (int i=0; i<nd; i++)
+//            qDebug () << __PRETTY_FUNCTION__ << real (opor[i]) << real (*(cop->data ()+i)) << imag (opor[i]) << imag (*(cop->data ()+i));
+    
+//    QFile fContData (QString ("stc4_%1.dat").arg (iColumn));
+//    fContData.open (QIODevice::WriteOnly);
+//    QTextStream stCont (&fContData);
     quint8 * st = new quint8 [nd2];
     for (int i=0; i<nd2; i++)
     {
@@ -60,6 +61,7 @@ void ConvDistColumnThread :: run (void)
     if (cr <= 0)
         exit (-2);
     int i0 = iColumn;
+    Q_UNUSED (i0);
     for (int ii=0; ii< nd2; ii++)
     {
 /*        if (i0<1)
@@ -70,6 +72,7 @@ void ConvDistColumnThread :: run (void)
         }
 */
     }
+#if 0
 
     for (int ii=0; ii<128; ii++)
         st[ii] = 0.0;
@@ -144,6 +147,9 @@ void ConvDistColumnThread :: run (void)
 
     delete [] stc2;
 #endif
+    delete [] stc1;
+    delete [] stc;
+    delete [] st;
     delete cop;
     delete opor;
     delete fftTime;

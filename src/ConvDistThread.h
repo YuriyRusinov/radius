@@ -29,6 +29,10 @@ signals:
     void sendImage (QImage * im);
     void sendTime (int mSeconds);
 
+private slots:
+    void columnTerminated (void);
+    void columnFinished (void);
+
 private:
     //
     // Variables
