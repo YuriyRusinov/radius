@@ -36,9 +36,11 @@ void ConvDistColumnThread :: run (void)
     int nd2 = 2*ndn;
     CalcOpor1 * cop = new CalcOpor1 (nd);
     complex<double> * opor = cop->calc();// new complex<double> [nd];
+    delete cop;
     int N1 = convParameters->getImpNumb();
     qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor << cop->data();
-//    if (iColumn == 0)
+    if (iColumn >= 8400)
+        qDebug () << __PRETTY_FUNCTION__;
 //        for (int i=0; i<nd; i++)
 //            qDebug () << __PRETTY_FUNCTION__ << real (opor[i]) << real (*(cop->data ()+i)) << imag (opor[i]) << imag (*(cop->data ()+i));
     
@@ -150,7 +152,6 @@ void ConvDistColumnThread :: run (void)
     delete [] stc1;
     delete [] stc;
     delete [] st;
-    delete cop;
     delete opor;
     delete fftTime;
 }
