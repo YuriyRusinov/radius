@@ -26,6 +26,7 @@ private:
     // Variables
     //
     ConvDistPhysParameters * convParameters;
+    QMutex fftMutex;
     FILE * fInput;
     FILE * fOutput;
     int iColumn;

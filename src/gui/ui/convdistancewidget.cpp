@@ -42,8 +42,8 @@ void ConvDistanceWidget :: loadDataFile (void)
         return;
 
     UI->lERggFileName->setText (fileName);
-    bool isStart (!UI->lEConvDistFileName->text().isEmpty());
-    UI->pbStart->setEnabled (isStart);
+//    bool isStart (!UI->lEConvDistFileName->text().isEmpty());
+//    UI->pbStart->setEnabled (isStart);
 }
 
 void ConvDistanceWidget :: setSaveFile (void)
@@ -53,8 +53,8 @@ void ConvDistanceWidget :: setSaveFile (void)
         return;
 
     UI->lEConvDistFileName->setText (fileConvName);
-    bool isStart (!UI->lERggFileName->text().isEmpty());
-    UI->pbStart->setEnabled (isStart);
+//    bool isStart (!UI->lERggFileName->text().isEmpty());
+//    UI->pbStart->setEnabled (isStart);
 }
 
 void ConvDistanceWidget :: startConv (void)
@@ -107,7 +107,7 @@ void ConvDistanceWidget :: init (void)
 
     UI->lENumberOfReadingsInImpulse->setText (QString::number (N1));
 
-    UI->pbStart->setEnabled (false);
+//    UI->pbStart->setEnabled (true);
 }
 
 void ConvDistanceWidget :: closeEvent(QCloseEvent *event)

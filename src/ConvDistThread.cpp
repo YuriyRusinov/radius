@@ -130,7 +130,7 @@ void ConvDistThread :: run (void)
         //while (!thrCol->isFinished())
         //    ;
         thrCol->wait();
-        //delete thrCol;
+        //thrCol->deleteLater();
 /*        int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
@@ -299,5 +299,5 @@ void ConvDistThread :: columnFinished (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
     QThread * thr = qobject_cast<QThread *>(this->sender());
-    delete thr;
+    thr->deleteLater();
 }

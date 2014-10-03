@@ -34,15 +34,19 @@ void ConvDistColumnThread :: run (void)
     int ndn = convParameters->getNRChannels();
     int nd = FFT_Transform::pow2roundup (ndn);
     int nd2 = 2*ndn;
+    fftMutex.lock ();
     CalcOpor1 * cop = new CalcOpor1 (nd);
     complex<double> * opor = cop->calc();// new complex<double> [nd];
     delete cop;
+    fftMutex.unlock ();
     int N1 = convParameters->getImpNumb();
-    qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor << cop->data();
-    if (iColumn >= 8400)
+    qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor;// << cop->data();
+    if (iColumn >= 8380)
         qDebug () << __PRETTY_FUNCTION__;
 //        for (int i=0; i<nd; i++)
 //            qDebug () << __PRETTY_FUNCTION__ << real (opor[i]) << real (*(cop->data ()+i)) << imag (opor[i]) << imag (*(cop->data ()+i));
+    Q_UNUSED (nd2);
+#if 0
     
 //    QFile fContData (QString ("stc4_%1.dat").arg (iColumn));
 //    fContData.open (QIODevice::WriteOnly);
@@ -74,7 +78,6 @@ void ConvDistColumnThread :: run (void)
         }
 */
     }
-#if 0
 
     for (int ii=0; ii<128; ii++)
         st[ii] = 0.0;
@@ -148,10 +151,10 @@ void ConvDistColumnThread :: run (void)
     delete [] xfft;
 
     delete [] stc2;
-#endif
     delete [] stc1;
     delete [] stc;
     delete [] st;
-    delete opor;
+#endif
+    delete [] opor;
     delete fftTime;
 }
