@@ -126,12 +126,12 @@ void ConvDistThread :: run (void)
         ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
         connect (thrCol, SIGNAL (terminated()), this, SLOT (columnTerminated()) );
         connect (thrCol, SIGNAL (finished()), this, SLOT (columnFinished()) );
-        thrCol->start();
+        //thrCol->start();
         //while (!thrCol->isFinished())
         //    ;
         thrCol->wait();
         //thrCol->deleteLater();
-/*        int cr = fread (st, sizeof (quint8), nd2, fid5);
+        int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
         for (int ii=0; ii< nd2; ii++)
@@ -212,7 +212,7 @@ void ConvDistThread :: run (void)
 
         //delete [] stc2abs;
         delete [] stc2;
-*/
+
     }
     delete cop;
     if (fid6)
