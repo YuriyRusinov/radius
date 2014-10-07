@@ -68,7 +68,8 @@ void ConvDistanceWidget :: startConv (void)
     QString fName = UI->lERggFileName->text();
     QString fConvName = UI->lEConvDistFileName->text();
     int nCal = UI->lECalibration->text().toInt();
-    ConvDistPhysParameters * cParams = new ConvDistPhysParameters (ndn, nch, cl, bw, dnr, dimp, fName, fConvName, nCal);
+    int nThr = UI->lEFFTThreads->text().toInt();
+    ConvDistPhysParameters * cParams = new ConvDistPhysParameters (ndn, nch, cl, bw, dnr, dimp, fName, fConvName, nCal, nThr);
     qDebug () << __PRETTY_FUNCTION__ << cParams;
     emit setParams (cParams);
 }
@@ -106,6 +107,10 @@ void ConvDistanceWidget :: init (void)
     UI->lEImpulseDuration->setText (QString::number (dimp*1e6));
 
     UI->lENumberOfReadingsInImpulse->setText (QString::number (N1));
+
+    QValidator * fftVal = new QIntValidator (1, 100, this);
+    UI->lEFFTThreads->setValidator (fftVal);
+    UI->lEFFTThreads->setText (QString::number (1));
 
 //    UI->pbStart->setEnabled (true);
 }

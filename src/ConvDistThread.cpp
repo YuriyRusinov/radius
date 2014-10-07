@@ -120,17 +120,21 @@ void ConvDistThread :: run (void)
     double maxval = 0.0;
 //    stc2MatrAbs = new double (na*nd);
     qDebug () << __PRETTY_FUNCTION__ << fftTime->elapsed ();
+    int nThr = convParameters->getNumThreads();
+    fftw_init_threads ();
+    fftw_plan_with_nthreads (nThr);
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
-        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
+/*        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
         connect (thrCol, SIGNAL (terminated()), this, SLOT (columnTerminated()) );
         connect (thrCol, SIGNAL (finished()), this, SLOT (columnFinished()) );
-        //thrCol->start();
+        thrCol->start();
         //while (!thrCol->isFinished())
         //    ;
         thrCol->wait();
         //thrCol->deleteLater();
+*/
         int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
@@ -212,7 +216,6 @@ void ConvDistThread :: run (void)
 
         //delete [] stc2abs;
         delete [] stc2;
-
     }
     delete cop;
     if (fid6)
@@ -267,7 +270,7 @@ void ConvDistThread :: run (void)
         }
         delete [] vals;
     }
-    
+    fftw_cleanup_threads ();
     //delete [] vals;
     qDebug () << __PRETTY_FUNCTION__ << QString ("Data were read and processed");
     fContData.close();

@@ -1,6 +1,6 @@
 #include "ConvDistPhys.h"
 
-ConvDistPhysParameters :: ConvDistPhysParameters (int ndn, int nch, double c, double bw, double dnr, double dimp, const QString& cfileName, const QString& fConvName, int nCal)
+ConvDistPhysParameters :: ConvDistPhysParameters (int ndn, int nch, double c, double bw, double dnr, double dimp, const QString& cfileName, const QString& fConvName, int nCal, int nThreads)
     : Ndn (ndn),
     Nd2 (2*ndn),
     NChannels (nch),
@@ -12,7 +12,8 @@ ConvDistPhysParameters :: ConvDistPhysParameters (int ndn, int nch, double c, do
     NImp ((int)FQuant2*Dimp+1),
     fileName (cfileName),
     fileConvName (fConvName),
-    nCalibration (nCal)
+    nCalibration (nCal),
+    numFFTThreads (nThreads)
 {
 }
 
@@ -28,7 +29,8 @@ ConvDistPhysParameters :: ConvDistPhysParameters (const ConvDistPhysParameters& 
     NImp (CPars.NImp),
     fileName (CPars.fileName),
     fileConvName (CPars.fileConvName),
-    nCalibration (CPars.nCalibration)
+    nCalibration (CPars.nCalibration),
+    numFFTThreads (CPars.numFFTThreads)
 {
 }
 
@@ -86,8 +88,12 @@ const QString& ConvDistPhysParameters :: getConvFileName (void) const
     return fileConvName;
 }
 
-
 int ConvDistPhysParameters :: getNCalibration (void) const
 {
     return nCalibration;
+}
+
+int ConvDistPhysParameters :: getNumThreads (void) const
+{
+    return numFFTThreads;
 }

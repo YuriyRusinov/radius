@@ -8,7 +8,7 @@
 class _FFTMATR_EXPORT_ ConvDistPhysParameters
 {
 public:
-    ConvDistPhysParameters (int ndn, int nch, double c, double bw, double dnr, double dimp, const QString& fileName, const QString& fileConvName, int nCal);
+    ConvDistPhysParameters (int ndn, int nch, double c, double bw, double dnr, double dimp, const QString& fileName, const QString& fileConvName, int nCal, int nThreads=1);
     ConvDistPhysParameters (const ConvDistPhysParameters& CPars);
     ~ConvDistPhysParameters (void);
 
@@ -25,6 +25,7 @@ public:
     const QString& getConvFileName (void) const;
 
     int getNCalibration (void) const;
+    int getNumThreads (void) const;
 private:
     //
     // Variables
@@ -43,6 +44,7 @@ private:
     QString fileConvName;
 
     int nCalibration;
+    int numFFTThreads;
 };
 
 #endif
