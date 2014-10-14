@@ -17,6 +17,8 @@ public:
     virtual complex<double> * operator () (complex<double> * src, int nsrc, int n2, int sign, unsigned flags);
 
     static int pow2roundup (int n);
+private:
+    fftw_plan pCurrent;
 };
 
 class _FFTMATR_EXPORT_ FFT_RealTransform

@@ -8,6 +8,7 @@ FFT_Transform :: FFT_Transform (void)
 
 FFT_Transform :: ~FFT_Transform (void)
 {
+    fftw_cleanup();
 }
 
 complex<double> * FFT_Transform :: operator () (complex<double> * src, int nsrc, int n2, int sign, unsigned flags)
@@ -35,6 +36,7 @@ complex<double> * FFT_Transform :: operator () (complex<double> * src, int nsrc,
     out = (fftw_complex*) fftw_malloc (sizeof(fftw_complex) * n2);
     p = fftw_plan_dft_1d (n2, in, out, sign, flags);//fftw_plan_dft_r2c_1d(n2, in, out, flags);
     fftw_execute (p);
+    pCurrent = p;
     for (int i=0; i<n2; i++)
     {
         if (sign == FFTW_FORWARD)
