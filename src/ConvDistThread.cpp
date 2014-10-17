@@ -126,7 +126,7 @@ void ConvDistThread :: run (void)
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
-/*        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
+        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
         connect (thrCol, SIGNAL (terminated()), this, SLOT (columnTerminated()) );
         connect (thrCol, SIGNAL (finished()), this, SLOT (columnFinished()) );
         thrCol->start();
@@ -134,8 +134,8 @@ void ConvDistThread :: run (void)
         //    ;
         thrCol->wait();
         //thrCol->deleteLater();
-*/
-        int cr = fread (st, sizeof (quint8), nd2, fid5);
+
+/*        int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
             return;
         for (int ii=0; ii< nd2; ii++)
@@ -216,6 +216,7 @@ void ConvDistThread :: run (void)
 
         //delete [] stc2abs;
         delete [] stc2;
+*/
     }
     delete cop;
     if (fid6)

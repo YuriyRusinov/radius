@@ -45,7 +45,7 @@ complex<double> * FFT_Transform :: operator () (complex<double> * src, int nsrc,
             res[i] = complex<double> (out[i][0], out[i][1]);
         //qDebug () << __PRETTY_FUNCTION__ << (double)real(res[i]) << (double)imag(res[i]);
     }
-    fftw_destroy_plan (p);
+    //fftw_destroy_plan (p);
     fftw_free(out);
     fftw_free(in);
     //delete [] in;
