@@ -13,12 +13,14 @@
 #include "ConvDistPhys.h"
 #include "ConvDistColumnThread.h"
 
-ConvDistColumnThread :: ConvDistColumnThread (ConvDistPhysParameters * cParams, FILE * fidIn, FILE * fidOut, int iCol, QObject * parent)
+ConvDistColumnThread :: ConvDistColumnThread (ConvDistPhysParameters * cParams, FILE * fidIn, FILE * fidOut, int iCol, complex<double> * _opor, int nd, QObject * parent)
     : QThread (parent),
     convParameters (cParams),
     fInput (fidIn),
     fOutput (fidOut),
-    iColumn (iCol)
+    iColumn (iCol),
+    m_opor (_opor),
+    nDim (nd)
 {
 }
 
@@ -29,15 +31,13 @@ ConvDistColumnThread :: ~ConvDistColumnThread (void)
 void ConvDistColumnThread :: run (void)
 {
     QTime * fftTime = new QTime;
-    if (!fInput || !fOutput || iColumn < 0)
+    if (!fInput || !fOutput || iColumn < 0 || !m_opor)
         exit (-1);
     int ndn = convParameters->getNRChannels();
     int nd = FFT_Transform::pow2roundup (ndn);
     int nd2 = 2*ndn;
     fftMutex.lock ();
-    CalcOpor1 * cop = new CalcOpor1 (nd);
-    complex<double> * opor = cop->calc();// new complex<double> [nd];
-    delete cop;
+    complex<double> * opor = m_opor;//cop->calc();// new complex<double> [nd];
     fftMutex.unlock ();
     int N1 = convParameters->getImpNumb();
     qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor;// << cop->data();
@@ -45,9 +45,7 @@ void ConvDistColumnThread :: run (void)
         qDebug () << __PRETTY_FUNCTION__;
 //        for (int i=0; i<nd; i++)
 //            qDebug () << __PRETTY_FUNCTION__ << real (opor[i]) << real (*(cop->data ()+i)) << imag (opor[i]) << imag (*(cop->data ()+i));
-    Q_UNUSED (nd2);
-#if 0
-    
+
 //    QFile fContData (QString ("stc4_%1.dat").arg (iColumn));
 //    fContData.open (QIODevice::WriteOnly);
 //    QTextStream stCont (&fContData);
@@ -67,7 +65,7 @@ void ConvDistColumnThread :: run (void)
     if (cr <= 0)
         exit (-2);
     int i0 = iColumn;
-    Q_UNUSED (i0);
+
     for (int ii=0; ii< nd2; ii++)
     {
 /*        if (i0<1)
@@ -98,18 +96,18 @@ void ConvDistColumnThread :: run (void)
         stc[ii] = complex<double> (re, im);//st[2*ii], st[2*ii+1]);
     }
     complex<double> * stc4 = 0;//new complex<double> [nd];
+
     FFT_Transform fft;// = new FFT_Transform;
     stc4 = fft (stc, nd, nd, FFTW_FORWARD, FFTW_ESTIMATE);
-    delete [] stc;
     qDebug () << __PRETTY_FUNCTION__ << tr ("FFT of data, elapsed time %1").arg (fftTime->elapsed ()/1.0e3);
-    for (int ii=0; ii<nd; ii++)
+/*    for (int ii=0; ii<nd; ii++)
     {
         double re = real (stc4[ii])*nd;
         double im = imag (stc4[ii])*nd;
         stc4[ii] = complex<double> (re, im);
         stCont << re << (im >= 0 ? "+" : " ") << im << "i" << endl;
     }
-
+*/
     for (int ii=0; ii<nd; ii++)
     {
         double rstc4 = real (stc4[ii])/nd;
@@ -151,10 +149,9 @@ void ConvDistColumnThread :: run (void)
     delete [] xfft;
 
     delete [] stc2;
+//#endif
     delete [] stc1;
     delete [] stc;
     delete [] st;
-#endif
-    delete [] opor;
     delete fftTime;
 }

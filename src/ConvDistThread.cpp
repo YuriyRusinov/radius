@@ -126,7 +126,7 @@ void ConvDistThread :: run (void)
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
-        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, 0);
+        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, opor, nd, 0);
         connect (thrCol, SIGNAL (terminated()), this, SLOT (columnTerminated()) );
         connect (thrCol, SIGNAL (finished()), this, SLOT (columnFinished()) );
         thrCol->start();

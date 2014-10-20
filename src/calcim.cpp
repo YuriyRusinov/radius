@@ -199,7 +199,7 @@ complex<double>* CalcOpor1 :: calc ()
     }
     FFT_Transform fft;
     qDebug () << __PRETTY_FUNCTION__ << "FFT begins";
-    //opor2 = fft (opor, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
+    opor2 = fft (opor, nd, FFT_Transform :: pow2roundup(nd), FFTW_FORWARD, FFTW_ESTIMATE);
     qDebug () << __PRETTY_FUNCTION__ << "FFT completed";
 
     //delete [] opor2;

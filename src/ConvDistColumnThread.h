@@ -15,7 +15,7 @@ using std::complex;
 class _FFTMATR_EXPORT_ ConvDistColumnThread : public QThread
 {
 public:
-    ConvDistColumnThread (ConvDistPhysParameters * cParams, FILE * fidIn, FILE * fidOut, int iCol, QObject * parent=0);
+    ConvDistColumnThread (ConvDistPhysParameters * cParams, FILE * fidIn, FILE * fidOut, int iCol, complex<double> * _opor, int nd, QObject * parent=0);
     virtual ~ConvDistColumnThread (void);
 
 protected:
@@ -30,6 +30,8 @@ private:
     FILE * fInput;
     FILE * fOutput;
     int iColumn;
+    complex<double> * m_opor;
+    int nDim;
 private:
     Q_OBJECT
 };
