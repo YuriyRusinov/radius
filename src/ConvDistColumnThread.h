@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QMutex>
+#include <QSemaphore>
 
 #include <complex>
 #include "matrix.h"
@@ -27,6 +28,7 @@ private:
     //
     ConvDistPhysParameters * convParameters;
     QMutex fftMutex;
+    QSemaphore fileSem;
     FILE * fInput;
     FILE * fOutput;
     int iColumn;
