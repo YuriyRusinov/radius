@@ -126,14 +126,27 @@ void ConvDistThread :: run (void)
     for (int i0=0; i0<na; i0++)
     {
 //        qDebug () << __PRETTY_FUNCTION__ << QString("Read new data");
-        ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0, opor, nd, 0);
-        connect (thrCol, SIGNAL (terminated()), this, SLOT (columnTerminated()) );
-        connect (thrCol, SIGNAL (finished()), this, SLOT (columnFinished()) );
-        thrCol->start();
-        //while (!thrCol->isFinished())
-        //    ;
-        thrCol->wait();
-        //thrCol->deleteLater();
+        QList<QThread *> thrList;
+        for (int ii=0; ii<nThr; ii++)
+        {
+            ConvDistColumnThread * thrCol = new ConvDistColumnThread (convParameters, fid5, fid6, i0/nThr+ii, opor, nd, 0);
+            connect (thrCol, SIGNAL (terminated()), this, SLOT (columnTerminated()) );
+            connect (thrCol, SIGNAL (finished()), this, SLOT (columnFinished()) );
+            thrList.append (thrCol);
+//            thrCol->start();
+//            thrCol->wait();
+        }
+        for (int ii=0; ii<nThr; ii++)
+        {
+            QThread * thr = thrList[ii];
+            thr->start ();
+        }
+        for (int ii=0; ii<nThr; ii++)
+        {
+            QThread * thr = thrList[ii];
+            thr->wait ();
+        }
+//        thrCol->wait();
 
 /*        int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
