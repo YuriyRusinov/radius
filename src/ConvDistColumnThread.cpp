@@ -159,4 +159,5 @@ void ConvDistColumnThread :: run (void)
     delete [] stc;
     delete [] st;
     delete fftTime;
+    qDebug () << __PRETTY_FUNCTION__ << tr("Column calculated");
 }
