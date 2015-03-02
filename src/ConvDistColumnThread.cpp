@@ -16,7 +16,6 @@
 ConvDistColumnThread :: ConvDistColumnThread (ConvDistPhysParameters * cParams, FILE * fidIn, FILE * fidOut, int iCol, complex<double> * _opor, int nd, QObject * parent)
     : QThread (parent),
     convParameters (cParams),
-    fileSem (3),
     fInput (fidIn),
     fOutput (fidOut),
     iColumn (iCol),
@@ -42,8 +41,8 @@ void ConvDistColumnThread :: run (void)
     fftMutex.unlock ();
     int N1 = convParameters->getImpNumb();
     qDebug () << __PRETTY_FUNCTION__ << iColumn << N1 << opor;// << cop->data();
-    if (iColumn >= 8380)
-        qDebug () << __PRETTY_FUNCTION__;
+//    if (iColumn >= 8380)
+//        qDebug () << __PRETTY_FUNCTION__;
 //        for (int i=0; i<nd; i++)
 //            qDebug () << __PRETTY_FUNCTION__ << real (opor[i]) << real (*(cop->data ()+i)) << imag (opor[i]) << imag (*(cop->data ()+i));
 
@@ -62,11 +61,11 @@ void ConvDistColumnThread :: run (void)
         stc[i] = complex<double> (0.0, 0.0);
         stc1[i] = complex<double> (0.0, 0.0);
     }
-    fileSem.acquire ();
+    fileL.lockForRead();
     int cr = fread (st, sizeof (quint8), nd2, fInput);
+    fileL.unlock ();
     if (cr <= 0)
         exit (-2);
-    fileSem.acquire ();
     int i0 = iColumn;
 
     for (int ii=0; ii< nd2; ii++)
@@ -137,10 +136,10 @@ void ConvDistColumnThread :: run (void)
         double vmod = sqrt (stc2[2*ii]*stc2[2*ii] + stc2[2*ii+1]*stc2[2*ii+1]);
         maxval = qMax (maxval, vmod);
     }
-    if (fOutput && fileSem.available () >= 1)
+    if (fOutput)
     {
         //qDebug () << __PRETTY_FUNCTION__ << QString ("Write data");
-        fileSem.acquire();
+        fileL.lockForWrite ();
         size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fOutput);
         int ier = ferror (fOutput);
         //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
@@ -149,7 +148,7 @@ void ConvDistColumnThread :: run (void)
             qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
             return;
         }
-        fileSem.release (3);
+        fileL.unlock();
     }
     delete [] xfft;
 

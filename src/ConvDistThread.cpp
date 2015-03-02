@@ -140,10 +140,10 @@ void ConvDistThread :: run (void)
         {
             QThread * thr = thrList[ii];
             thr->start ();
-//        }
-//        for (int ii=0; ii<nThr; ii++)
-//        {
-//            QThread * thr = thrList[ii];
+        }
+        for (int ii=0; ii<nThr; ii++)
+        {
+            QThread * thr = thrList[ii];
             thr->wait ();
         }
 //        thrCol->wait();
