@@ -95,7 +95,9 @@ void ConvDistThread :: run (void)
 
     QString fileConvName = convParameters->getConvFileName();//QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
-    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "w+");
+    FILE * fid6 = 0;
+    if (!fileConvName.isEmpty())
+        fid6 = fopen (fileConvName.toAscii().constData(), "w");
 
     int na = convParameters->getChannelsNumb ();
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
