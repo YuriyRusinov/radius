@@ -334,7 +334,7 @@
     <message>
         <location filename="../src/radarConvIm.cpp" line="89"/>
         <source>Result image</source>
-        <translation type="unfinished"></translation>
+        <translation>Результирующее изображение</translation>
     </message>
 </context>
 <context>
@@ -342,149 +342,149 @@
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="14"/>
         <source>Convolution by azimuth parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры свертки по азимуту</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="24"/>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="70"/>
         <source>Image parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры изображения</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="30"/>
         <source>Data sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник данных</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="36"/>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="180"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Output file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл результатов</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="53"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Входной файл</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="76"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calibration scale :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштаб калибровки</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="86"/>
         <source>Result image parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры результирующего изображения </translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="95"/>
         <source>Image center :</source>
-        <translation type="unfinished"></translation>
+        <translation>Центр изображения :</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="108"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Image size :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер изображения </translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="118"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Scale factor :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштабный множитель</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="131"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Offset :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Смещение</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="144"/>
         <source>Logarithm compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Логарифическое сжатие</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="191"/>
         <source>Physical parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Физические параметры</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="197"/>
         <source>Physician parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Физические параметры</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="203"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Image shift :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Смещение</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by azimuth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Скважность по азимуту, градусы</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="226"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bandwidth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина полосы</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="239"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by distance :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Скважность по радиусу, м</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="249"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Light speed :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость света</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="269"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quantization frequency :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота квантования</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="279"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Impulse duration, microseconds :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Продолжительность импульса, мкс</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="292"/>
         <source>Number of readings in impulse :</source>
-        <translation type="unfinished"></translation>
+        <translation>Число отсчетов в импульсе :</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="309"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lambda :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Лямбда</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="322"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Horizontal component :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Горизонтальная компонента</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="335"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vertical component :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Вертикальная компонента</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="345"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dimension for FFT :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Размерность FFT</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="380"/>
         <source>&amp;Start</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Старт</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="387"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Закрыть</translation>
     </message>
 </context>
 <context>
@@ -492,103 +492,103 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="14"/>
         <source>Convolution by distance parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параетры свертки по дальности</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="20"/>
         <source>Data sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник данных</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="26"/>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="50"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Output file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл результатов</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="57"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Входной файл</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="74"/>
         <source>Image parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры изображения</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calibration scale :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштаб калибровки</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="99"/>
         <source>Physician parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Физические параметры</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="105"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of readings in distance channel :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Число отсчетов в канале</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="118"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of distance channels :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Число каналов по дальности</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="131"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bandwidth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина полосы</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="144"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by distance :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Скважность по радиусу, м</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="157"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Light speed :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость света</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="170"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quantization frequency :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота квантования</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="187"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Impulse duration, microseconds :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Продолжительность ипульса, ms</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="200"/>
         <source>Number of readings in impulse :</source>
-        <translation type="unfinished"></translation>
+        <translation>Число отсчетов в импульсе :</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="235"/>
         <source>&amp;Start</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Старт</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="242"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Закрыть</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="251"/>
         <source>Computing parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параетры вычислений</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="257"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of FFT threads :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Число потоков для FFT</translation>
     </message>
 </context>
 <context>
@@ -596,17 +596,17 @@
     <message>
         <location filename="../src/gui/ui/fft_time_widget.ui" line="14"/>
         <source>FFT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/ui/fft_time_widget.ui" line="22"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Elapsed time :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Время выполнения</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/fft_time_widget.ui" line="39"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;seconds&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>секунд</translation>
     </message>
 </context>
 <context>
@@ -615,22 +615,22 @@
         <location filename="../src/gui/radDataWidget.cpp" line="13"/>
         <location filename="../src/gui/radDataWidget.cpp" line="24"/>
         <source>Source matrix</source>
-        <translation type="unfinished"></translation>
+        <translation>Исходная матрица</translation>
     </message>
     <message>
         <location filename="../src/gui/radDataWidget.cpp" line="38"/>
         <source>Model was set</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель задана</translation>
     </message>
     <message>
         <location filename="../src/gui/radDataWidget.cpp" line="50"/>
         <source>Real component</source>
-        <translation type="unfinished"></translation>
+        <translation>Вещественная компонента</translation>
     </message>
     <message>
         <location filename="../src/gui/radDataWidget.cpp" line="51"/>
         <source>Image component</source>
-        <translation type="unfinished"></translation>
+        <translation>Мнимая компонента</translation>
     </message>
 </context>
 <context>
@@ -639,22 +639,22 @@
         <location filename="../src/gui/radTableWidget.cpp" line="13"/>
         <location filename="../src/gui/radTableWidget.cpp" line="24"/>
         <source>Source matrix</source>
-        <translation type="unfinished"></translation>
+        <translation>Исходная матрица</translation>
     </message>
     <message>
         <location filename="../src/gui/radTableWidget.cpp" line="38"/>
         <source>Model was set</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель задана</translation>
     </message>
     <message>
         <location filename="../src/gui/radTableWidget.cpp" line="52"/>
         <source>Real component</source>
-        <translation type="unfinished"></translation>
+        <translation>Вещественная компонента</translation>
     </message>
     <message>
         <location filename="../src/gui/radTableWidget.cpp" line="53"/>
         <source>Image component</source>
-        <translation type="unfinished"></translation>
+        <translation>Мнимая компонента</translation>
     </message>
 </context>
 <context>
@@ -663,12 +663,12 @@
         <location filename="../src/gui/rggImageWidget.cpp" line="20"/>
         <location filename="../src/gui/rggImageWidget.cpp" line="60"/>
         <source>Save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить изображение</translation>
     </message>
     <message>
         <location filename="../src/gui/rggImageWidget.cpp" line="60"/>
         <source>Images (*.png *.xpm *.jpg);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы изображений (*.png *.xpm *.jpg);;Все файлы (*)</translation>
     </message>
 </context>
 </TS>
