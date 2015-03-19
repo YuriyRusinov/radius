@@ -198,7 +198,7 @@
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="132"/>
         <source>Test FFT for stc1</source>
-        <translation></translation>
+        <translation>Тестирование FFT для контрольных данных</translation>
     </message>
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="135"/>
@@ -492,7 +492,7 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="14"/>
         <source>Convolution by distance parameters</source>
-        <translation>Параетры свертки по дальности</translation>
+        <translation>Параметры свертки по дальности</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="20"/>
