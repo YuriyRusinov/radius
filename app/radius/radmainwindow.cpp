@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QTime>
 #include <QMessageBox>
+#include <QCoreApplication>
 
 #include <radDataWidget.h>
 #include <radTableWidget.h>
@@ -30,6 +31,8 @@
 #include <convdistancewidget.h>
 #include <convazimuthwidget.h>
 #include <constants1.h>
+#include <radapplication.h>
+#include <RadSettings.h>
 
 #include <complex>
 #include <math.h>
@@ -134,6 +137,12 @@ void RadMainWindow :: init (void)
 
     QAction * actFFT2Test = calcMenu->addAction (tr("Test 2D FFT"));
     connect (actFFT2Test, SIGNAL (triggered()), this, SLOT (slotFFT2Test()) );
+
+    QMenu * settingsMenu = new QMenu (tr ("&Settings"), this);
+    UI->menuBar->addMenu (settingsMenu);
+
+    QAction * actSettings = settingsMenu->addAction (tr("&Settings"));
+    connect (actSettings, SIGNAL (triggered()), this, SLOT (slotSetings()) );
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -1036,4 +1045,16 @@ void RadMainWindow :: addWidget (QWidget * w)
     QMdiSubWindow * m_subW = m_mdiArea->addSubWindow (w);
     w->show();
     m_subW->setAttribute (Qt::WA_DeleteOnClose);
+}
+
+void RadMainWindow :: slotSetings (void)
+{
+    if (!qobject_cast<RadApplication *>(QCoreApplication::instance()))
+        return;
+
+    QCoreApplication * app = QCoreApplication::instance();
+    RadiusSettings * rSettings = qobject_cast<RadApplication *> (app) ? qobject_cast<RadApplication *> (app)->getRadSettings () : 0;
+    if (rSettings)
+        rSettings->editSettings(this);
+ 
 }

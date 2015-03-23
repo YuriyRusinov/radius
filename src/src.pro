@@ -42,6 +42,8 @@ HEADERS += fft_c.h \
            ConvDistColumnThread.h \
            ConvAzimuthPhys.h \
            ConvAzimuthThread.h \
+           radapplication.h \
+           RadSettings.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -52,7 +54,9 @@ SOURCES += fft_c.cpp \
            ConvDistThread.cpp \
            ConvDistColumnThread.cpp \
            ConvAzimuthPhys.cpp \
-           ConvAzimuthThread.cpp
+           ConvAzimuthThread.cpp \
+           radapplication.cpp \
+           RadSettings.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
