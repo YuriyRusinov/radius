@@ -35,7 +35,6 @@ int main (int argc, char * argv[])
     bool istr = radiusTr->load("radius_ru", transl_path);//.load (transl_path + QString ("reper_app_ru.qm"), ".");
     if (istr)
         app->installTranslator (radiusTr);
-  
     RadMainWindow * rw = new RadMainWindow;
 
     rw->show ();
