@@ -93,7 +93,7 @@ void RadMainWindow :: openDataFile (void)
     if (fileName.isEmpty())
         return;
 
-    actCalc1->setEnabled (true);
+//    actCalc1->setEnabled (true);
 }
 
 void RadMainWindow :: init (void)
