@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="radius">
+    <file>antenne_32.png</file>
+    <file>open.png</file>
+    <file>save.png</file>
+    <file>exit.png</file>
+    <file>settings.png</file>
+    <file>calc.png</file>
+    <file>help.png</file>
+    <file>help-icon.png</file>
+    <file alias="m31.jpg">m31_bers_1824.jpg</file>
+  </qresource>
+</RCC>

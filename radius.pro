@@ -5,6 +5,8 @@ SUBDIRS += src \
 
 include (./radius.conf)
 
+RESOURCES = ./icons/radius_icons.qrc
+
 #transl
 transl.files = ./transl/*.qm
 transl.path = $$RAD_TRANSL_DIR

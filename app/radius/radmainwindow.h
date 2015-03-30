@@ -7,6 +7,8 @@
 
 class QMdiArea;
 class QAction;
+class QToolBar;
+class QMenu;
 
 namespace Ui
 {
@@ -26,7 +28,7 @@ private slots:
     void initConvAz (void);
 
     void openDataFile (void);
-    void openConvFile (void);
+    void saveImageFile (void);
     void fftTest (void);
     void stcFFTTest (void);
     void stc1FFTTest (void);
@@ -38,12 +40,14 @@ private slots:
     void slotSetings (void);
 
     void addWidget (QWidget * w);
+    void slotHelp (void);
 
 private:
     //
     // Functions
     //
     void init (void);
+    void initToolBars (void);
 
 private:
     //
@@ -53,9 +57,20 @@ private:
     QMdiArea * m_mdiArea;
     QString fileName;
     QString fileConvName;
+    QToolBar * tbActions;
 
     QAction * actCalc1;
     QAction * actCalc2;
+
+    QMenu * menuFile;
+    QAction * actFileMenu;
+    QAction * actOpenDataFile;
+    QAction * actSaveImageFile;
+    QMenu * calcMenu;
+    QAction * actCalcMenu;
+    QAction * actSettings;
+    QMenu * menuHelp;
+    QAction * actHelp;
 
     //complex<double> * stc;// = new complex<double> [nd];
     //complex<double> * stc1;/// = new complex<double> [nd];

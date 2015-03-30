@@ -6,6 +6,8 @@ TARGET = $${EXECUTABLE_PREFIX}_app
 
 DESTDIR = ../../bin
 
+RESOURCES = ../../icons/radius_icons.qrc
+
 HEADERS += radmainwindow.h
 
 FORMS += radius_mainwindow.ui

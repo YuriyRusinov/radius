@@ -22,6 +22,8 @@
 #include <QColor>
 #include <QTime>
 #include <QMessageBox>
+#include <QToolBar>
+#include <QBrush>
 #include <QCoreApplication>
 
 #include <radDataWidget.h>
@@ -33,6 +35,7 @@
 #include <constants1.h>
 #include <radapplication.h>
 #include <RadSettings.h>
+#include <radMdiArea.h>
 
 #include <complex>
 #include <math.h>
@@ -52,19 +55,23 @@ using std::complex;
 RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     : QMainWindow (parent, flags),
     UI (new Ui::Rad_Main_Window),
-    m_mdiArea (new QMdiArea (this)),
-    actCalc1 (new QAction (tr("Calculate&1"), this)),
-    actCalc2 (new QAction (tr("Calculate&2"), this))
+    m_mdiArea (0),//new QMdiArea (this)),
+    tbActions (new QToolBar (this)),
+    actCalc1 (0),//new QAction (tr("Calculate&1"), this)),
+    actCalc2 (0),//new QAction (tr("Calculate&2"), this)),
+    menuFile (new QMenu (tr ("&RLI tools")))
 //    stc (new complex<double> [nd]),
 //    stc1 (new complex<double> [nd]),
 //    stc2 (new double [2*nd]),
 //    stc3 (0),
 //    stc4 (0)
 {
+    Q_INIT_RESOURCE (radius_icons);
     UI->setupUi (this);
+    tbActions->setIconSize (QSize(32, 32));
 
-    setCentralWidget (m_mdiArea);
     init ();
+    initToolBars();
 }
 
 RadMainWindow :: ~RadMainWindow (void)
@@ -91,25 +98,36 @@ void RadMainWindow :: openDataFile (void)
 
 void RadMainWindow :: init (void)
 {
-    QMenu * openMenu = new QMenu (tr ("&File"), this);
-    UI->menuFile->addMenu (openMenu);
+//    QMenu * openMenu = new QMenu (tr ("&RLI tools"), this);
+//    UI->menuFile->addMenu (openMenu);
+    m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), this);
+    setCentralWidget (m_mdiArea);
+//    QBrush bk (QPixmap(":/radius/m31.jpg"));
+//    m_mdiArea->setBackground (bk);
+    actFileMenu = UI->menuBar->addMenu (menuFile);
 
-    QAction * actOpenDataFile = openMenu->addAction (tr("Open &source file"));
+    actOpenDataFile = menuFile->addAction (tr("Open &image file"));
+    actOpenDataFile->setIcon (QIcon(":/radius/open.png"));
     QKeySequence keyOpen (tr("Ctrl+O", "File|Open"));
     actOpenDataFile->setShortcut (keyOpen);
     connect (actOpenDataFile, SIGNAL (triggered()), this, SLOT (openDataFile()) );
 
-    QAction * actOpenConvFile = openMenu->addAction (tr("Open &convolution file"));
-    connect (actOpenConvFile, SIGNAL (triggered()), this, SLOT (openConvFile()) );
+    actSaveImageFile = menuFile->addAction (tr("Save &As..."));
+    actSaveImageFile->setIcon (QIcon(":/radius/save.png"));
+    QKeySequence keySave (tr("Ctrl+Shift+S", "File|Save"));
+    actSaveImageFile->setShortcut (keySave);
+    connect (actSaveImageFile, SIGNAL (triggered()), this, SLOT (saveImageFile()) );
 
-    UI->menuFile->addSeparator ();
-    QAction * actQuit = UI->menuFile->addAction (tr("&Quit"));
+    menuFile->addSeparator ();
+    QAction * actQuit = menuFile->addAction (tr("&Quit"));
+    actQuit->setIcon (QIcon(":/radius/exit.png"));
     QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
     actQuit->setShortcut (keyQuit);
     connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
 
-    QMenu * calcMenu = new QMenu (tr ("&Calculate"), this);
-    UI->menuBar->addMenu (calcMenu);
+    calcMenu = new QMenu (tr ("&Calculate"));
+    //calcMenu->setIcon (QIcon(":/radius/antenne_32.png"));
+    actCalcMenu = UI->menuBar->addMenu (calcMenu);
 
     QAction * actInitConvDist = calcMenu->addAction (tr("&Init convolution by distance"));
     connect (actInitConvDist, SIGNAL (triggered()), this, SLOT (initConvDist()) );
@@ -118,13 +136,13 @@ void RadMainWindow :: init (void)
     QAction * actFFTTest = calcMenu->addAction (tr("Test &FFT"));
     connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
 
-    calcMenu->addAction (actCalc1);
-    connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
-    actCalc1->setEnabled (false);
+//    calcMenu->addAction (actCalc1);
+//    connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
+//    actCalc1->setEnabled (false);
 
-    calcMenu->addAction (actCalc2);
-    connect (actCalc2, SIGNAL (triggered()), this, SLOT (slotTest2()) );
-    actCalc2->setEnabled (false);
+//    calcMenu->addAction (actCalc2);
+//    connect (actCalc2, SIGNAL (triggered()), this, SLOT (slotTest2()) );
+//    actCalc2->setEnabled (false);
 
     QAction * actOporTest = calcMenu->addAction (tr("Test FFT for opor"));
     connect (actOporTest, SIGNAL (triggered()), this, SLOT (oporTest()) );
@@ -138,11 +156,33 @@ void RadMainWindow :: init (void)
     QAction * actFFT2Test = calcMenu->addAction (tr("Test 2D FFT"));
     connect (actFFT2Test, SIGNAL (triggered()), this, SLOT (slotFFT2Test()) );
 
-    QMenu * settingsMenu = new QMenu (tr ("&Settings"), this);
-    UI->menuBar->addMenu (settingsMenu);
+    UI->menuBar->addSeparator ();
 
-    QAction * actSettings = settingsMenu->addAction (tr("&Settings"));
+    QMenu * settingsMenu = new QMenu (tr ("&Settings"), this);
+    settingsMenu->setIcon (QIcon(":/radius/settings.png"));
+    UI->menuBar->addMenu (settingsMenu);
+//    UI->menuBar->insertSeparator (sMenu);
+
+    actSettings = settingsMenu->addAction (tr("&Settings"));
+    actSettings->setIcon (QIcon(":/radius/settings.png"));
     connect (actSettings, SIGNAL (triggered()), this, SLOT (slotSetings()) );
+
+    menuHelp = new QMenu (tr("&Help"));
+    actHelp = UI->menuBar->addMenu (menuHelp);
+    actHelp->setIcon (QIcon (":/radius/help.png"));
+
+    QAction * actHelpRad = menuHelp->addAction (QIcon(":/radius/help-icon.png"), tr("User Manual"));
+    connect (actHelpRad, SIGNAL (triggered()), this, SLOT (slotHelp()) );
+}
+
+void RadMainWindow :: initToolBars (void)
+{
+    tbActions->addAction (actFileMenu);
+    tbActions->addAction (actCalcMenu);
+    tbActions->addAction (actSettings);
+    actCalcMenu->setIcon (QIcon(":/radius/antenne_32.png"));
+    tbActions->addAction (actHelp);
+    this->addToolBar(tbActions);
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -429,10 +469,10 @@ void RadMainWindow :: slotTest1 (void)
     actCalc2->setEnabled (true);
 }
 
-void RadMainWindow :: openConvFile (void)
+void RadMainWindow :: saveImageFile (void)
 {
-    actCalc2->setEnabled (true);
-    slotTest2 ();
+//    actCalc2->setEnabled (true);
+//    slotTest2 ();
 }
 
 void RadMainWindow :: slotTest2 (void)
@@ -1057,4 +1097,9 @@ void RadMainWindow :: slotSetings (void)
     if (rSettings)
         rSettings->editSettings(this);
  
+}
+
+void RadMainWindow :: slotHelp (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
 }
