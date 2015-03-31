@@ -89,7 +89,8 @@ RadMainWindow :: ~RadMainWindow (void)
 void RadMainWindow :: openDataFile (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    fileName = QFileDialog::getOpenFileName (this, tr("Select source file"), QDir::currentPath(), tr("All files (*)"));
+    QString filter (tr("Image files (*.flt *.bmp *.gif *.jpg);;All files(*);"));
+    fileName = QFileDialog::getOpenFileName (this, tr("Select source file"), QDir::currentPath(), filter);
     if (fileName.isEmpty())
         return;
 
