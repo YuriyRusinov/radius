@@ -39,7 +39,7 @@ void RadMdiArea :: paintEvent (QPaintEvent * pEvent)
     //pEvent->accept();
     QPainter painter (this->viewport());
     painter.setPen (Qt::yellow);
-    painter.setFont(QFont("Arial", 40));
+    painter.setFont(QFont("Arial", 60));
     //painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
     //painter.fillRect(0, 0, 500, 500, QColor(0,220,0));
     painter.drawText (pEvent->rect(), Qt::AlignCenter, rTitle);

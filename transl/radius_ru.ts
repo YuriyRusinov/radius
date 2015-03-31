@@ -289,7 +289,8 @@
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="103"/>
         <source>Radius software</source>
-        <translation>Программный комплекс &quot;Радиус&quot; </translation>
+        <translation>Программный комплекс 
+&quot;Радиус&quot; </translation>
     </message>
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="62"/>
