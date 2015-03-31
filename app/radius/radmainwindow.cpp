@@ -59,7 +59,7 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     tbActions (new QToolBar (this)),
     actCalc1 (0),//new QAction (tr("Calculate&1"), this)),
     actCalc2 (0),//new QAction (tr("Calculate&2"), this)),
-    menuFile (new QMenu (tr ("&RLI tools")))
+    menuFile (new QMenu (tr ("&Images tools")))
 //    stc (new complex<double> [nd]),
 //    stc1 (new complex<double> [nd]),
 //    stc2 (new double [2*nd]),
@@ -106,6 +106,7 @@ void RadMainWindow :: init (void)
 //    QBrush bk (QPixmap(":/radius/m31.jpg"));
 //    m_mdiArea->setBackground (bk);
     actFileMenu = UI->menuBar->addMenu (menuFile);
+    actFileMenu->setIcon (QIcon(":/radius/image.png"));
 
     actOpenDataFile = menuFile->addAction (tr("Open &image file"));
     actOpenDataFile->setIcon (QIcon(":/radius/open.png"));
@@ -126,7 +127,7 @@ void RadMainWindow :: init (void)
     actQuit->setShortcut (keyQuit);
     connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
 
-    calcMenu = new QMenu (tr ("&Calculate"));
+    calcMenu = new QMenu (tr ("&RLI tools"));
     //calcMenu->setIcon (QIcon(":/radius/antenne_32.png"));
     actCalcMenu = UI->menuBar->addMenu (calcMenu);
 

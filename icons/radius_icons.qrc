@@ -9,5 +9,6 @@
     <file>help.png</file>
     <file>help-icon.png</file>
     <file alias="m31.jpg">m31_bers_1824.jpg</file>
+    <file alias="image.png">image-file-icon.png</file>
   </qresource>
 </RCC>

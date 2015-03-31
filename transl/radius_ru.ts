@@ -282,7 +282,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="62"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="129"/>
         <source>&amp;RLI tools</source>
         <translation>Работа с &amp;РЛИ</translation>
     </message>
@@ -290,6 +290,11 @@
         <location filename="../app/radius/radmainwindow.cpp" line="103"/>
         <source>Radius software</source>
         <translation>Программный комплекс &quot;Радиус&quot; </translation>
+    </message>
+    <message>
+        <location filename="../app/radius/radmainwindow.cpp" line="62"/>
+        <source>&amp;Images tools</source>
+        <translation>Работа с &amp;изображениями</translation>
     </message>
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="110"/>
@@ -317,11 +322,6 @@
         <source>Ctrl+Q</source>
         <comment>File|Quit</comment>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="129"/>
-        <source>&amp;Calculate</source>
-        <translation>&amp;Расчет</translation>
     </message>
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="133"/>
