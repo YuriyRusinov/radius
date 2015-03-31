@@ -5,11 +5,12 @@
 #include "src_config.h"
 
 class QResizeEvent;
+class QPaintEvent;
 
 class _FFTMATR_EXPORT_ RadMdiArea : public QMdiArea
 {
 public:
-    RadMdiArea (const QImage& im, QWidget * parent = 0);
+    RadMdiArea (const QImage& im, QString title, QWidget * parent = 0);
     ~RadMdiArea (void);
 
 protected:
@@ -17,12 +18,14 @@ protected:
     // Overrides
     //
     virtual void resizeEvent (QResizeEvent * resizeEvent);
+    virtual void paintEvent (QPaintEvent * pEvent);
 
 private:
     //
     // Variables
     //
     QImage bkImage;
+    QString rTitle;
 
 private:
     Q_OBJECT

@@ -100,7 +100,8 @@ void RadMainWindow :: init (void)
 {
 //    QMenu * openMenu = new QMenu (tr ("&RLI tools"), this);
 //    UI->menuFile->addMenu (openMenu);
-    m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), this);
+    m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
+    m_mdiArea->update();
     setCentralWidget (m_mdiArea);
 //    QBrush bk (QPixmap(":/radius/m31.jpg"));
 //    m_mdiArea->setBackground (bk);
