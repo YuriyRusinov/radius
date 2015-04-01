@@ -101,12 +101,41 @@ void RadMainWindow :: init (void)
 {
 //    QMenu * openMenu = new QMenu (tr ("&RLI tools"), this);
 //    UI->menuFile->addMenu (openMenu);
+    UI->menuBar->setStyleSheet (
+"QMenuBar"
+"{"
+"	background-color: qlineargradient( x1:0, y1:0, x2:0, y2:1, "
+"		stop: 0   #b0c4de, "
+"		stop: 0.8 #e6e6e8, "
+"		stop: 1   #b0c4de ); "
+"               padding:   4px; "
+"}"
+" QMenuBar::item"
+"{"
+"	background-color: qlineargradient( x1:0, y1:0, x2:0, y2:1, "
+"		stop: 0   #b0c4de, "
+"		stop: 0.8 #c8dcf6, "
+"		stop: 1   #4682b4 ); "
+"	border-width:  1px; "
+"	border-color:  darkkhaki; "
+"	border-style:  solid; "
+"	border-radius: 5px; "
+"       margin:        4px; "
+"	padding:       4px; "
+"       background: transparent; "
+"	spacing:       3px; "
+"}" );
+
     m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
     m_mdiArea->update();
     setCentralWidget (m_mdiArea);
 //    QBrush bk (QPixmap(":/radius/m31.jpg"));
 //    m_mdiArea->setBackground (bk);
+//    menuFile->setSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    menuFile->setMinimumSize (50, 10);
     actFileMenu = UI->menuBar->addMenu (menuFile);
+//    actFileMenu->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+    qDebug () << __PRETTY_FUNCTION__ << menuFile->sizePolicy ().horizontalPolicy () << menuFile->sizeHint() << menuFile->minimumSize();
     actFileMenu->setIcon (QIcon(":/radius/image.png"));
 
     actOpenDataFile = menuFile->addAction (tr("Open &image file"));
@@ -149,22 +178,25 @@ void RadMainWindow :: init (void)
 
     QAction * actOporTest = calcMenu->addAction (tr("Test FFT for opor"));
     connect (actOporTest, SIGNAL (triggered()), this, SLOT (oporTest()) );
+    actOporTest->setVisible (false);
 
     QAction * actStcTest = calcMenu->addAction (tr("Test FFT for stc"));
     connect (actStcTest, SIGNAL (triggered()), this, SLOT (stcFFTTest()) );
+    actStcTest->setVisible (false);
 
     QAction * actStc1Test = calcMenu->addAction (tr("Test FFT for stc1"));
     connect (actStc1Test, SIGNAL (triggered()), this, SLOT (stc1FFTTest()) );
+    actStc1Test->setVisible (false);
 
     QAction * actFFT2Test = calcMenu->addAction (tr("Test 2D FFT"));
     connect (actFFT2Test, SIGNAL (triggered()), this, SLOT (slotFFT2Test()) );
+    actFFT2Test->setVisible (false);
 
     UI->menuBar->addSeparator ();
 
     QMenu * settingsMenu = new QMenu (tr ("&Settings"), this);
     settingsMenu->setIcon (QIcon(":/radius/settings.png"));
     UI->menuBar->addMenu (settingsMenu);
-//    UI->menuBar->insertSeparator (sMenu);
 
     actSettings = settingsMenu->addAction (tr("&Settings"));
     actSettings->setIcon (QIcon(":/radius/settings.png"));
