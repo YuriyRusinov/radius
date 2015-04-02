@@ -2,6 +2,7 @@
 #include <QResizeEvent>
 #include <QPaintEvent>
 #include <QFont>
+#include <QWidget>
 #include <QtDebug>
 #include "radMdiArea.h"
 
@@ -35,12 +36,11 @@ void RadMdiArea :: paintEvent (QPaintEvent * pEvent)
 {
 //    Q_UNUSED (pEvent);
     QMdiArea::paintEvent (pEvent);
-    //qDebug () << __PRETTY_FUNCTION__ << rTitle;
-    //pEvent->accept();
-    QPainter painter (this->viewport());
+    QWidget * vPort = this->viewport();
+    QPainter painter (vPort);
     painter.setPen (Qt::yellow);
     painter.setFont(QFont("Arial", 60));
     //painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
     //painter.fillRect(0, 0, 500, 500, QColor(0,220,0));
-    painter.drawText (pEvent->rect(), Qt::AlignCenter, rTitle);
+    painter.drawText (vPort->rect(), Qt::AlignCenter, rTitle);
 }

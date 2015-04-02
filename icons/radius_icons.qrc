@@ -10,5 +10,10 @@
     <file>help-icon.png</file>
     <file alias="m31.jpg">m31_bers_1824.jpg</file>
     <file alias="image.png">image-file-icon.png</file>
+    <file>fft.png</file>
+    <file>fft_a.png</file>
+    <file>antenna_128.png</file>
+    <file>binary.png</file>
+    <file>galaxy3d.png</file>
   </qresource>
 </RCC>

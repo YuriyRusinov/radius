@@ -36,6 +36,9 @@ private slots:
     void slotTest1 (void);
     void slotTest2 (void);
     void slotFFT2Test (void);
+    void slot3DMod (void);
+    void slot3DView (void);
+    void slotBinariRLI (void);
 
     void slotSetings (void);
 
@@ -58,6 +61,8 @@ private:
     QString fileName;
     QString fileConvName;
     QToolBar * tbActions;
+    QToolBar * tbCalc;
+    QToolBar * tbOthers;
 
     QAction * actCalc1;
     QAction * actCalc2;
@@ -66,12 +71,20 @@ private:
     QAction * actFileMenu;
     QAction * actOpenDataFile;
     QAction * actSaveImageFile;
+    QAction * actQuit;
     QMenu * calcMenu;
+    QAction * actInitConvDist;
+    QAction * actInitConvAz;
+    QMenu * RLI3DMenu;
+    QAction * act3DMod;
+    QAction * actView3DMod;
+    QAction * act3DBinary;
     QAction * actCalcMenu;
+    QMenu * settingsMenu;
     QAction * actSettings;
     QMenu * menuHelp;
     QAction * actHelp;
-
+    QAction * actHelpRad;
     //complex<double> * stc;// = new complex<double> [nd];
     //complex<double> * stc1;/// = new complex<double> [nd];
     //double * stc2;

@@ -57,9 +57,15 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     UI (new Ui::Rad_Main_Window),
     m_mdiArea (0),//new QMdiArea (this)),
     tbActions (new QToolBar (this)),
+    tbCalc (new QToolBar (this)),
+    tbOthers (new QToolBar (this)),
     actCalc1 (0),//new QAction (tr("Calculate&1"), this)),
     actCalc2 (0),//new QAction (tr("Calculate&2"), this)),
-    menuFile (new QMenu (tr ("&Images tools")))
+    menuFile (new QMenu (tr ("&Images tools"))),
+    calcMenu (new QMenu (tr ("&RLI tools"))),
+    RLI3DMenu (new QMenu (tr ("3&D models"))),
+    settingsMenu (new QMenu (tr ("&Settings"))),
+    menuHelp (new QMenu (tr("&Help")))
 //    stc (new complex<double> [nd]),
 //    stc1 (new complex<double> [nd]),
 //    stc2 (new double [2*nd]),
@@ -101,7 +107,7 @@ void RadMainWindow :: init (void)
 {
 //    QMenu * openMenu = new QMenu (tr ("&RLI tools"), this);
 //    UI->menuFile->addMenu (openMenu);
-    UI->menuBar->setStyleSheet (
+/*    UI->menuBar->setStyleSheet (
 "QMenuBar"
 "{"
 "	background-color: qlineargradient( x1:0, y1:0, x2:0, y2:1, "
@@ -125,18 +131,19 @@ void RadMainWindow :: init (void)
 "       background: transparent; "
 "	spacing:       3px; "
 "}" );
-
+*/
     m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
     m_mdiArea->update();
+    actFileMenu = UI->menuBar->addMenu (menuFile);//QIcon(":/radius/image.png"), tr ("&Images tools"));
     setCentralWidget (m_mdiArea);
 //    QBrush bk (QPixmap(":/radius/m31.jpg"));
 //    m_mdiArea->setBackground (bk);
 //    menuFile->setSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     menuFile->setMinimumSize (50, 10);
-    actFileMenu = UI->menuBar->addMenu (menuFile);
+//    actFileMenu = menuFile->menuAction ();//UI->menuBar->addMenu (menuFile);
 //    actFileMenu->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-    qDebug () << __PRETTY_FUNCTION__ << menuFile->sizePolicy ().horizontalPolicy () << menuFile->sizeHint() << menuFile->minimumSize();
-    actFileMenu->setIcon (QIcon(":/radius/image.png"));
+//    qDebug () << __PRETTY_FUNCTION__ << menuFile->sizePolicy ().horizontalPolicy () << menuFile->sizeHint() << menuFile->minimumSize();
+//    actFileMenu->setIcon (QIcon(":/radius/image.png"));
 
     actOpenDataFile = menuFile->addAction (tr("Open &image file"));
     actOpenDataFile->setIcon (QIcon(":/radius/open.png"));
@@ -151,20 +158,31 @@ void RadMainWindow :: init (void)
     connect (actSaveImageFile, SIGNAL (triggered()), this, SLOT (saveImageFile()) );
 
     menuFile->addSeparator ();
-    QAction * actQuit = menuFile->addAction (tr("&Quit"));
+    actQuit = menuFile->addAction (tr("&Quit"));
     actQuit->setIcon (QIcon(":/radius/exit.png"));
     QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
     actQuit->setShortcut (keyQuit);
     connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
 
-    calcMenu = new QMenu (tr ("&RLI tools"));
     //calcMenu->setIcon (QIcon(":/radius/antenne_32.png"));
     actCalcMenu = UI->menuBar->addMenu (calcMenu);
 
-    QAction * actInitConvDist = calcMenu->addAction (tr("&Init convolution by distance"));
+    actInitConvDist = calcMenu->addAction (tr("&Init convolution by distance"));
+    actInitConvDist->setIcon (QIcon (":/radius/fft.png"));
     connect (actInitConvDist, SIGNAL (triggered()), this, SLOT (initConvDist()) );
-    QAction * actInitConvAz = calcMenu->addAction (tr("&Init convolution by azimuth"));
+    actInitConvAz = calcMenu->addAction (tr("&Init convolution by azimuth"));
+    actInitConvAz->setIcon (QIcon (":/radius/fft_a.png"));
     connect (actInitConvAz, SIGNAL (triggered()), this, SLOT (initConvAz()) );
+    calcMenu->addSeparator ();
+
+    act3DMod = RLI3DMenu->addAction (QIcon (":/radius/antenna_128.png"), tr ("3D Models RLI"));
+    connect (act3DMod, SIGNAL (triggered()), this, SLOT (slot3DMod()) );
+    actView3DMod = RLI3DMenu->addAction (QIcon (":/radius/galaxy3d.png"), tr ("View 3D Models"));
+    connect (actView3DMod, SIGNAL (triggered()), this, SLOT (slot3DView()) );
+    act3DBinary = RLI3DMenu->addAction (QIcon (":/radius/binary.png"), tr ("Binary RLI"));
+    connect (act3DBinary, SIGNAL (triggered()), this, SLOT (slotBinariRLI()) );
+    UI->menuBar->addMenu (RLI3DMenu);
+
     QAction * actFFTTest = calcMenu->addAction (tr("Test &FFT"));
     connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
 
@@ -194,30 +212,37 @@ void RadMainWindow :: init (void)
 
     UI->menuBar->addSeparator ();
 
-    QMenu * settingsMenu = new QMenu (tr ("&Settings"), this);
-    settingsMenu->setIcon (QIcon(":/radius/settings.png"));
+    //settingsMenu->setIcon (QIcon(":/radius/settings.png"));
     UI->menuBar->addMenu (settingsMenu);
 
     actSettings = settingsMenu->addAction (tr("&Settings"));
     actSettings->setIcon (QIcon(":/radius/settings.png"));
     connect (actSettings, SIGNAL (triggered()), this, SLOT (slotSetings()) );
 
-    menuHelp = new QMenu (tr("&Help"));
     actHelp = UI->menuBar->addMenu (menuHelp);
-    actHelp->setIcon (QIcon (":/radius/help.png"));
+    //actHelp->setIcon (QIcon (":/radius/help.png"));
 
-    QAction * actHelpRad = menuHelp->addAction (QIcon(":/radius/help-icon.png"), tr("User Manual"));
+    actHelpRad = menuHelp->addAction (QIcon(":/radius/help-icon.png"), tr("User Manual"));
     connect (actHelpRad, SIGNAL (triggered()), this, SLOT (slotHelp()) );
 }
 
 void RadMainWindow :: initToolBars (void)
 {
-    tbActions->addAction (actFileMenu);
-    tbActions->addAction (actCalcMenu);
-    tbActions->addAction (actSettings);
-    actCalcMenu->setIcon (QIcon(":/radius/antenne_32.png"));
-    tbActions->addAction (actHelp);
-    this->addToolBar(tbActions);
+    tbActions->addAction (actOpenDataFile);
+    tbActions->addAction (actSaveImageFile);
+    tbCalc->addAction (actInitConvDist);
+    tbCalc->addAction (actInitConvAz);
+    tbCalc->addSeparator ();
+    tbCalc->addAction (act3DMod);
+    tbCalc->addAction (actView3DMod);
+    tbCalc->addAction (act3DBinary);
+    tbOthers->addAction (actSettings);
+    tbOthers->addAction (actHelpRad);
+    tbOthers->addSeparator ();
+    tbOthers->addAction (actQuit);
+    this->addToolBar (tbActions);
+    this->addToolBar (tbCalc);
+    this->addToolBar (tbOthers);
 }
 
 void RadMainWindow :: slotTest1 (void)
@@ -1135,6 +1160,21 @@ void RadMainWindow :: slotSetings (void)
 }
 
 void RadMainWindow :: slotHelp (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+}
+
+void RadMainWindow :: slot3DMod (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+}
+
+void RadMainWindow :: slot3DView (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+}
+
+void RadMainWindow :: slotBinariRLI (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
 }
