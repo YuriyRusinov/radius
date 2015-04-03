@@ -36,6 +36,7 @@
 #include <radapplication.h>
 #include <RadSettings.h>
 #include <radMdiArea.h>
+#include <assistant.h>
 
 #include <complex>
 #include <math.h>
@@ -56,6 +57,7 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     : QMainWindow (parent, flags),
     UI (new Ui::Rad_Main_Window),
     m_mdiArea (0),//new QMdiArea (this)),
+    ass (new Assistant),
     tbActions (new QToolBar (this)),
     tbCalc (new QToolBar (this)),
     tbOthers (new QToolBar (this)),
@@ -90,6 +92,7 @@ RadMainWindow :: ~RadMainWindow (void)
     if (stc4)
         delete [] stc4;
 */
+    delete ass;
 }
 
 void RadMainWindow :: openDataFile (void)
@@ -223,6 +226,8 @@ void RadMainWindow :: init (void)
     //actHelp->setIcon (QIcon (":/radius/help.png"));
 
     actHelpRad = menuHelp->addAction (QIcon(":/radius/help-icon.png"), tr("User Manual"));
+    QKeySequence keyHelp (tr("F1", "Help"));
+    actHelpRad->setShortcut (keyHelp);
     connect (actHelpRad, SIGNAL (triggered()), this, SLOT (slotHelp()) );
 }
 
@@ -1162,6 +1167,7 @@ void RadMainWindow :: slotSetings (void)
 void RadMainWindow :: slotHelp (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+    ass->showDocumentation ("index.html");
 }
 
 void RadMainWindow :: slot3DMod (void)

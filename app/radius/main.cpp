@@ -28,7 +28,7 @@ int main (int argc, char * argv[])
                                      transl_path);
         rSettings->beginGroup (QString("System settings/") + rAppNameEng);
     }
-    
+
     transl_path = rSettings->getParam("Translators_path");
 
     rSettings->endGroup();

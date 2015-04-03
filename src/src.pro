@@ -44,6 +44,7 @@ HEADERS += fft_c.h \
            ConvAzimuthThread.h \
            radapplication.h \
            RadSettings.h \
+           assistant.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -56,7 +57,8 @@ SOURCES += fft_c.cpp \
            ConvAzimuthPhys.cpp \
            ConvAzimuthThread.cpp \
            radapplication.cpp \
-           RadSettings.cpp
+           RadSettings.cpp \
+           assistant.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
@@ -68,8 +70,12 @@ headers.files += \
                  radarConvIm.h \
                  ConvDistPhys.h \
                  ConvDistThread.h \
+                 ConvDistColumnThread.h \
                  ConvAzimuthPhys.h \
                  ConvAzimuthThread.h \
+                 radapplication.h \
+                 RadSettings.h \
+                 assistant.h \
                  src_config.h
 
 headers.path = $$RAD_INCLUDE_DIR
