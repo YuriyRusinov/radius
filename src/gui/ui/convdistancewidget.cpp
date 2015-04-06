@@ -22,6 +22,7 @@ ConvDistanceWidget :: ConvDistanceWidget (QWidget * parent, Qt::WindowFlags flag
     UI (new Ui::conv_distance_widget)
 {
     UI->setupUi (this);
+    this->setWindowIcon (QIcon(":/radius/dcconv.png"));
     this->init();
 
     connect (UI->lELightSpeed, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
@@ -107,6 +108,9 @@ void ConvDistanceWidget :: init (void)
     }
     UI->lERggFileName->setText (fRGGName);
     UI->lEConvDistFileName->setText (fConvName);
+    UI->tbRggFileName->setIcon (QIcon (":/radius/open.png"));
+    UI->tbConvDFileName->setIcon (QIcon (":/radius/save.png"));
+
     QValidator * calVal = new QIntValidator (this);
     UI->lECalibration->setValidator (calVal);
     UI->lECalibration->setText (QString::number (20000));

@@ -22,6 +22,7 @@ ConvAzimuthWidget :: ConvAzimuthWidget (QWidget * parent, Qt::WindowFlags flags)
     UI (new Ui::conv_azimuth_widget)
 {
     UI->setupUi (this);
+    this->setWindowIcon (QIcon(":/radius/dcconv.png"));
     this->init();
 
     connect (UI->lELightSpeed, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
@@ -173,6 +174,9 @@ void ConvAzimuthWidget :: init (void)
     }
     UI->lERggFileName->setText (fConvName);
     UI->lEConvDistFileName->setText (fImageName);
+    UI->tbRggFileName->setIcon (QIcon (":/radius/open.png"));
+    UI->tbConvDFileName->setIcon (QIcon (":/radius/save.png"));
+
     QValidator * calVal = new QIntValidator (this);
     UI->lECalibration->setValidator (calVal);
     UI->lECalibration->setText (QString::number (1));

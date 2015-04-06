@@ -15,5 +15,7 @@
     <file>antenna_128.png</file>
     <file>binary.png</file>
     <file>galaxy3d.png</file>
+    <file>convFFT.png</file>
+    <file alias="dcconv.png">dcconv5.png</file>
   </qresource>
 </RCC>
