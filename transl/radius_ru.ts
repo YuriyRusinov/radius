@@ -836,7 +836,7 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="251"/>
         <source>Computing parameters</source>
-        <translation>Параетры вычислений</translation>
+        <translation>Параметры вычислений</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="257"/>
