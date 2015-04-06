@@ -7,11 +7,14 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDir>
+#include <QCoreApplication>
 #include <QtDebug>
 
 #include "constants1.h"
 #include "ConvAzimuthPhys.h"
 #include "convazimuthwidget.h"
+#include "radapplication.h"
+#include "RadSettings.h"
 #include "ui_conv_azimuth_widget.h"
 
 ConvAzimuthWidget :: ConvAzimuthWidget (QWidget * parent, Qt::WindowFlags flags)
@@ -75,6 +78,18 @@ void ConvAzimuthWidget :: startConv (void)
     double off = UI->lEOffset->text().toDouble();
     Qt::CheckState chLog = UI->chLogarithm->checkState ();
     bool isLog = (chLog == Qt::Checked);
+    QCoreApplication * app = QCoreApplication::instance ();
+    if (qobject_cast<RadApplication *>(app))
+    {
+        RadiusSettings * rSettings = qobject_cast<RadApplication *>(app)->getRadSettings ();
+        if (rSettings)
+        {
+            rSettings->beginGroup ("System settings");
+            rSettings->writeSettings ("radius", "Convolution file", fName);
+            rSettings->writeSettings ("radius", "Image file", fConvName);
+            rSettings->endGroup();
+        }
+    }
     ConvAzimuthPhysParameters * cParams = new ConvAzimuthPhysParameters (nfft, ndc, ndim, nshift, c, r, h, bw, dnr, dimp, aStep, alamb, fName, fConvName, nCal, sc, off, isLog);
     emit sendParameters (cParams);
 }
@@ -142,6 +157,22 @@ void ConvAzimuthWidget :: calcNumbImp (const QString& text)
 
 void ConvAzimuthWidget :: init (void)
 {
+    QString fConvName = QString ();
+    QString fImageName =  QString ();
+    QCoreApplication * app = QCoreApplication::instance ();
+    if (qobject_cast<RadApplication *>(app))
+    {
+        RadiusSettings * rSettings = qobject_cast<RadApplication *>(app)->getRadSettings ();
+        if (rSettings)
+        {
+            rSettings->beginGroup ("System settings/radius");
+            fConvName = rSettings->getParam ("Convolution file");
+            fImageName = rSettings->getParam ("Image file");
+            rSettings->endGroup();
+        }
+    }
+    UI->lERggFileName->setText (fConvName);
+    UI->lEConvDistFileName->setText (fImageName);
     QValidator * calVal = new QIntValidator (this);
     UI->lECalibration->setValidator (calVal);
     UI->lECalibration->setText (QString::number (1));
@@ -205,7 +236,7 @@ void ConvAzimuthWidget :: init (void)
     UI->lEOffset->setValidator (dOffsetVal);
     UI->lEOffset->setText (QString::number (0.0, 'f', 5));
 
-    UI->pbStart->setEnabled (false);
+    UI->pbStart->setEnabled (!fConvName.isEmpty());
 }
 
 void ConvAzimuthWidget :: closeEvent(QCloseEvent *event)

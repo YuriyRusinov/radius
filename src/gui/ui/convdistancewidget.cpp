@@ -7,11 +7,14 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDir>
+#include <QCoreApplication>
 #include <QtDebug>
 
 #include "ConvDistPhys.h"
 #include "constants1.h"
 #include "convdistancewidget.h"
+#include "radapplication.h"
+#include "RadSettings.h"
 #include "ui_conv_distance_widget.h"
 
 ConvDistanceWidget :: ConvDistanceWidget (QWidget * parent, Qt::WindowFlags flags)
@@ -65,17 +68,45 @@ void ConvDistanceWidget :: startConv (void)
     double bw = UI->lEBandwidth->text().toDouble();
     double dnr = UI->lEDistanceStep->text().toDouble();
     double dimp = UI->lEImpulseDuration->text().toDouble()*0.1e-5;
-    QString fName = UI->lERggFileName->text();
+    QString fRGGName = UI->lERggFileName->text();
     QString fConvName = UI->lEConvDistFileName->text();
     int nCal = UI->lECalibration->text().toInt();
     int nThr = UI->lEFFTThreads->text().toInt();
-    ConvDistPhysParameters * cParams = new ConvDistPhysParameters (ndn, nch, cl, bw, dnr, dimp, fName, fConvName, nCal, nThr);
+    QCoreApplication * app = QCoreApplication::instance ();
+    if (qobject_cast<RadApplication *>(app))
+    {
+        RadiusSettings * rSettings = qobject_cast<RadApplication *>(app)->getRadSettings ();
+        if (rSettings)
+        {
+            rSettings->beginGroup ("System settings");
+            rSettings->writeSettings ("radius", "RGG file", fRGGName);
+            rSettings->writeSettings ("radius", "Convolution file", fConvName);
+            rSettings->endGroup();
+        }
+    }
+    ConvDistPhysParameters * cParams = new ConvDistPhysParameters (ndn, nch, cl, bw, dnr, dimp, fRGGName, fConvName, nCal, nThr);
     qDebug () << __PRETTY_FUNCTION__ << cParams;
     emit setParams (cParams);
 }
 
 void ConvDistanceWidget :: init (void)
 {
+    QString fRGGName = QString ();
+    QString fConvName = QString ();
+    QCoreApplication * app = QCoreApplication::instance ();
+    if (qobject_cast<RadApplication *>(app))
+    {
+        RadiusSettings * rSettings = qobject_cast<RadApplication *>(app)->getRadSettings ();
+        if (rSettings)
+        {
+            rSettings->beginGroup ("System settings/radius");
+            fRGGName = rSettings->getParam ("RGG file");
+            fConvName = rSettings->getParam ("Convolution file");
+            rSettings->endGroup();
+        }
+    }
+    UI->lERggFileName->setText (fRGGName);
+    UI->lEConvDistFileName->setText (fConvName);
     QValidator * calVal = new QIntValidator (this);
     UI->lECalibration->setValidator (calVal);
     UI->lECalibration->setText (QString::number (20000));

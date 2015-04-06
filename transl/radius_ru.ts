@@ -657,7 +657,7 @@
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="144"/>
         <source>Logarithm compression</source>
-        <translation>Логарифическое сжатие</translation>
+        <translation>Логарифмическое сжатие</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="191"/>
