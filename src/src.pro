@@ -3,6 +3,8 @@ TARGET = fft_matrix
 
 CONFIG += qt
 
+QT += opengl
+
 DESTDIR = ../bin
 
 include (../radius.conf)
@@ -26,11 +28,13 @@ win32{
 INCLUDEPATH *= . \
                gui \
                gui/ui \
+               gui/OpenGl \
                misc
 
 DEPENDPATH *= . \
                gui \
                gui/ui \
+               gui/OpenGl \
                misc
 
 HEADERS += fft_c.h \

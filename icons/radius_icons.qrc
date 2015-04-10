@@ -17,5 +17,6 @@
     <file>galaxy3d.png</file>
     <file>convFFT.png</file>
     <file alias="dcconv.png">dcconv5.png</file>
+    <file>quit.png</file>
   </qresource>
 </RCC>

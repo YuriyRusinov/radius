@@ -37,6 +37,7 @@
 #include <RadSettings.h>
 #include <radMdiArea.h>
 #include <assistant.h>
+#include <window.h>
 
 #include <complex>
 #include <math.h>
@@ -162,7 +163,7 @@ void RadMainWindow :: init (void)
 
     menuFile->addSeparator ();
     actQuit = menuFile->addAction (tr("&Quit"));
-    actQuit->setIcon (QIcon(":/radius/exit.png"));
+    actQuit->setIcon (QIcon(":/radius/quit.png"));
     QKeySequence keyQuit (tr("Ctrl+Q", "File|Quit"));
     actQuit->setShortcut (keyQuit);
     connect (actQuit, SIGNAL (triggered()), this, SLOT (close()) );
@@ -1178,6 +1179,13 @@ void RadMainWindow :: slot3DMod (void)
 void RadMainWindow :: slot3DView (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+    QString filter (tr("Object files (*.obj);;All files(*);"));
+    QString objFileName = QFileDialog::getOpenFileName (this, tr("Select source file"), QDir::currentPath(), filter);
+    if (objFileName.isEmpty())
+        return;
+
+    QWidget * w = new Window (objFileName);
+    addWidget (w);
 }
 
 void RadMainWindow :: slotBinariRLI (void)

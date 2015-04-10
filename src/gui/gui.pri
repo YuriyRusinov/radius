@@ -6,7 +6,12 @@ HEADERS += gui/radDataWidget.h \
            gui/ui/convdistancewidget.h \
            gui/ui/convazimuthwidget.h \
            gui/ui/savesettingsform.h \
-           gui/ui/editsettingsform.h
+           gui/ui/editsettingsform.h \
+           gui/OpenGl/window.h \
+           gui/OpenGl/glwidget.h \
+           gui/OpenGl/qtlogo.h \
+           gui/OpenGl/object.h \
+           gui/OpenGl/objloader.h
 
 FORMS += gui/ui/fft_time_widget.ui \
          gui/ui/conv_distance_widget.ui \
@@ -23,7 +28,12 @@ SOURCES += gui/radDataWidget.cpp \
            gui/ui/convdistancewidget.cpp \
            gui/ui/convazimuthwidget.cpp \
            gui/ui/savesettingsform.cpp \
-           gui/ui/editsettingsform.cpp
+           gui/ui/editsettingsform.cpp \
+           gui/OpenGl/window.cpp \
+           gui/OpenGl/glwidget.cpp \
+           gui/OpenGl/qtlogo.cpp \
+           gui/OpenGl/object.cpp \
+           gui/OpenGl/objloader.cpp
 
 headers.files += gui/radDataWidget.h \
                  gui/radTableWidget.h \
@@ -32,4 +42,10 @@ headers.files += gui/radDataWidget.h \
                  gui/ui/ffttimewidget.h \
                  gui/ui/convdistancewidget.h \
                  gui/ui/convazimuthwidget.h \
-                 gui/ui/savesettingsform.h
+                 gui/ui/savesettingsform.h \
+                 gui/OpenGl/window.h \
+                 gui/OpenGl/glwidget.h \
+                 gui/OpenGl/qtlogo.h \
+                 gui/OpenGl/object.h \
+                 gui/OpenGl/objloader.h
+
