@@ -66,6 +66,7 @@ SOURCES += fft_c.cpp \
 
 include (gui/gui.pri)
 include (misc/misc.pri)
+include (gologram/gologram.pri)
 
 headers.files += \
                  fft_c.h \

@@ -39,6 +39,9 @@
 #include <assert.h>
 
 #if defined( WIN32 )
+    #include <windows.h>
+    #pragma warning (disable:4251)
+    #pragma warning (disable:4530)
     #if defined( _FFTMATR_DLL_ )
         #define _FFTMATR_EXPORT_ __declspec(dllexport)
     #else
