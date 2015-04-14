@@ -35,7 +35,7 @@ QVariant GolographicModel :: data (const QModelIndex &index, int role) const
         if (index.column() == 0)
             return tr("Azimuth is %1").arg(rGol.XY_angle);
         else if (index.column() == 1)
-            return tr("Obliquity is %2").arg (rGol.XZ_angle);
+            return tr("Obliquity is %1").arg (rGol.XZ_angle);
         else
             return QVariant();
     }
