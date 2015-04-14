@@ -92,13 +92,13 @@ void swap_STDtoQT_vector(QVector<unsigned char>& lhs,std::vector<unsigned char>&
     }
 }
 
-QVector<returningData> generateImages(const generatingData &data, mslLoader::OBJloader &loader, const std::string &folder)
+QVector<golographicData> generateImages(const generatingData &data, mslLoader::OBJloader &loader, const std::string &folder)
 {
     cubPair cubs = buildCub(loader,data.lengthOfShip,data.numberOfUnit);
     std::vector<Cuboid> cubusCubus;
     Cuboid cubBig;
 
-    QVector<returningData> imagesData;
+    QVector<golographicData> imagesData;
 
     for(double XY_plane = data.XY_angleMin; XY_plane < data.XY_angleMax; XY_plane += data.XY_angleStep)
     {
@@ -123,7 +123,7 @@ QVector<returningData> generateImages(const generatingData &data, mslLoader::OBJ
 
             unsigned int imageSize = static_cast<unsigned int>(sqrt(static_cast<double>(image.size())));
 
-            returningData buf;
+            golographicData buf;
             buf.XY_angle = static_cast<unsigned int>(XY_plane);
             buf.XZ_angle = static_cast<unsigned int>(XZ_plane);
             buf.rowNumber = buf.columnNumber = imageSize;
@@ -159,7 +159,7 @@ void ImageGenerator::loadModel()
     loader.load(imageData.filename.toStdString());
 }
 
-QVector<returningData> ImageGenerator::generateImages()
+QVector<golographicData> ImageGenerator::generateImages()
 {
     int imagesNum = ((imageData.data.XY_angleMax - imageData.data.XY_angleMin)/imageData.data.XY_angleStep) *
             ((imageData.data.XZ_angleMax - imageData.data.XZ_angleMin)/imageData.data.XZ_angleStep - 1);
@@ -172,13 +172,13 @@ QVector<returningData> ImageGenerator::generateImages()
     if (progressD->wasCanceled())
     {
         delete progressD;
-        return QVector<returningData>();//imagesData;
+        return QVector<golographicData>();//imagesData;
     }
     cubPair cubs = buildCub(loader,imageData.data.lengthOfShip,imageData.data.numberOfUnit);
     std::vector<Cuboid> cubusCubus;
     Cuboid cubBig;
 
-    QVector<returningData> imagesData;
+    QVector<golographicData> imagesData;
 
     int value = 0;
     if (progressD->wasCanceled())
@@ -239,7 +239,7 @@ QVector<returningData> ImageGenerator::generateImages()
 
             unsigned int imageSize = static_cast<unsigned int>(sqrt(static_cast<double>(image.size())));
 
-            returningData buf;
+            golographicData buf;
             buf.XY_angle = static_cast<unsigned int>(XY_plane);
             buf.XZ_angle = static_cast<unsigned int>(XZ_plane);
             buf.rowNumber = buf.columnNumber = imageSize;

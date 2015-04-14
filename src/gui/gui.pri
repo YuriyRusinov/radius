@@ -11,14 +11,16 @@ HEADERS += gui/radDataWidget.h \
            gui/OpenGl/glwidget.h \
            gui/OpenGl/qtlogo.h \
            gui/OpenGl/object.h \
-           gui/OpenGl/objloader.h
+           gui/OpenGl/objloader.h \
+           gui/golographicModel.h \
+           gui/golographicWidget.h \
+           gui/golographicDelegate.h
 
 FORMS += gui/ui/fft_time_widget.ui \
          gui/ui/conv_distance_widget.ui \
          gui/ui/conv_azimuth_widget.ui \
          gui/ui/save_settings_form.ui \
          gui/ui/edit_settings_form.ui
-
 
 SOURCES += gui/radDataWidget.cpp \
            gui/radTableWidget.cpp \
@@ -33,7 +35,10 @@ SOURCES += gui/radDataWidget.cpp \
            gui/OpenGl/glwidget.cpp \
            gui/OpenGl/qtlogo.cpp \
            gui/OpenGl/object.cpp \
-           gui/OpenGl/objloader.cpp
+           gui/OpenGl/objloader.cpp \
+           gui/golographicModel.cpp \
+           gui/golographicWidget.cpp \
+           gui/golographicDelegate.cpp
 
 headers.files += gui/radDataWidget.h \
                  gui/radTableWidget.h \
@@ -47,5 +52,8 @@ headers.files += gui/radDataWidget.h \
                  gui/OpenGl/glwidget.h \
                  gui/OpenGl/qtlogo.h \
                  gui/OpenGl/object.h \
-                 gui/OpenGl/objloader.h
+                 gui/OpenGl/objloader.h \
+                 gui/golographicModel.h \
+                 gui/golographicWidget.h \
+                 gui/golographicDelegate.h
 

@@ -4,12 +4,14 @@
 #include <QMainWindow>
 
 #include <complex>
+#include <gologramma.h>
 
 class QMdiArea;
 class QAction;
 class QToolBar;
 class QMenu;
 class Assistant;
+class generatingDataPlus;
 
 namespace Ui
 {
@@ -42,6 +44,7 @@ private slots:
     void slotBinariRLI (void);
 
     void slotSetings (void);
+    void slotGologramCalc (generatingDataPlus gdp);
 
     void addWidget (QWidget * w);
     void slotHelp (void);

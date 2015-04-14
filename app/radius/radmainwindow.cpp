@@ -48,6 +48,9 @@
 #include <fft_c.h>
 #include <calcim.h>
 #include <radarConvIm.h>
+#include <imagecreatorform.h>
+#include <golographicModel.h>
+#include <golographicWidget.h>
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -1174,6 +1177,23 @@ void RadMainWindow :: slotHelp (void)
 void RadMainWindow :: slot3DMod (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+    imageCreatorForm * icf = new imageCreatorForm (this);
+    connect (icf, SIGNAL (imagesData(generatingDataPlus)), this, SLOT (slotGologramCalc(generatingDataPlus)) );
+    icf->exec();
+}
+
+void RadMainWindow :: slotGologramCalc (generatingDataPlus gdp)
+{
+    ImageGenerator* generator = new ImageGenerator(gdp,this);
+    generator->loadModel();
+    QVector<golographicData> resD = generator->generateImages();
+    delete generator;
+
+    QAbstractItemModel * gMod = new GolographicModel (resD);
+    QWidget * w = new GolographicWidget;
+    w->setWindowTitle (tr("Golographic images"));
+    qobject_cast<GolographicWidget *>(w)->setModel (gMod);
+    addWidget (w);
 }
 
 void RadMainWindow :: slot3DView (void)

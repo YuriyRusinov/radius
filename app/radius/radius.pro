@@ -31,12 +31,14 @@ INCLUDEPATH *= ../../src \
                ../../src/gui \
                ../../src/gui/ui \
                ../../src/gui/OpenGl \
+               ../../src/gologram \
                ../../src/misc
 
 DEPENDPATH *= ../../src \
                ../../src/gui \
                ../../src/gui/ui \
                ../../src/gui/OpenGl \
+               ../../src/gologram \
                ../../src/misc
 
 LIBS += -L$$DESTDIR -lfft_matrix

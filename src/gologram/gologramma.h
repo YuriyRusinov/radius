@@ -45,7 +45,7 @@ struct _FFTMATR_EXPORT_ generatingData
     double XZ_angleStep;
 };
 
-struct _FFTMATR_EXPORT_ returningData
+struct _FFTMATR_EXPORT_ golographicData
 {
     unsigned int XY_angle;
     unsigned int XZ_angle;
@@ -64,7 +64,7 @@ struct _FFTMATR_EXPORT_ generatingDataPlus
     generatingData data;
 };
 
-QVector<returningData> _FFTMATR_EXPORT_ generateImages(const generatingData &data,mslLoader::OBJloader &loader,const std::string &folder);
+QVector<golographicData> _FFTMATR_EXPORT_ generateImages(const generatingData &data,mslLoader::OBJloader &loader,const std::string &folder);
 
 class _FFTMATR_EXPORT_ ImageGenerator: public QObject
 {
@@ -74,10 +74,10 @@ public:
     explicit ImageGenerator(const generatingDataPlus&,QObject* parent = 0);
 
     void loadModel();
-    QVector<returningData> generateImages();
+    QVector<golographicData> generateImages();
 
 private slots:
-	void prCancel (void);
+    void prCancel (void);
 
 private:
     generatingDataPlus imageData;

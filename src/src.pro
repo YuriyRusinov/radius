@@ -29,12 +29,14 @@ INCLUDEPATH *= . \
                gui \
                gui/ui \
                gui/OpenGl \
+               gologram \
                misc
 
 DEPENDPATH *= . \
                gui \
                gui/ui \
                gui/OpenGl \
+               gologram \
                misc
 
 HEADERS += fft_c.h \
