@@ -38,6 +38,7 @@
 #include <radMdiArea.h>
 #include <assistant.h>
 #include <window.h>
+#include <xform.h>
 
 #include <complex>
 #include <math.h>
@@ -107,6 +108,11 @@ void RadMainWindow :: openDataFile (void)
     if (fileName.isEmpty())
         return;
 
+    XFormWidget * xformWidget = new XFormWidget(0);
+    QStyle *arthurStyle = new ArthurStyle();
+    xformWidget->setStyle(arthurStyle);
+    xformWidget->setFile(fileName);
+    this->addWidget (xformWidget);
 //    actCalc1->setEnabled (true);
 }
 

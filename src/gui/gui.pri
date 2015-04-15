@@ -14,7 +14,10 @@ HEADERS += gui/radDataWidget.h \
            gui/OpenGl/objloader.h \
            gui/golographicModel.h \
            gui/golographicWidget.h \
-           gui/golographicDelegate.h
+           gui/golographicDelegate.h \
+           gui/arthurwidgets.h \
+           gui/arthurstyle.h \
+           gui/xform.h
 
 FORMS += gui/ui/fft_time_widget.ui \
          gui/ui/conv_distance_widget.ui \
@@ -38,7 +41,10 @@ SOURCES += gui/radDataWidget.cpp \
            gui/OpenGl/objloader.cpp \
            gui/golographicModel.cpp \
            gui/golographicWidget.cpp \
-           gui/golographicDelegate.cpp
+           gui/golographicDelegate.cpp \
+           gui/arthurwidgets.cpp \
+           gui/arthurstyle.cpp \
+           gui/xform.cpp
 
 headers.files += gui/radDataWidget.h \
                  gui/radTableWidget.h \
@@ -55,5 +61,9 @@ headers.files += gui/radDataWidget.h \
                  gui/OpenGl/objloader.h \
                  gui/golographicModel.h \
                  gui/golographicWidget.h \
-                 gui/golographicDelegate.h
+                 gui/golographicDelegate.h \
+                 gui/authorwidgets.h \
+                 gui/authorstyle.h \
+                 gui/xform.h
 
+RESOURCES += shared.qrc
