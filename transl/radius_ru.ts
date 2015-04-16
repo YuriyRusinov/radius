@@ -513,7 +513,7 @@
     <message>
         <location filename="../src/gui/xform.cpp" line="998"/>
         <source>Transformations</source>
-        <translation>Преобраования</translation>
+        <translation>Преобразования</translation>
     </message>
     <message>
         <location filename="../src/gui/xform.cpp" line="1001"/>

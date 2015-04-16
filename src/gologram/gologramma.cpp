@@ -186,7 +186,7 @@ QVector<golographicData> ImageGenerator::generateImages()
         delete progressD;
         return imagesData;
     }
-    for(double XY_plane = imageData.data.XY_angleMin; XY_plane < imageData.data.XY_angleMax; XY_plane += imageData.data.XY_angleStep)
+    for(double XY_plane = imageData.data.XY_angleMin; XY_plane <= imageData.data.XY_angleMax; XY_plane += imageData.data.XY_angleStep)
     {
         //progressD->update();
 		
