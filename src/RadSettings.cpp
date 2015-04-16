@@ -53,7 +53,7 @@ void RadiusSettings :: readSettings ( void )
         this->beginGroup ( groups[i] );
         if (this->childGroups ().count () > 0)
         {
-            qDebug () << __PRETTY_FUNCTION__ << QString ("Sub group");
+//            qDebug () << __PRETTY_FUNCTION__ << QString ("Sub group");
             readSettings ();
         }
         this->endGroup ();

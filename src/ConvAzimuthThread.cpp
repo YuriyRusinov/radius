@@ -319,4 +319,5 @@ void ConvAzimuthThread :: run (void)
     //fftWidget->show();
     //subFFTW->setAttribute (Qt::WA_DeleteOnClose);
     delete fftTime;
+//    exec ();
 }

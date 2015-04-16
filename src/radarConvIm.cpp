@@ -1,4 +1,5 @@
 #include <QImage>
+#include <QThread>
 #include <QtDebug>
 
 #include <radDataWidget.h>
@@ -27,6 +28,7 @@ RadarImageProc::RadarImageProc (QObject * parent)
     : QObject (parent)
 {
     instance = this;
+    qDebug () << __PRETTY_FUNCTION__ << QThread::idealThreadCount();
 }
 
 RadarImageProc::RadarImageProc (const RadarImageProc&)
@@ -92,8 +94,8 @@ void RadarImageProc::receiveImage (QImage * im)
 
 void RadarImageProc::convFinished (void)
 {
-    qDebug () << __PRETTY_FUNCTION__;
     QThread * thr = qobject_cast<QThread*>(sender());
+    qDebug () << __PRETTY_FUNCTION__ << thr->isFinished ();
     thr->quit ();
     delete thr;//thr->deleteLater();
 }

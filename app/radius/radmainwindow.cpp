@@ -24,6 +24,8 @@
 #include <QMessageBox>
 #include <QToolBar>
 #include <QBrush>
+#include <QThread>
+#include <QThreadPool>
 #include <QCoreApplication>
 
 #include <radDataWidget.h>
@@ -145,6 +147,10 @@ void RadMainWindow :: init (void)
 "	spacing:       3px; "
 "}" );
 */
+    RadarImageProc * rdConv = RadarImageProc::getRadarImage();
+    if (!rdConv)
+        return;
+    connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
     m_mdiArea->update();
     actFileMenu = UI->menuBar->addMenu (menuFile);//QIcon(":/radius/image.png"), tr ("&Images tools"));
@@ -1133,7 +1139,6 @@ void RadMainWindow :: initConvDist (void)
     RadarImageProc * rdConv = RadarImageProc::getRadarImage();
     if (!rdConv)
         return;
-    connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     ConvDistanceWidget * cW = rdConv->getCDistWidget();
     QMdiSubWindow * subCW = m_mdiArea->addSubWindow (cW);
     cW->show();
@@ -1145,7 +1150,6 @@ void RadMainWindow :: initConvAz (void)
     RadarImageProc * rdConv = RadarImageProc::getRadarImage();
     if (!rdConv)
         return;
-    connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     ConvAzimuthWidget * cW = rdConv->getCAzWidget();
     QMdiSubWindow * subCW = m_mdiArea->addSubWindow (cW);
     cW->show();
@@ -1154,10 +1158,10 @@ void RadMainWindow :: initConvAz (void)
 
 void RadMainWindow :: addWidget (QWidget * w)
 {
-    qDebug () << __PRETTY_FUNCTION__ << w;
+    qDebug () << __PRETTY_FUNCTION__ << w << QThreadPool::globalInstance()->activeThreadCount ();
     if (!w)
         return;
-    QMdiSubWindow * m_subW = m_mdiArea->addSubWindow (w);
+    QMdiSubWindow * m_subW = m_mdiArea->addSubWindow (w, Qt::Window);
     w->show();
     m_subW->setAttribute (Qt::WA_DeleteOnClose);
 }
