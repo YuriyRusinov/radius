@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QCoreApplication>
+#include <QThread>
 #include <QtDebug>
 
 #include "ConvDistPhys.h"
@@ -82,6 +83,7 @@ void ConvDistanceWidget :: startConv (void)
             rSettings->beginGroup ("System settings");
             rSettings->writeSettings ("radius", "RGG file", fRGGName);
             rSettings->writeSettings ("radius", "Convolution file", fConvName);
+            rSettings->writeSettings ("radius", "FFT Threads", QString::number (nThr));
             rSettings->endGroup();
         }
     }
@@ -95,9 +97,10 @@ void ConvDistanceWidget :: init (void)
     QString fRGGName = QString ();
     QString fConvName = QString ();
     QCoreApplication * app = QCoreApplication::instance ();
+    RadiusSettings * rSettings = 0;//qobject_cast<RadApplication *>(app)->getRadSettings ();
     if (qobject_cast<RadApplication *>(app))
     {
-        RadiusSettings * rSettings = qobject_cast<RadApplication *>(app)->getRadSettings ();
+        rSettings = qobject_cast<RadApplication *>(app)->getRadSettings ();
         if (rSettings)
         {
             rSettings->beginGroup ("System settings/radius");
@@ -145,7 +148,16 @@ void ConvDistanceWidget :: init (void)
 
     QValidator * fftVal = new QIntValidator (1, 100, this);
     UI->lEFFTThreads->setValidator (fftVal);
-    UI->lEFFTThreads->setText (QString::number (1));
+    int nthreads = 1;
+    if (rSettings)
+    {
+        rSettings->beginGroup ("System settings/radius");
+        nthreads = rSettings->getParam ("FFT Threads").toInt();
+    }
+    else
+        nthreads = QThread::idealThreadCount ();
+    UI->lEFFTThreads->setText (QString::number (nthreads));
+    UI->lEFFTThreads->setToolTip (tr("Number of FFT threads"));
 
 //    UI->pbStart->setEnabled (true);
 }
