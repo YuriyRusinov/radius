@@ -152,7 +152,8 @@ void ConvDistanceWidget :: init (void)
     if (rSettings)
     {
         rSettings->beginGroup ("System settings/radius");
-        nthreads = rSettings->getParam ("FFT Threads").toInt();
+        nthreads = qMax (rSettings->getParam ("FFT Threads").toInt(), 1);
+        rSettings->endGroup();
     }
     else
         nthreads = QThread::idealThreadCount ();
