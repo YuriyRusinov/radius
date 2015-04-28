@@ -48,6 +48,7 @@ private slots:
 
     void addWidget (QWidget * w);
     void slotHelp (void);
+    void viewImages (const QVector<golographicData>& r);
 
 private:
     //

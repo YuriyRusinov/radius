@@ -19,7 +19,7 @@ imageCreatorForm::~imageCreatorForm()
 
 void imageCreatorForm::formInit()
 {
-    connect(ui->exitButton,SIGNAL(clicked()),this,SLOT(close()));
+    connect(ui->exitButton,SIGNAL(clicked()),this,SLOT(reject()));
     connect(ui->selectFolder,SIGNAL(clicked()),this,SLOT(selectFileName()));
     connect(ui->startButton,SIGNAL(clicked()),this,SLOT(build()));
 

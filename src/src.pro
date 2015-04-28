@@ -53,6 +53,7 @@ HEADERS += fft_c.h \
            assistant.h \
            hoverpoints.h \
            ImageGolographicThread.h \
+           ImageGeneratorObject.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -68,7 +69,8 @@ SOURCES += fft_c.cpp \
            RadSettings.cpp \
            assistant.cpp \
            hoverpoints.cpp \
-           ImageGolographicThread.cpp
+           ImageGolographicThread.cpp \
+           ImageGeneratorObject.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
@@ -89,6 +91,7 @@ headers.files += \
                  assistant.h \
                  hoverpoints.h \
                  ImageGolographicThread.h \
+                 ImageGeneratorObject.h \
                  src_config.h
 
 headers.path = $$RAD_INCLUDE_DIR

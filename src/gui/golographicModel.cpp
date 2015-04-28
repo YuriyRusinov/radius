@@ -33,9 +33,9 @@ QVariant GolographicModel :: data (const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
     {
         if (index.column() == 0)
-            return tr("Azimuth is %1").arg(rGol.XY_angle);
+            return tr("%1").arg(rGol.XY_angle);
         else if (index.column() == 1)
-            return tr("Obliquity is %1").arg (rGol.XZ_angle);
+            return tr("%1").arg (rGol.XZ_angle);
         else
             return QVariant();
     }
@@ -72,10 +72,10 @@ QVariant GolographicModel :: headerData (int section, Qt::Orientation orientatio
     if (orientation == Qt::Horizontal) {
         switch (section) {
             case 0:
-                return tr("Azimuth");
+                return tr("Azimuth,\n degrees");
 
             case 1:
-                return tr("Obliquity");
+                return tr("Obliquity,\n degrees");
 
             case 2:
                 return tr("Image of ship");

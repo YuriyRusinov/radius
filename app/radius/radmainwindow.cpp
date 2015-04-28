@@ -37,6 +37,7 @@
 #include <constants1.h>
 #include <radapplication.h>
 #include <RadSettings.h>
+#include <ImageGeneratorObject.h>
 #include <radMdiArea.h>
 #include <assistant.h>
 #include <window.h>
@@ -151,6 +152,8 @@ void RadMainWindow :: init (void)
     if (!rdConv)
         return;
     connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
+    ImageGolographicObject * m_ImageObject = rdConv->getImageGolographic ();
+    connect (m_ImageObject, SIGNAL (viewImages (const QVector<golographicData>&)), this, SLOT (viewImages (const QVector<golographicData>&)) );
     m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
     m_mdiArea->update();
     actFileMenu = UI->menuBar->addMenu (menuFile);//QIcon(":/radius/image.png"), tr ("&Images tools"));
@@ -1187,18 +1190,36 @@ void RadMainWindow :: slotHelp (void)
 void RadMainWindow :: slot3DMod (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    imageCreatorForm * icf = new imageCreatorForm (this);
+    imageCreatorForm * icf = new imageCreatorForm (0);
     connect (icf, SIGNAL (imagesData(generatingDataPlus)), this, SLOT (slotGologramCalc(generatingDataPlus)) );
-    icf->exec();
+    QMdiSubWindow * subCW = m_mdiArea->addSubWindow (icf);
+    connect (icf, SIGNAL (rejected()), subCW, SLOT (close()) );
+    icf->show();
+    subCW->setAttribute (Qt::WA_DeleteOnClose);
+    //icf->exec();
 }
 
 void RadMainWindow :: slotGologramCalc (generatingDataPlus gdp)
 {
-    ImageGenerator* generator = new ImageGenerator(gdp,this);
+/*    ImageGenerator* generator = new ImageGenerator(gdp,this);
     generator->loadModel();
     QVector<golographicData> resD = generator->generateImages();
     delete generator;
+*/
+    RadarImageProc * rdConv = RadarImageProc::getRadarImage();
+    ImageGolographicObject * m_ImageObject = rdConv->getImageGolographic ();
+    m_ImageObject->generateImages (gdp);
+/*    QVector<golographicData> resD = m_ImageObject->getImages ();
+    QAbstractItemModel * gMod = new GolographicModel (resD);
+    QWidget * w = new GolographicWidget;
+    w->setWindowTitle (tr("Golographic images"));
+    qobject_cast<GolographicWidget *>(w)->setModel (gMod);
+    addWidget (w);
+*/
+}
 
+void RadMainWindow :: viewImages (const QVector<golographicData>& resD)
+{
     QAbstractItemModel * gMod = new GolographicModel (resD);
     QWidget * w = new GolographicWidget;
     w->setWindowTitle (tr("Golographic images"));

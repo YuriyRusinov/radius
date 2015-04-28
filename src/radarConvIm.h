@@ -13,6 +13,7 @@ class ConvDistanceWidget;
 class ConvDistPhysParameters;
 class ConvAzimuthWidget;
 class ConvAzimuthPhysParameters;
+class ImageGolographicObject;
 
 using std::complex;
 
@@ -22,6 +23,7 @@ public:
     static RadarImageProc * getRadarImage (QObject * parent=0);
     ConvDistanceWidget * getCDistWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
     ConvAzimuthWidget * getCAzWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
+    ImageGolographicObject * getImageGolographic (void);
 
 public slots:
     void procConvDist (ConvDistPhysParameters * cParams);
@@ -51,6 +53,7 @@ private:
     // Variables
     //
     static RadarImageProc * instance;
+    ImageGolographicObject * m_golIm;
 
 private:
     Q_OBJECT

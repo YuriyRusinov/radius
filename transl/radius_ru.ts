@@ -136,23 +136,23 @@
     <name>GolographicModel</name>
     <message>
         <location filename="../src/gui/golographicModel.cpp" line="36"/>
-        <source>Azimuth is %1</source>
-        <translation>Азимут = %1</translation>
-    </message>
-    <message>
         <location filename="../src/gui/golographicModel.cpp" line="38"/>
-        <source>Obliquity is %1</source>
-        <translation>Наклонение = %1</translation>
+        <source>%1</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/golographicModel.cpp" line="75"/>
-        <source>Azimuth</source>
-        <translation>Азимут</translation>
+        <source>Azimuth,
+ degrees</source>
+        <translation>Азимут,
+градусы</translation>
     </message>
     <message>
         <location filename="../src/gui/golographicModel.cpp" line="78"/>
-        <source>Obliquity</source>
-        <translation>Наклонение</translation>
+        <source>Obliquity,
+ degrees</source>
+        <translation>Наклонение,
+градусы</translation>
     </message>
     <message>
         <location filename="../src/gui/golographicModel.cpp" line="81"/>
@@ -161,14 +161,14 @@
     </message>
 </context>
 <context>
-    <name>ImageGenerator</name>
+    <name>ImageGolographicObject</name>
     <message>
-        <location filename="../src/gologram/gologramma.cpp" line="167"/>
+        <location filename="../src/ImageGeneratorObject.cpp" line="12"/>
         <source>Creating images...</source>
         <translation>Генерация изображений...</translation>
     </message>
     <message>
-        <location filename="../src/gologram/gologramma.cpp" line="167"/>
+        <location filename="../src/ImageGeneratorObject.cpp" line="12"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Отмена</translation>
     </message>
@@ -189,240 +189,240 @@
 <context>
     <name>RadMainWindow</name>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="109"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="1213"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="110"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1234"/>
         <source>Select source file</source>
         <translation>Выберите файл с данными</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="319"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="562"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="322"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="565"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="169"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="172"/>
         <source>Ctrl+O</source>
         <comment>File|Open</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="74"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="75"/>
         <source>&amp;RLI tools</source>
         <translation>Работа с &amp;РЛИ</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="154"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="157"/>
         <source>Radius software</source>
         <translation>Программный комплекс 
 &quot;Радиус&quot; </translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="73"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="74"/>
         <source>&amp;Images tools</source>
         <translation>Работа с &amp;изображениями</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="167"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="170"/>
         <source>Open &amp;image file</source>
         <translation>Открыть &amp;файл с изображением </translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="173"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="176"/>
         <source>Save &amp;As...</source>
         <translation>Сохранить &amp;как...</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="175"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="178"/>
         <source>Ctrl+Shift+S</source>
         <comment>File|Save</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="180"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="183"/>
         <source>&amp;Quit</source>
         <translation>&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="182"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="185"/>
         <source>Ctrl+Q</source>
         <comment>File|Quit</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="189"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="192"/>
         <source>&amp;Init convolution by distance</source>
         <translation>Инициализация свертки по &amp;дальности</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="192"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="195"/>
         <source>&amp;Init convolution by azimuth</source>
         <translation>Инициализация свертки по &amp;азимуту</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="205"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="208"/>
         <source>Test &amp;FFT</source>
         <translation>Тестирование &amp;FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="216"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="219"/>
         <source>Test FFT for opor</source>
         <translation>Тестирование FFT для опорной функции</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="220"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="223"/>
         <source>Test FFT for stc</source>
         <translation>Тестирование FFT для данных</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="224"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="227"/>
         <source>Test FFT for stc1</source>
         <translation>Тестирование FFT для контрольных данных</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="228"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="231"/>
         <source>Test 2D FFT</source>
         <translation>Тестирование FFT 2D</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="76"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="237"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="77"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="240"/>
         <source>&amp;Settings</source>
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="75"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="76"/>
         <source>3&amp;D models</source>
         <translation>Работа с 3&amp;D моделями</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="77"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="78"/>
         <source>&amp;Help</source>
         <translation>&amp;Помощь</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="108"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="109"/>
         <source>Image files (*.flt *.bmp *.gif *.jpg);;All files(*);</source>
         <translation>Файлы RLI изображений (*.flt *.bmp *.gif *.jpg);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="197"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="200"/>
         <source>3D Models RLI</source>
         <translation>RLI 3D модели</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="199"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="202"/>
         <source>View 3D Models</source>
         <translation>Просмотр 3D моделей</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="201"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="204"/>
         <source>Binary RLI</source>
         <translation>Бинарные RLI</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="244"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="247"/>
         <source>User Manual</source>
         <translation>Руководство пользователя</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="245"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="248"/>
         <source>F1</source>
         <comment>Help</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="319"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="322"/>
         <source>Save 1st data</source>
         <translation>Сохранение результатов свертки </translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="436"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="439"/>
         <source>Stc2 after FFT</source>
         <translation>Данные после FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="462"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="465"/>
         <source>Write error</source>
         <translation>Ошибка записи</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="562"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="565"/>
         <source>Open convolution data</source>
         <translation>Открыть данные свертки по дальности</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="592"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="595"/>
         <source>Read data</source>
         <translation>Чтение данных</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="592"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="595"/>
         <source>Cannot read convolution data</source>
         <translation>Не могу считать данные</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="725"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="728"/>
         <source>Results </source>
         <translation>Результаты</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="735"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="738"/>
         <source>Image was calculated</source>
         <translation>Голографическое изображение получено</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="787"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="912"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="790"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="915"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="787"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="831"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="912"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="970"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="790"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="834"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="915"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="973"/>
         <source>All files (*.*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="831"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="970"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="834"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="973"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="886"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="889"/>
         <source>Opor before FFT</source>
         <translation>Опорная функция</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="901"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="904"/>
         <source>Opor after FFT</source>
         <translation>Опорная функция после FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1107"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1110"/>
         <source>Source matrix</source>
         <translation>Исходная матрица</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1122"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1125"/>
         <source>Source matrix after FFT</source>
         <translation>Образ Фурье исходной матрицы</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1130"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1133"/>
         <source>Source matrix after forward and backward FFT</source>
         <translation>Исходная матрица после прямого и обратного FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1204"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1225"/>
         <source>Golographic images</source>
         <translation>Голографические изображения</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1212"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1233"/>
         <source>Object files (*.obj);;All files(*);</source>
         <translation>Объектные файлы (*.obj);;Все файлы (*)</translation>
     </message>
@@ -476,7 +476,7 @@
 <context>
     <name>RadarImageProc</name>
     <message>
-        <location filename="../src/radarConvIm.cpp" line="91"/>
+        <location filename="../src/radarConvIm.cpp" line="93"/>
         <source>Result image</source>
         <translation>Результирующее изображение</translation>
     </message>

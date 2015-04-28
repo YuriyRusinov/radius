@@ -87,6 +87,9 @@ signals:
     void startCreating();
     void createOneImage(int value);
     void createAllImages();
+
+    void imageVal (int val);
+    void allImageVal (int v);
 };
 
 #endif // GOLOGRAMMA_H

@@ -14,6 +14,7 @@
 #include "ConvDistThread.h"
 #include "ConvAzimuthThread.h"
 #include "radarConvIm.h"
+#include "ImageGeneratorObject.h"
 
 RadarImageProc * RadarImageProc::instance=0;
 
@@ -25,7 +26,8 @@ RadarImageProc * RadarImageProc::getRadarImage (QObject * parent)
 }
 
 RadarImageProc::RadarImageProc (QObject * parent)
-    : QObject (parent)
+    : QObject (parent),
+    m_golIm (new ImageGolographicObject)
 {
     instance = this;
     qDebug () << __PRETTY_FUNCTION__ << QThread::idealThreadCount();
@@ -125,4 +127,9 @@ void RadarImageProc::receiveElapsedTime (int msec)
     FFTTimeWidget * fftWidget = new FFTTimeWidget;
     fftWidget->setTimeElapsed (msec);
     emit sendWidget (fftWidget);
+}
+
+ImageGolographicObject * RadarImageProc::getImageGolographic (void)
+{
+    return m_golIm;
 }
