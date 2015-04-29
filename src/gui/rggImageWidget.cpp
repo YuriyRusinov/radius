@@ -51,7 +51,7 @@ void rggImageWidget :: contextMenuEvent ( QContextMenuEvent * event )
     //qDebug () << __PRETTY_FUNCTION__ << p << tCh << UI->tvHistory->viewport() ;
     pMenu->popup(gp);
     event->accept();
-    QWidget::contextMenuEvent(event);
+    //QWidget::contextMenuEvent(event);
 }
 
 void rggImageWidget :: saveImage (void)
