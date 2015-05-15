@@ -50,7 +50,9 @@
 #include <QWheelEvent>
 #include <QLineEdit>
 #include <QSlider>
+#include <QToolButton>
 #include <QtCore/qmath.h>
+#include <QtDebug>
 
 #include "math.h"
 
@@ -174,7 +176,7 @@ void XFormView::setFile(const QString &name)
 
 //test  for FLT format
 
-    if(name.contains(".flt") || name.contains(".FLT"))
+    if(name.contains(".flt", Qt::CaseInsensitive))
     {
         QImage image_flt;
 //read flt image in bytearray
@@ -1015,6 +1017,32 @@ XFormWidget::XFormWidget(QWidget *parent)
     shearSlider->setRange(-990, 990);
     shearSlider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
+    QGroupBox * histGroup = new QGroupBox(mainGroup);
+    histGroup->setTitle(tr("Histograms"));
+    QBoxLayout * buttonsLay = new QVBoxLayout (histGroup);
+    QToolButton * tbHist = new QToolButton (histGroup);
+    tbHist->setIcon (QIcon (":/radius/hist-icon.png"));
+    tbHist->setToolTip (tr("Histogram"));
+    QToolButton * tbBrightness = new QToolButton (histGroup);
+    tbBrightness->setToolTip (tr("Brightness"));
+    tbBrightness->setIcon (QIcon (":/radius/bright-icon.png"));
+    QToolButton * tbImAdjust = new QToolButton (histGroup);
+    tbImAdjust->setToolTip (tr ("Image justify"));
+    tbImAdjust->setIcon (QIcon (":/radius/adjust-icon.png"));
+
+    buttonsLay->setAlignment (Qt::AlignHCenter);
+    QSize iSize (32, 32);
+    tbHist->setIconSize (iSize);
+    tbBrightness->setIconSize (iSize);
+    tbImAdjust->setIconSize (iSize);
+
+    buttonsLay->addWidget (tbHist);
+    buttonsLay->addWidget (tbBrightness);
+    buttonsLay->addWidget (tbImAdjust);
+
+    connect (tbHist, SIGNAL (clicked()), this, SLOT (viewHist()) );
+    connect (tbBrightness, SIGNAL (clicked()), this, SLOT (viewBright()) );
+    connect (tbImAdjust, SIGNAL (clicked()), this, SLOT (viewAdjust()) );
     /*QGroupBox *typeGroup = new QGroupBox(mainGroup);
     typeGroup->setTitle(tr("Type"));
     QRadioButton *vectorType = new QRadioButton(typeGroup);
@@ -1069,6 +1097,7 @@ XFormWidget::XFormWidget(QWidget *parent)
     mainGroupLayout->addWidget(rotateGroup);
     mainGroupLayout->addWidget(scaleGroup);
     mainGroupLayout->addWidget(shearGroup);
+    mainGroupLayout->addWidget(histGroup);
 //   mainGroupLayout->addWidget(typeGroup);
     mainGroupLayout->addStretch(1);
 //   mainGroupLayout->addWidget(resetButton);
@@ -1119,3 +1148,19 @@ void XFormWidget::setFile(const QString &name)
 {
     view->setFile(name);
 }
+
+void XFormWidget::viewHist (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+}
+
+void XFormWidget::viewBright (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+}
+
+void XFormWidget::viewAdjust (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+}
+

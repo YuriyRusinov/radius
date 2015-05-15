@@ -18,5 +18,8 @@
     <file>convFFT.png</file>
     <file alias="dcconv.png">dcconv5.png</file>
     <file>quit.png</file>
+    <file>adjust-icon.png</file>
+    <file>bright-icon.png</file>
+    <file>hist-icon.png</file>
   </qresource>
 </RCC>

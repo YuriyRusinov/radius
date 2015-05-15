@@ -135,6 +135,12 @@ class _FFTMATR_EXPORT_ XFormWidget : public QWidget
 public:
     XFormWidget(QWidget *parent);
     void setFile(const QString & ); 
+
+private slots:
+    void viewHist (void);
+    void viewBright (void);
+    void viewAdjust (void);
+
 private:
     XFormView *view;
     QLineEdit *textEditor;
