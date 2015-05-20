@@ -17,6 +17,7 @@ HEADERS += gui/radDataWidget.h \
            gui/golographicDelegate.h \
            gui/arthurwidgets.h \
            gui/arthurstyle.h \
+           gui/rhistwidget.h \
            gui/xform.h
 
 FORMS += gui/ui/fft_time_widget.ui \
@@ -44,6 +45,7 @@ SOURCES += gui/radDataWidget.cpp \
            gui/golographicDelegate.cpp \
            gui/arthurwidgets.cpp \
            gui/arthurstyle.cpp \
+           gui/rhistwidget.cpp \
            gui/xform.cpp
 
 headers.files += gui/radDataWidget.h \
@@ -64,6 +66,7 @@ headers.files += gui/radDataWidget.h \
                  gui/golographicDelegate.h \
                  gui/authorwidgets.h \
                  gui/authorstyle.h \
+                 gui/rhistwidget.h \
                  gui/xform.h
 
 RESOURCES += shared.qrc

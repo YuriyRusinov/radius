@@ -141,6 +141,9 @@ private slots:
     void viewBright (void);
     void viewAdjust (void);
 
+signals:
+    void pHistogram (QPixmap pMap);
+
 private:
     XFormView *view;
     QLineEdit *textEditor;

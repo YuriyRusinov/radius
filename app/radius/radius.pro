@@ -6,6 +6,8 @@ TARGET = $${EXECUTABLE_PREFIX}_app
 
 DESTDIR = ../../bin
 
+CONFIG += qwt
+
 RESOURCES = ../../icons/radius_icons.qrc
 
 HEADERS += radmainwindow.h
@@ -17,11 +19,12 @@ SOURCES += radmainwindow.cpp \
 
 INCLUDEPATH *= $$FFT_INC_DIR
 INCLUDEPATH *= $$BLAS_INC_DIR
+INCLUDEPATH *= $$QWT_INC_DIR
 
 DEFINES += _FILE_OFFSET_BITS=64
 
 unix{
-    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lm -L$$BLAS_LIB_DIR -lblas
+    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lm -L$$BLAS_LIB_DIR -lblas -L$$QWT_LIB_DIR -lqwt
 }
 win32{
     LIBS *= -L$$FFT_LIB_DIR -llibfftw3-3

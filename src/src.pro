@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = fft_matrix
 
-CONFIG += qt
+CONFIG += qwt
 
 QT += opengl
 
@@ -14,12 +14,14 @@ DEFINES += _FILE_OFFSET_BITS=64
 
 INCLUDEPATH *= $$FFT_INC_DIR
 INCLUDEPATH *= $$BLAS_INC_DIR
+INCLUDEPATH *= $$QWT_INC_DIR
 
 DEPENDPATH *= $$FFT_INC_DIR
 DEPENDPATH *= $$BLAS_INC_DIR
+DEPENDPATH *= $$QWT_INC_DIR
 
 unix{
-    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -lblas
+    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -lblas -L$$QWT_LIB_DIR -lqwt
 }
 win32{
     LIBS *= -L$$FFT_LIB_DIR -llibfftw3-3

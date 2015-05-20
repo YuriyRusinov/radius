@@ -1152,6 +1152,7 @@ void XFormWidget::setFile(const QString &name)
 void XFormWidget::viewHist (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+    emit pHistogram (view->pixmap());
 }
 
 void XFormWidget::viewBright (void)

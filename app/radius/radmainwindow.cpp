@@ -55,6 +55,7 @@
 #include <imagecreatorform.h>
 #include <golographicModel.h>
 #include <golographicWidget.h>
+#include <rhistwidget.h>
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -116,6 +117,7 @@ void RadMainWindow :: openDataFile (void)
     xformWidget->setStyle(arthurStyle);
     xformWidget->setFile(fileName);
     this->addWidget (xformWidget);
+    connect (xformWidget, SIGNAL (pHistogram (QPixmap)), this, SLOT (viewHistogram (QPixmap)) );
 //    actCalc1->setEnabled (true);
 }
 
@@ -1242,4 +1244,11 @@ void RadMainWindow :: slot3DView (void)
 void RadMainWindow :: slotBinariRLI (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+}
+
+void RadMainWindow :: viewHistogram (QPixmap pMap)
+{
+    Q_UNUSED (pMap);
+    QWidget * w = new HistWidget (this);
+    addWidget (w);
 }
