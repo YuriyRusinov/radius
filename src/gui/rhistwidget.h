@@ -2,7 +2,6 @@
 #define _RHISTWIDGET_H
 
 #include <QWidget>
-#include <qwt_plot.h>
 #include "src_config.h"
 
 class QwtPlot;
@@ -22,7 +21,7 @@ private:
     //
     // Variables
     //
-    QwtPlot plot;
+    QwtPlot *m_plot;
 private:
     Q_OBJECT
 };

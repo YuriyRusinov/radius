@@ -3,16 +3,18 @@
 
 #include <qwt_plot_histogram.h>
 #include <qwt_series_data.h>
+#include <qwt_plot.h>
 #include "rhistwidget.h"
 
 HistWidget :: HistWidget (QWidget * parent, Qt::WindowFlags flags)
-    : QWidget (parent, flags)
+    : QWidget (parent, flags),
+    m_plot (new QwtPlot(this))
 {
     setWindowTitle (tr("Histogram"));
     QGridLayout * gLay = new QGridLayout (this);
-    gLay->addWidget (&plot, 0, 0, 1, 1);
+    gLay->addWidget (m_plot, 0, 0, 1, 1);
 
-    plot.setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_plot->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     QwtPlotHistogram * plotHist = new QwtPlotHistogram;
     QVector<QwtIntervalSample> samples(3);
@@ -25,11 +27,11 @@ HistWidget :: HistWidget (QWidget * parent, Qt::WindowFlags flags)
     samples[2].value = 30;
     plotHist->setSamples (samples);//Data (QwtSeriesData<QwtIntervalSample>(&samples));//setSamples (hData);
     qDebug () << __PRETTY_FUNCTION__ << plotHist->boundingRect().size();
-    plotHist->attach (&plot);
-    plot.setAxisScale(QwtPlot::yLeft, 0.0, 1.0);//yMax);
-    plot.setAxisScale(QwtPlot::xBottom, 0.0, 10);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
+    plotHist->attach (m_plot);
+    m_plot->setAxisScale(QwtPlot::yLeft, 0.0, 1.0);//yMax);
+    m_plot->setAxisScale(QwtPlot::xBottom, 0.0, 10);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
 
-    plot.replot();
+    m_plot->replot();
 }
 
 HistWidget :: ~HistWidget (void)
@@ -38,7 +40,7 @@ HistWidget :: ~HistWidget (void)
 
 void HistWidget :: showEvent ( QShowEvent * event )
 {
-    qDebug () << __PRETTY_FUNCTION__ << plot.sizeHint() << sizeHint();
+    //qDebug () << __PRETTY_FUNCTION__ << plot.sizeHint() << sizeHint();
     //plot->replot();
     QWidget::showEvent (event);
 }
