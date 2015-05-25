@@ -5,6 +5,7 @@
 #include <qwt_series_data.h>
 #include <qwt_plot.h>
 #include "rhistwidget.h"
+#include "rhistogram.h"
 
 HistWidget :: HistWidget (QWidget * parent, Qt::WindowFlags flags)
     : QWidget (parent, flags),
@@ -28,8 +29,8 @@ HistWidget :: HistWidget (QWidget * parent, Qt::WindowFlags flags)
     plotHist->setSamples (samples);//Data (QwtSeriesData<QwtIntervalSample>(&samples));//setSamples (hData);
     qDebug () << __PRETTY_FUNCTION__ << plotHist->boundingRect().size();
     plotHist->attach (m_plot);
-    m_plot->setAxisScale(QwtPlot::yLeft, 0.0, 1.0);//yMax);
-    m_plot->setAxisScale(QwtPlot::xBottom, 0.0, 10);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
+    m_plot->setAxisScale(QwtPlot::yLeft, 0.0, 100.0);//yMax);
+    m_plot->setAxisScale(QwtPlot::xBottom, 0.0, 100);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
 
     m_plot->replot();
 }
