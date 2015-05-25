@@ -19,6 +19,11 @@ protected:
     virtual void showEvent ( QShowEvent * event );
 private:
     //
+    // Functions
+    //
+    void init (void);
+private:
+    //
     // Variables
     //
     QwtPlot *m_plot;

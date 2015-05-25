@@ -17,7 +17,24 @@ HistWidget :: HistWidget (QWidget * parent, Qt::WindowFlags flags)
 
     m_plot->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    QwtPlotHistogram * plotHist = new QwtPlotHistogram;
+    this->init ();
+    m_plot->replot();
+}
+
+HistWidget :: ~HistWidget (void)
+{
+}
+
+void HistWidget :: showEvent ( QShowEvent * event )
+{
+    //qDebug () << __PRETTY_FUNCTION__ << plot.sizeHint() << sizeHint();
+    //plot->replot();
+    QWidget::showEvent (event);
+}
+
+void HistWidget :: init (void)
+{
+    QwtPlotHistogram * plotHist = new Histogram (tr("Model histogram"), QColor(Qt::green));//new QwtPlotHistogram;
     QVector<QwtIntervalSample> samples(3);
     samples[0].interval = QwtInterval(0, 20);
     samples[0].value = 40;
@@ -32,16 +49,5 @@ HistWidget :: HistWidget (QWidget * parent, Qt::WindowFlags flags)
     m_plot->setAxisScale(QwtPlot::yLeft, 0.0, 100.0);//yMax);
     m_plot->setAxisScale(QwtPlot::xBottom, 0.0, 100);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
 
-    m_plot->replot();
-}
 
-HistWidget :: ~HistWidget (void)
-{
-}
-
-void HistWidget :: showEvent ( QShowEvent * event )
-{
-    //qDebug () << __PRETTY_FUNCTION__ << plot.sizeHint() << sizeHint();
-    //plot->replot();
-    QWidget::showEvent (event);
 }
