@@ -1248,7 +1248,6 @@ void RadMainWindow :: slotBinariRLI (void)
 
 void RadMainWindow :: viewHistogram (QPixmap pMap)
 {
-    Q_UNUSED (pMap);
-    QWidget * w = new HistWidget (this);
+    QWidget * w = new HistWidget (pMap.toImage(), this);
     addWidget (w);
 }
