@@ -89,7 +89,7 @@ void HistWidget :: init (void)
     plotGreenHist->attach (m_plot);
     plotBlueHist->attach (m_plot);
     m_plot->setAxisScale(QwtPlot::yLeft, 0.0, yMax);
-    m_plot->setAxisScale(QwtPlot::xBottom, 0.0, 256);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
+    m_plot->setAxisScale(QwtPlot::xBottom, 0.0, (double)nColors);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
 
 
 }

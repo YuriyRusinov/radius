@@ -24,12 +24,12 @@ Calc1 :: ~Calc1 ()
 
 double * Calc1 :: operator () (const double* st, int nd2)
 {
-    double * st1 = new double [nd];
+//    double * st1 = new double [nd];
     complex<double> * opor = new complex<double> [nd];
     complex<double> * opor2 = new complex<double> [nd];
     for (int i=0; i<nd; i++)
     {
-        st1[i] = 0.0;
+//        st1[i] = 0.0;
         opor[i] = complex<double>(0.0, 0.0);
         opor2[i] = complex<double>(0.0, 0.0);
     }
@@ -87,7 +87,7 @@ double * Calc1 :: operator () (const double* st, int nd2)
     delete [] stc1;
     delete [] stc;
     delete [] opor;
-    delete [] st1;
+//    delete [] st1;
 
 
     return stc2;
