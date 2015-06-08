@@ -2,6 +2,9 @@ TEMPLATE = lib
 TARGET = fft_matrix
 
 CONFIG += qwt
+win32{
+    CONFIG += QwtDll
+}
 
 QT += opengl
 

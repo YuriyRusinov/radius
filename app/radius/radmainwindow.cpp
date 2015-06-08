@@ -197,7 +197,7 @@ void RadMainWindow :: init (void)
     actInitConvAz = calcMenu->addAction (tr("&Init convolution by azimuth"));
     actInitConvAz->setIcon (QIcon (":/radius/fft_a.png"));
     connect (actInitConvAz, SIGNAL (triggered()), this, SLOT (initConvAz()) );
-    calcMenu->addSeparator ();
+//    calcMenu->addSeparator ();
 
     act3DMod = RLI3DMenu->addAction (QIcon (":/radius/antenna_128.png"), tr ("3D Models RLI"));
     connect (act3DMod, SIGNAL (triggered()), this, SLOT (slot3DMod()) );
@@ -209,6 +209,7 @@ void RadMainWindow :: init (void)
 
     QAction * actFFTTest = calcMenu->addAction (tr("Test &FFT"));
     connect (actFFTTest, SIGNAL (triggered()), this, SLOT (fftTest()) );
+    actFFTTest->setVisible (false);
 
 //    calcMenu->addAction (actCalc1);
 //    connect (actCalc1, SIGNAL (triggered()), this, SLOT (slotTest1()) );
