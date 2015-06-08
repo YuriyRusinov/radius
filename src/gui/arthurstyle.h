@@ -43,10 +43,11 @@
 #define ARTHURSTYLE_H
 
 #include <QWindowsStyle>
+#include "src_config.h"
 
 QT_USE_NAMESPACE
 
-class ArthurStyle : public QWindowsStyle
+class _FFTMATR_EXPORT_ ArthurStyle : public QWindowsStyle
 {
 public:
     ArthurStyle();
