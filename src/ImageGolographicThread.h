@@ -15,7 +15,7 @@ public:
 
     void setData (const generatingDataPlus& data);
     int getImageNum (void);
-    const QVector<golographicData>& getResults (void) const;
+    const VGolographic& getResults (void) const;
 
 private slots:
     void setPVal (int val);
@@ -23,7 +23,7 @@ private slots:
 
 signals:
     void setValue (int value);
-    void getImagesData (const QVector<golographicData>&);
+    void getImagesData (const VGolographic&);
 
 protected:
     void run (void);
@@ -35,7 +35,7 @@ private:
     //ImageGenerator* generator;
     int numb;
     generatingDataPlus imageData;
-    QVector<golographicData> resD;
+    VGolographic resD;
 
 private:
     Q_OBJECT

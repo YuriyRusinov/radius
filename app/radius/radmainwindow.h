@@ -48,7 +48,7 @@ private slots:
 
     void addWidget (QWidget * w);
     void slotHelp (void);
-    void viewImages (const QVector<golographicData>& r);
+    void viewImages (const VGolographic& r);
     void viewHistogram (QPixmap pMap);
 
 private:

@@ -35,7 +35,7 @@ int ImageGolographicThread :: getImageNum (void)
     return numb;
 }
 
-const QVector<golographicData>& ImageGolographicThread :: getResults (void) const
+const VGolographic& ImageGolographicThread :: getResults (void) const
 {
     return resD;
 }

@@ -13,17 +13,17 @@ class _FFTMATR_EXPORT_ ImageGolographicObject : public QObject
 {
 public:
     void generateImages (const generatingDataPlus& data);
-    const QVector<golographicData>& getImages (void) const;
+    const VGolographic& getImages (void) const;
     QThread * imThread (void) const;
 
 private slots:
     void setProgVal (int value);
     void imageGenFinished (void);
     void imageGenTerminated (void);
-    void loadImageData (const QVector<golographicData>& r);
+    void loadImageData (const VGolographic& r);
 
 signals:
-    void viewImages (const QVector<golographicData>& r);
+    void viewImages (const VGolographic& r);
 
 private:
     //
@@ -38,7 +38,7 @@ private:
     // Variables
     //
     ImageGolographicThread * m_ImageGol;
-    QVector<golographicData> resD;
+    VGolographic resD;
     QProgressDialog * pDialog;
 private:
     Q_OBJECT

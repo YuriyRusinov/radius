@@ -60,6 +60,13 @@ QVariant GolographicModel :: data (const QModelIndex &index, int role) const
             }
         return QVariant (QPixmap::fromImage (pIm));
     }
+    else if (role == Qt::SizeHintRole)// && index.column () == 2)
+    {
+        int nWidth = rGol.rowNumber;
+        int nHeight = rGol.columnNumber;
+        qDebug () << __PRETTY_FUNCTION__ << nWidth << nHeight; 
+        return QSize (nWidth, nHeight);
+    }
     else
         return QVariant ();
 }

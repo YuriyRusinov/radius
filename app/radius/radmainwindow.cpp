@@ -155,7 +155,7 @@ void RadMainWindow :: init (void)
         return;
     connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     ImageGolographicObject * m_ImageObject = rdConv->getImageGolographic ();
-    connect (m_ImageObject, SIGNAL (viewImages (const QVector<golographicData>&)), this, SLOT (viewImages (const QVector<golographicData>&)) );
+    connect (m_ImageObject, SIGNAL (viewImages (const VGolographic&)), this, SLOT (viewImages (const VGolographic&)) );
     m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
     m_mdiArea->update();
     actFileMenu = UI->menuBar->addMenu (menuFile);//QIcon(":/radius/image.png"), tr ("&Images tools"));
@@ -1206,13 +1206,13 @@ void RadMainWindow :: slotGologramCalc (generatingDataPlus gdp)
 {
 /*    ImageGenerator* generator = new ImageGenerator(gdp,this);
     generator->loadModel();
-    QVector<golographicData> resD = generator->generateImages();
+    VGolographic resD = generator->generateImages();
     delete generator;
 */
     RadarImageProc * rdConv = RadarImageProc::getRadarImage();
     ImageGolographicObject * m_ImageObject = rdConv->getImageGolographic ();
     m_ImageObject->generateImages (gdp);
-/*    QVector<golographicData> resD = m_ImageObject->getImages ();
+/*    VGolographic resD = m_ImageObject->getImages ();
     QAbstractItemModel * gMod = new GolographicModel (resD);
     QWidget * w = new GolographicWidget;
     w->setWindowTitle (tr("Golographic images"));
@@ -1221,7 +1221,7 @@ void RadMainWindow :: slotGologramCalc (generatingDataPlus gdp)
 */
 }
 
-void RadMainWindow :: viewImages (const QVector<golographicData>& resD)
+void RadMainWindow :: viewImages (const VGolographic& resD)
 {
     QAbstractItemModel * gMod = new GolographicModel (resD);
     QWidget * w = new GolographicWidget;

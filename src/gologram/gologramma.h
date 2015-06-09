@@ -4,6 +4,8 @@
 #include "src_config.h"
 #include "cuboid.h"
 
+#include <QVector>
+#include <QMetaType>
 #include <QProgressDialog>
 
 //programm
@@ -91,5 +93,9 @@ signals:
     void imageVal (int val);
     void allImageVal (int v);
 };
+
+typedef QVector<golographicData> VGolographic;
+
+//qRegisterMetaType< QVector<golographicData> > ("VGolographic");
 
 #endif // GOLOGRAMMA_H

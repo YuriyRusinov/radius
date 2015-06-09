@@ -11,8 +11,9 @@ ImageGolographicObject :: ImageGolographicObject (QObject * parent)
     m_ImageGol (new ImageGolographicThread (this)),
     pDialog (new QProgressDialog(tr("Creating images..."), tr("&Cancel"), 0, 0))
 {
+    qRegisterMetaType< VGolographic > ("VGolographic");
     connect (m_ImageGol, SIGNAL (setValue (int)), this, SLOT (setProgVal(int)) );
-    connect (m_ImageGol, SIGNAL (getImagesData (const QVector<golographicData>&)), this, SLOT (loadImageData (const QVector<golographicData>&)) );
+    connect (m_ImageGol, SIGNAL (getImagesData (const VGolographic&)), this, SLOT (loadImageData (const VGolographic&)) );
     connect (m_ImageGol, SIGNAL (finished()), this, SLOT (imageGenFinished()) );
     connect (m_ImageGol, SIGNAL (terminated()), this, SLOT (imageGenTerminated()) );
 }
@@ -60,7 +61,7 @@ void ImageGolographicObject :: setProgVal (int value)
         pDialog->setValue (value);
 }
 
-const QVector<golographicData>& ImageGolographicObject :: getImages (void) const
+const VGolographic& ImageGolographicObject :: getImages (void) const
 {
     return resD;
 }
@@ -70,7 +71,7 @@ QThread * ImageGolographicObject :: imThread (void) const
     return m_ImageGol;
 }
 
-void ImageGolographicObject :: loadImageData (const QVector<golographicData>& r)
+void ImageGolographicObject :: loadImageData (const VGolographic& r)
 {
     resD = r;
 }
