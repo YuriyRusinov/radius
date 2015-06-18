@@ -14,6 +14,7 @@ class ConvDistPhysParameters;
 class ConvAzimuthWidget;
 class ConvAzimuthPhysParameters;
 class ImageGolographicObject;
+class RadiusImageEqualizer;
 
 using std::complex;
 
@@ -24,6 +25,7 @@ public:
     ConvDistanceWidget * getCDistWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
     ConvAzimuthWidget * getCAzWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
     ImageGolographicObject * getImageGolographic (void);
+    RadiusImageEqualizer * getImageHistEq (void);
 
 public slots:
     void procConvDist (ConvDistPhysParameters * cParams);
@@ -54,6 +56,7 @@ private:
     //
     static RadarImageProc * instance;
     ImageGolographicObject * m_golIm;
+    RadiusImageEqualizer * m_RadIm;
 
 private:
     Q_OBJECT

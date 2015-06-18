@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "src_config.h"
 
+class QPushButton;
 class QwtPlot;
 
 class _FFTMATR_EXPORT_ HistWidget : public QWidget
@@ -28,6 +29,7 @@ private:
     //
     QImage wImage;
     QwtPlot *m_plot;
+    QPushButton * pbEqualize;
 private:
     Q_OBJECT
 };

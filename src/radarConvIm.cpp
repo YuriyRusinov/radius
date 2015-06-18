@@ -15,6 +15,7 @@
 #include "ConvAzimuthThread.h"
 #include "radarConvIm.h"
 #include "ImageGeneratorObject.h"
+#include "RadarImageEq.h"
 
 RadarImageProc * RadarImageProc::instance=0;
 
@@ -27,7 +28,8 @@ RadarImageProc * RadarImageProc::getRadarImage (QObject * parent)
 
 RadarImageProc::RadarImageProc (QObject * parent)
     : QObject (parent),
-    m_golIm (new ImageGolographicObject)
+    m_golIm (new ImageGolographicObject),
+    m_RadIm (new RadiusImageEqualizer)
 {
     instance = this;
     qDebug () << __PRETTY_FUNCTION__ << QThread::idealThreadCount();
@@ -46,6 +48,8 @@ RadarImageProc::~RadarImageProc (void)
         delete instance;
         instance = 0;
     }
+    delete m_golIm;
+    delete m_RadIm;
 }
 
 RadarImageProc& RadarImageProc::operator= (const RadarImageProc&)
@@ -132,4 +136,9 @@ void RadarImageProc::receiveElapsedTime (int msec)
 ImageGolographicObject * RadarImageProc::getImageGolographic (void)
 {
     return m_golIm;
+}
+
+RadiusImageEqualizer * RadarImageProc::getImageHistEq (void)
+{
+    return m_RadIm;
 }

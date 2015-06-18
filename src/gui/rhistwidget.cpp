@@ -1,4 +1,6 @@
 #include <QGridLayout>
+#include <QPushButton>
+#include <QHBoxLayout>
 #include <QtDebug>
 
 #include <qwt_plot_histogram.h>
@@ -10,11 +12,17 @@
 HistWidget :: HistWidget (const QImage& im, QWidget * parent, Qt::WindowFlags flags)
     : QWidget (parent, flags),
     wImage (im),
-    m_plot (new QwtPlot(this))
+    m_plot (new QwtPlot(this)),
+    pbEqualize (new QPushButton(tr("Equalize"), this))
 {
     setWindowTitle (tr("Histogram"));
     QGridLayout * gLay = new QGridLayout (this);
     gLay->addWidget (m_plot, 0, 0, 1, 1);
+
+    QHBoxLayout * hButtonsLay = new QHBoxLayout;
+    hButtonsLay->addStretch();
+    hButtonsLay->addWidget (pbEqualize);
+    gLay->addLayout (hButtonsLay, 1, 0, 1, 1);
 
     m_plot->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -39,17 +47,6 @@ void HistWidget :: init (void)
     QwtPlotHistogram * plotGreenHist = new Histogram (tr("Model histogram"), QColor(Qt::green));//new QwtPlotHistogram;
     QwtPlotHistogram * plotBlueHist = new Histogram (tr("Model histogram"), QColor(Qt::blue));//new QwtPlotHistogram;
     const int nColors = 256;
-/*    QVector<QwtIntervalSample> samples(3);//nColors);
-    samples[0].interval = QwtInterval(0, 20);
-    samples[0].value = 40;
-    samples[1].interval = QwtInterval(20.01, 50);
-    samples[1].interval.setBorderFlags(QwtInterval::ExcludeBorders);
-    samples[1].value = 80;
-    samples[2].interval = QwtInterval(50, 80);
-    samples[2].value = 30;
-    plotHist->setSamples (samples);//Data (QwtSeriesData<QwtIntervalSample>(&samples));//setSamples (hData);
-    qDebug () << __PRETTY_FUNCTION__ << plotHist->boundingRect().size();
-*/
     double *rhist = new double [nColors];
     double *ghist = new double [nColors];
     double *bhist = new double [nColors];

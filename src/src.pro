@@ -60,6 +60,7 @@ HEADERS += fft_c.h \
            ImageGolographicThread.h \
            ImageGeneratorObject.h \
            rhistogram.h \
+           RadarImageEq.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -77,7 +78,8 @@ SOURCES += fft_c.cpp \
            hoverpoints.cpp \
            ImageGolographicThread.cpp \
            ImageGeneratorObject.cpp \
-           rhistogram.cpp
+           rhistogram.cpp \
+           RadarImageEq.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)
@@ -100,6 +102,7 @@ headers.files += \
                  ImageGolographicThread.h \
                  ImageGeneratorObject.h \
                  rhistogram.h \
+                 RadarImageEq.h \
                  src_config.h
 
 headers.path = $$RAD_INCLUDE_DIR

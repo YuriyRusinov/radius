@@ -56,6 +56,7 @@
 #include <golographicModel.h>
 #include <golographicWidget.h>
 #include <rhistwidget.h>
+#include <RadarImageEq.h>
 
 #include "radmainwindow.h"
 #include "ui_radius_mainwindow.h"
@@ -112,13 +113,10 @@ void RadMainWindow :: openDataFile (void)
     if (fileName.isEmpty())
         return;
 
-    XFormWidget * xformWidget = new XFormWidget(0);
-    QStyle *arthurStyle = new ArthurStyle();
-    xformWidget->setStyle(arthurStyle);
-    xformWidget->setFile(fileName);
+    RadarImageProc * rdConv = RadarImageProc::getRadarImage();
+    RadiusImageEqualizer * m_ImageEq = rdConv->getImageHistEq ();
+    XFormWidget * xformWidget = m_ImageEq->viewGolographicImage (fileName);
     this->addWidget (xformWidget);
-    connect (xformWidget, SIGNAL (pHistogram (QPixmap)), this, SLOT (viewHistogram (QPixmap)) );
-//    actCalc1->setEnabled (true);
 }
 
 void RadMainWindow :: init (void)
@@ -156,6 +154,8 @@ void RadMainWindow :: init (void)
     connect (rdConv, SIGNAL(sendWidget(QWidget *)), this, SLOT (addWidget (QWidget *)), Qt::DirectConnection);
     ImageGolographicObject * m_ImageObject = rdConv->getImageGolographic ();
     connect (m_ImageObject, SIGNAL (viewImages (const VGolographic&)), this, SLOT (viewImages (const VGolographic&)) );
+    RadiusImageEqualizer * m_ImageEq = rdConv->getImageHistEq ();
+    connect (m_ImageEq, SIGNAL (histView (QWidget *)), this, SLOT (addWidget (QWidget *)) );
     m_mdiArea = new RadMdiArea (QImage (":/radius/m31.jpg"), tr ("Radius software"), this);
     m_mdiArea->update();
     actFileMenu = UI->menuBar->addMenu (menuFile);//QIcon(":/radius/image.png"), tr ("&Images tools"));

@@ -19,7 +19,7 @@ private slots:
     void viewHistogram (QPixmap pMap);
 
 signals:
-    void histView (HistWidget *);
+    void histView (QWidget *);
 
 private:
     //
