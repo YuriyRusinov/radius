@@ -26,67 +26,45 @@ HistWidget :: HistWidget (const QImage& im, QWidget * parent, Qt::WindowFlags fl
 
     m_plot->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    this->init ();
-    m_plot->replot();
 }
 
 HistWidget :: ~HistWidget (void)
 {
 }
 
-void HistWidget :: showEvent ( QShowEvent * event )
+void HistWidget :: setImage (const QImage& wIm)
 {
-    //qDebug () << __PRETTY_FUNCTION__ << plot.sizeHint() << sizeHint();
-    //plot->replot();
-    QWidget::showEvent (event);
+    wImage = wIm;
 }
 
-void HistWidget :: init (void)
+void HistWidget :: setHistData (const double * const rHist, const double * const gHist, const double * const bHist, int nColors)
 {
     QwtPlotHistogram * plotRedHist = new Histogram (tr("Model histogram"), QColor(Qt::red));//new QwtPlotHistogram;
     QwtPlotHistogram * plotGreenHist = new Histogram (tr("Model histogram"), QColor(Qt::green));//new QwtPlotHistogram;
     QwtPlotHistogram * plotBlueHist = new Histogram (tr("Model histogram"), QColor(Qt::blue));//new QwtPlotHistogram;
-    const int nColors = 256;
     double *rhist = new double [nColors];
     double *ghist = new double [nColors];
     double *bhist = new double [nColors];
-    for (int i=0; i<nColors; i++)
-    {
-        rhist [i] = 0.0;
-        ghist [i] = 0.0;
-        bhist [i] = 0.0;
-    }
+    double yMax = 0.0;
     int imW = wImage.width();
     int imH = wImage.height();
     int imSize = imW*imH;
-    for (int i=0; i<imW; i++)
-    {
-        for (int j=0; j<imH; j++)
-        {
-            int color = wImage.pixel( i,j );
-            rhist[ qRed( color ) ] += 1.0;
-            ghist[ qGreen( color ) ] += 1.0;
-            bhist[ qBlue( color ) ] += 1.0;
-        }
-    }
-    double yMax = 0.0;
     for( int i = 0; i < nColors; i++ )
     {
-        rhist[ i ] /= imSize;
+        rhist[ i ] = rHist[i] / imSize;
         yMax = qMax (yMax, rhist[i]);
-        ghist[ i ] /= imSize;
+        ghist[ i ] = gHist[i] / imSize;
         yMax = qMax (yMax, ghist[i]);
-        bhist[ i ] /= imSize;
+        bhist[ i ] = bHist[i] / imSize;
         yMax = qMax (yMax, bhist[i]);
     }
     (dynamic_cast <Histogram *>(plotRedHist))->setValues (nColors, rhist);
-    (dynamic_cast <Histogram *>(plotGreenHist))->setValues (nColors, rhist);
-    (dynamic_cast <Histogram *>(plotBlueHist))->setValues (nColors, rhist);
+    (dynamic_cast <Histogram *>(plotGreenHist))->setValues (nColors, ghist);
+    (dynamic_cast <Histogram *>(plotBlueHist))->setValues (nColors, bhist);
     plotRedHist->attach (m_plot);
     plotGreenHist->attach (m_plot);
     plotBlueHist->attach (m_plot);
     m_plot->setAxisScale(QwtPlot::yLeft, 0.0, yMax);
     m_plot->setAxisScale(QwtPlot::xBottom, 0.0, (double)nColors);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
-
-
+    m_plot->replot();
 }

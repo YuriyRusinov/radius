@@ -1,3 +1,5 @@
+#include <QtDebug>
+
 #include "xform.h"
 #include "rhistwidget.h"
 #include "RadarImageEq.h"
@@ -28,6 +30,44 @@ XFormWidget * RadiusImageEqualizer :: viewGolographicImage (QString fileName, QW
 
 void RadiusImageEqualizer :: viewHistogram (QPixmap pMap)
 {
-    QWidget * w = new HistWidget (pMap.toImage(), 0);
+    qDebug () << __PRETTY_FUNCTION__;
+    QImage wImage = pMap.toImage ();
+    HistWidget * hw = new HistWidget;
+    int nCol = 256;
+    double * rHist = new double [nCol];
+    double * gHist = new double [nCol];
+    double * bHist = new double [nCol];
+    calcHist (wImage, rHist, gHist, bHist, nCol);
+    hw->setImage (wImage);
+    hw->setHistData (rHist, gHist, bHist, nCol);
+    delete [] bHist;
+    delete [] gHist;
+    delete [] rHist;
+    QWidget * w = qobject_cast <QWidget *>(hw);
     emit histView (w);
+}
+
+void RadiusImageEqualizer :: calcHist (const QImage& wImage, double * rHist, double * gHist, double * bHist, const int& nColors)
+{
+    if (wImage.isNull() || !rHist || !gHist || !bHist)
+        return;
+    qDebug () << __PRETTY_FUNCTION__;
+    for (int i=0; i<nColors; i++)
+    {
+        rHist [i] = 0.0;
+        gHist [i] = 0.0;
+        bHist [i] = 0.0;
+    }
+    int imW = wImage.width();
+    int imH = wImage.height();
+    for (int i=0; i<imW; i++)
+    {
+        for (int j=0; j<imH; j++)
+        {
+            int color = wImage.pixel( i,j );
+            rHist[ qRed( color ) ] += 1.0;
+            gHist[ qGreen( color ) ] += 1.0;
+            bHist[ qBlue( color ) ] += 1.0;
+        }
+    }
 }
