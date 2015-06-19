@@ -67,4 +67,7 @@ void HistWidget :: setHistData (const double * const rHist, const double * const
     m_plot->setAxisScale(QwtPlot::yLeft, 0.0, yMax);
     m_plot->setAxisScale(QwtPlot::xBottom, 0.0, (double)nColors);//m_histogramParams->getXMin(), m_histogramParams->getXMax());
     m_plot->replot();
+    delete [] bhist;
+    delete [] ghist;
+    delete [] rhist;
 }
