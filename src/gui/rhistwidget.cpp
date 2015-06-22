@@ -26,6 +26,8 @@ HistWidget :: HistWidget (const QImage& im, QWidget * parent, Qt::WindowFlags fl
 
     m_plot->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+    connect (pbEqualize, SIGNAL (clicked()), this, SLOT (imageHistEq()) );
 }
 
 HistWidget :: ~HistWidget (void)
@@ -70,4 +72,10 @@ void HistWidget :: setHistData (const double * const rHist, const double * const
     delete [] bhist;
     delete [] ghist;
     delete [] rhist;
+}
+
+void HistWidget :: imageHistEq (void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
+    emit histEq (wImage);
 }

@@ -17,6 +17,12 @@ public:
     void setImage (const QImage& wIm);
     void setHistData (const double * const rHist, const double * const gHist, const double * const bHist, int nColors);
 
+private slots:
+    void imageHistEq (void);
+
+signals:
+    void histEq (const QImage& wImage);
+
 private:
     //
     // Variables

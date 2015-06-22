@@ -44,6 +44,7 @@ void RadiusImageEqualizer :: viewHistogram (QPixmap pMap)
     delete [] gHist;
     delete [] rHist;
     QWidget * w = qobject_cast <QWidget *>(hw);
+    connect (hw, SIGNAL (histEq (const QImage&)), this, SLOT (histogramEq (const QImage&)) );
     emit histView (w);
 }
 
@@ -70,4 +71,17 @@ void RadiusImageEqualizer :: calcHist (const QImage& wImage, double * rHist, dou
             bHist[ qBlue( color ) ] += 1.0;
         }
     }
+}
+
+void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
+{
+    qDebug () << __PRETTY_FUNCTION__ << wImage.isNull();;
+    int nCol = 256;
+    double * rHist = new double [nCol];
+    double * gHist = new double [nCol];
+    double * bHist = new double [nCol];
+    calcHist (wImage, rHist, gHist, bHist, nCol);
+    delete [] bHist;
+    delete [] gHist;
+    delete [] rHist;
 }
