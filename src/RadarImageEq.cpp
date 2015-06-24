@@ -75,12 +75,21 @@ void RadiusImageEqualizer :: calcHist (const QImage& wImage, double * rHist, dou
 
 void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
 {
-    qDebug () << __PRETTY_FUNCTION__ << wImage.isNull();;
+    qDebug () << __PRETTY_FUNCTION__;
+    int imSize = wImage.width()*wImage.height();
+    if (wImage.isNull() || imSize == 0)
+        return;
     int nCol = 256;
     double * rHist = new double [nCol];
     double * gHist = new double [nCol];
     double * bHist = new double [nCol];
     calcHist (wImage, rHist, gHist, bHist, nCol);
+    for (int i=0; i<nCol; i++)
+    {
+        rHist[i] /= imSize;
+        gHist[i] /= imSize;
+        bHist[i] /= imSize;
+    }
     delete [] bHist;
     delete [] gHist;
     delete [] rHist;
