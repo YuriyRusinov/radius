@@ -30,6 +30,7 @@ private slots:
 
 signals:
     void histView (QWidget *);
+    void viewEqImage (QImage);
 
 private:
     //
@@ -40,6 +41,8 @@ private:
     RadiusImageEqualizer (QObject * parent=0);
     virtual ~RadiusImageEqualizer (void);
     RadiusImageEqualizer& operator= (const RadiusImageEqualizer&);
+
+    unsigned int * applyHistogram (const QImage &img, unsigned int *histogram);
 
 private:
     Q_OBJECT

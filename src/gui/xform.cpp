@@ -1165,3 +1165,7 @@ void XFormWidget::viewAdjust (void)
     qDebug () << __PRETTY_FUNCTION__;
 }
 
+void XFormWidget::setImage (const QImage& wImage)
+{
+    view->setPixmap (QPixmap::fromImage (wImage));
+}

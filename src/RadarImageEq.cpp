@@ -90,7 +90,64 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
         gHist[i] /= imSize;
         bHist[i] /= imSize;
     }
+    unsigned int * histogram = new unsigned int [nCol];
+    if (!histogram)
+    {
+        delete [] bHist;
+        delete [] gHist;
+        delete [] rHist;
+        return;
+    }
+    double racc = 0.0;
+    double gacc = 0.0;
+    double bacc = 0.0;
+    for (int i = 0; i < nCol; i++ )
+    {
+        racc += rHist[ i ];
+        gacc += gHist[ i ];
+        bacc += bHist[ i ];
+        histogram[ i ] = qRgb( (int)( racc * 255.0 + 0.5 ),
+                         (int)( gacc * 255.0 + 0.5 ),
+                         (int)( bacc * 255.0 + 0.5 ));
+    }
+    unsigned int * buffer = applyHistogram (wImage, histogram);
+    delete [] histogram;
+
+    QImage res;
+    if (buffer)
+    {
+        QImage tImage ((unsigned char*)buffer, wImage.width(), wImage.height(), QImage::Format_RGB32);
+        res = tImage;
+        res.detach ();
+        delete [] buffer;
+        XFormWidget * xfw = new XFormWidget (0);
+        xfw->setImage (res);
+        emit histView (xfw);
+        emit viewEqImage (res);
+    }
     delete [] bHist;
     delete [] gHist;
     delete [] rHist;
+}
+
+unsigned int * RadiusImageEqualizer :: applyHistogram (const QImage &img, unsigned int *histogram)
+{
+    unsigned int *buf;
+    int i, j, pos = 0;
+    int color;
+
+    buf = new unsigned int [img.width() * img.height() ];
+    if ( !buf )
+        return 0;
+
+    for( j = 0; j < img.height(); j++ )
+        for( i = 0; i < img.width(); i++ )
+        {
+            color = img.pixel( i,j );
+            buf[ pos ] = qRgb( qRed( histogram[ qRed( color ) ] ),
+                          qGreen( histogram[ qGreen( color ) ] ),
+                          qBlue( histogram[ qBlue( color ) ] ));
+            pos++;
+        }
+    return buf;
 }

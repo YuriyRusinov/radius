@@ -133,8 +133,11 @@ class _FFTMATR_EXPORT_ XFormWidget : public QWidget
 {
     Q_OBJECT
 public:
-    XFormWidget(QWidget *parent);
-    void setFile(const QString & ); 
+    XFormWidget(QWidget *parent=0);
+    void setFile(const QString & );
+
+public slots:
+    void setImage (const QImage& wImage);
 
 private slots:
     void viewHist (void);

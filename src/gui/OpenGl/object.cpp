@@ -116,13 +116,15 @@ void lsl::Object3D::calculatingNormals()
     if(!normals.isEmpty())
         normals.clear();
 
-    normals.reserve(faces.size());
+    unsigned int nf = faces.size();
+    normals.reserve(nf);
 
-    for(unsigned int i = 0; i < faces.size() ; ++i)
+    for(unsigned int i = 0; i < nf ; ++i)
     {
         QVector<QVector3D> pol = polygon(i);
         normals.push_back(calculationOfNormal(pol));
     }
 
     int a;
+    Q_UNUSED (a);
 }
