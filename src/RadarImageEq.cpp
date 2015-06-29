@@ -122,6 +122,7 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
         delete [] buffer;
         XFormWidget * xfw = new XFormWidget (0);
         xfw->setImage (res);
+        connect (xfw, SIGNAL (pHistogram (QPixmap)), this, SLOT (viewHistogram (QPixmap)) );
         emit histView (xfw);
         emit viewEqImage (res);
     }
