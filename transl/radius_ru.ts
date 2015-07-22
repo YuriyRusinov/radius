@@ -251,6 +251,7 @@
         <location filename="../app/radius/radmainwindow.cpp" line="180"/>
         <source>Ctrl+Shift+S</source>
         <comment>File|Save</comment>
+        <translatorcomment>Сохранить как</translatorcomment>
         <translation></translation>
     </message>
     <message>
