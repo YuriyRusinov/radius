@@ -24,7 +24,7 @@ INCLUDEPATH *= $$QWT_INC_DIR
 DEFINES += _FILE_OFFSET_BITS=64
 
 unix{
-    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lm -L$$BLAS_LIB_DIR -lblas -L$$QWT_LIB_DIR -lqwt6
+    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lm -L$$BLAS_LIB_DIR -L$$QWT_LIB_DIR
 }
 win32{
     LIBS *= -L$$FFT_LIB_DIR -llibfftw3-3

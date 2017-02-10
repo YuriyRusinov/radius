@@ -24,7 +24,7 @@ DEPENDPATH *= $$BLAS_INC_DIR
 DEPENDPATH *= $$QWT_INC_DIR
 
 unix{
-    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -lblas -L$$QWT_LIB_DIR -lqwt6
+    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -L$$QWT_LIB_DIR 
 }
 win32{
     LIBS *= -L$$FFT_LIB_DIR -llibfftw3-3
