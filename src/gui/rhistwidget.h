@@ -5,8 +5,11 @@
 #include "src_config.h"
 
 class QPushButton;
+class QToolButton;
 class QwtPlot;
 class QImage;
+class QDoubleSpinBox;
+class QSpinBox;
 
 class _FFTMATR_EXPORT_ HistWidget : public QWidget
 {
@@ -25,11 +28,22 @@ signals:
 
 private:
     //
+    // Functions
+    //
+    void init (void);
+private:
+    //
     // Variables
     //
     QImage wImage;
     QwtPlot *m_plot;
+    QDoubleSpinBox * wNoiseMinSp;
+    QDoubleSpinBox * wNoiseMaxSp;
+    QSpinBox * redColorSp;
+    QSpinBox * blueColorSp;
+    QToolButton * tbFiltering;
     QPushButton * pbEqualize;
+    double yMax;
 private:
     Q_OBJECT
 };
