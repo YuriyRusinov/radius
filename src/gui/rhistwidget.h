@@ -6,10 +6,12 @@
 
 class QPushButton;
 class QToolButton;
-class QwtPlot;
 class QImage;
 class QDoubleSpinBox;
 class QSpinBox;
+
+class QwtPlot;
+class QwtPlotMarker;
 
 class _FFTMATR_EXPORT_ HistWidget : public QWidget
 {
@@ -22,6 +24,10 @@ public:
 
 private slots:
     void imageHistEq (void);
+    void minNoiseValueChanged (double);
+    void maxNoiseValueChanged (double);
+    void redColorValueChanged (int);
+    void blueColorValueChanged (int);
 
 signals:
     void histEq (const QImage& wImage);
@@ -37,6 +43,10 @@ private:
     //
     QImage wImage;
     QwtPlot *m_plot;
+    QwtPlotMarker * m_plotMarkerNoiseMin;
+    QwtPlotMarker * m_plotMarkerNoiseMax;
+    QwtPlotMarker * m_plotMarkerColorRed;
+    QwtPlotMarker * m_plotMarkerColorBlue;
     QDoubleSpinBox * wNoiseMinSp;
     QDoubleSpinBox * wNoiseMaxSp;
     QSpinBox * redColorSp;
