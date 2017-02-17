@@ -44,7 +44,7 @@ void RadiusImageEqualizer :: viewHistogram (QPixmap pMap)
     delete [] gHist;
     delete [] rHist;
     QWidget * w = qobject_cast <QWidget *>(hw);
-    connect (hw, SIGNAL (histEq (const QImage&)), this, SLOT (histogramEq (const QImage&)) );
+    connect (hw, SIGNAL (histEq (const QImage&, double, double, int, int)), this, SLOT (histogramEq (const QImage&, double, double, int, int)) );
     emit histView (w);
 }
 
@@ -73,9 +73,9 @@ void RadiusImageEqualizer :: calcHist (const QImage& wImage, double * rHist, dou
     }
 }
 
-void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
+void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin, double wNoiseMax, int vRed, int vBlue)
 {
-    qDebug () << __PRETTY_FUNCTION__;
+    qDebug () << __PRETTY_FUNCTION__ << wNoiseMin << wNoiseMax << vRed << vBlue;
     int imSize = wImage.width()*wImage.height();
     if (wImage.isNull() || imSize == 0)
         return;
@@ -87,8 +87,14 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
     for (int i=0; i<nCol; i++)
     {
         rHist[i] /= imSize;
+        rHist[i] -= wNoiseMin;
+        rHist[i] = qMax (0.0, rHist[i]);
         gHist[i] /= imSize;
+        gHist[i] -= wNoiseMin;
+        gHist[i] = qMax (0.0, gHist[i]);
         bHist[i] /= imSize;
+        bHist[i] -= wNoiseMin;
+        bHist[i] = qMax (0.0, bHist[i]);
     }
     unsigned int * histogram = new unsigned int [nCol];
     if (!histogram)
@@ -101,7 +107,11 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
     double racc = 0.0;
     double gacc = 0.0;
     double bacc = 0.0;
-    for (int i = 0; i < nCol; i++ )
+    for (int i=0; i<vRed; i++)
+        histogram[ i ] = qRgb( (int)( 0.5 ),
+                         (int)( 0.5 ),
+                         (int)( 0.5 ));
+    for (int i = vRed; i < vBlue; i++ )
     {
         racc += rHist[ i ];
         gacc += gHist[ i ];
@@ -110,6 +120,10 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage)
                          (int)( gacc * 255.0 + 0.5 ),
                          (int)( bacc * 255.0 + 0.5 ));
     }
+    for (int i=vBlue; i<nCol; i++)
+        histogram[ i ] = qRgb( (int)( 0.5 ),
+                         (int)( 0.5 ),
+                         (int)( 0.5 ));
     unsigned int * buffer = applyHistogram (wImage, histogram);
     delete [] histogram;
 

@@ -95,7 +95,11 @@ void HistWidget :: setHistData (const double * const rHist, const double * const
 void HistWidget :: imageHistEq (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    emit histEq (wImage);
+    double wNMin = wNoiseMinSp->value ();
+    double wNMax = wNoiseMaxSp->value ();
+    int cr = redColorSp->value ();
+    int cb = blueColorSp->value ();
+    emit histEq (wImage, wNMin, wNMax, cr, cb);
 }
 
 void HistWidget :: init (void)

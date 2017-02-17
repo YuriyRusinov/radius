@@ -30,7 +30,7 @@ private slots:
     void blueColorValueChanged (int);
 
 signals:
-    void histEq (const QImage& wImage);
+    void histEq (const QImage& wImage, double wNoiseMin, double wNoiseMax, int cRed, int cBlue);
 
 private:
     //

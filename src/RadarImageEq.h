@@ -26,7 +26,7 @@ public:
 
 private slots:
     void viewHistogram (QPixmap pMap);
-    void histogramEq (const QImage& wImage);
+    void histogramEq (const QImage& wImage, double wNoiseMin, double wNoiseMax, int vRed, int vBlue);
 
 signals:
     void histView (QWidget *);
