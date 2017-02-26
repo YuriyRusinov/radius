@@ -15,13 +15,17 @@ include (../radius.conf)
 DEFINES += _FFTMATR_DLL_
 DEFINES += _FILE_OFFSET_BITS=64
 
-INCLUDEPATH *= $$FFT_INC_DIR
-INCLUDEPATH *= $$BLAS_INC_DIR
 INCLUDEPATH *= $$QWT_INC_DIR
 
-DEPENDPATH *= $$FFT_INC_DIR
-DEPENDPATH *= $$BLAS_INC_DIR
 DEPENDPATH *= $$QWT_INC_DIR
+
+CONFIG += link_pkgconfig
+PKGCONFIG += gsl
+PKGCONFIG += fftw3 fftw3_threads
+PKGCONFIG += blas
+
+LIBS *= -lopencv_features2d -lopencv_objdetect -lopencv_legacy -lopencv_ml
+PKGCONFIG += opencv
 
 unix{
     LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -L$$QWT_LIB_DIR 
@@ -61,6 +65,8 @@ HEADERS += fft_c.h \
            ImageGeneratorObject.h \
            rhistogram.h \
            RadarImageEq.h \
+           qimage_to_cvmat.h \
+           cvmat_to_qimage.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -79,7 +85,10 @@ SOURCES += fft_c.cpp \
            ImageGolographicThread.cpp \
            ImageGeneratorObject.cpp \
            rhistogram.cpp \
-           RadarImageEq.cpp
+           RadarImageEq.cpp \
+           qimage_to_cvmat.cpp \
+           cvmat_to_qimage.cpp \
+
 
 include (gui/gui.pri)
 include (misc/misc.pri)
@@ -103,6 +112,8 @@ headers.files += \
                  ImageGeneratorObject.h \
                  rhistogram.h \
                  RadarImageEq.h \
+                 qimage_to_cvmat.h \
+                 cvmat_to_qimage.h \
                  src_config.h
 
 headers.path = $$RAD_INCLUDE_DIR

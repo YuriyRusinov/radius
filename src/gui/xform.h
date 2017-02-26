@@ -48,6 +48,11 @@
 #include <QBasicTimer>
 #include <QPolygonF>
 
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+using cv::Mat;
+
 class HoverPoints;
 class QLineEdit;
 
@@ -91,6 +96,7 @@ public:
     XFormType type() const;
     QPixmap pixmap() const;
     QString text() const;
+    const Mat& getMatrix () const;
 
 public slots:
     void setAnimation(bool animate);
@@ -125,6 +131,7 @@ private:
     qreal m_shear;
     XFormType m_type;
     QPixmap m_pixmap;
+    cv::Mat m_matr;
     QString m_text;
     QBasicTimer timer;
 };
@@ -145,7 +152,7 @@ private slots:
     void viewAdjust (void);
 
 signals:
-    void pHistogram (QPixmap pMap);
+    void pHistogram (QPixmap pMap, const cv::Mat& matr);
 
 private:
     XFormView *view;

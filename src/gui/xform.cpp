@@ -54,6 +54,7 @@
 #include <QtCore/qmath.h>
 #include <QtDebug>
 
+#include "qimage_to_cvmat.h"
 #include "math.h"
 
 const int alpha = 155;
@@ -96,6 +97,11 @@ QPixmap XFormView::pixmap() const
 QString XFormView::text() const
 {
     return m_text;
+}
+
+const Mat& XFormView::getMatrix () const
+{
+    return m_matr;
 }
 
 void XFormView::setText(const QString &t)
@@ -369,10 +375,14 @@ void XFormView::setFile(const QString &name)
         image.setPixel(0, 0, value);
         image.setPixel(0, 1, value);
 
+        m_matr = QImageToCvMat (image);
         m_pixmap = QPixmap::fromImage(image);
     }
     else
+    {
         m_pixmap = QPixmap(name);
+        m_matr = imread (name.toLocal8Bit().constData());
+    }
 }
 
 void XFormView::setVectorType()
@@ -1152,7 +1162,7 @@ void XFormWidget::setFile(const QString &name)
 void XFormWidget::viewHist (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    emit pHistogram (view->pixmap());
+    emit pHistogram (view->pixmap(), view->getMatrix());
 }
 
 void XFormWidget::viewBright (void)
