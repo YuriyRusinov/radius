@@ -23,15 +23,14 @@ CONFIG += link_pkgconfig
 PKGCONFIG += gsl
 PKGCONFIG += fftw3 fftw3_threads
 PKGCONFIG += blas
-
-LIBS *= -lopencv_features2d -lopencv_objdetect -lopencv_legacy -lopencv_ml
 PKGCONFIG += opencv
 
-unix{
-    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -L$$QWT_LIB_DIR 
-}
+#unix{
+#    LIBS *= -L$$FFT_LIB_DIR -lfftw3 -lfftw3_threads -lm -L$$BLAS_LIB_DIR -L$$QWT_LIB_DIR 
+#}
 win32{
     LIBS *= -L$$FFT_LIB_DIR -llibfftw3-3
+    LIBS *= -lopencv_features2d -lopencv_objdetect -lopencv_legacy -lopencv_ml
 }
 
 INCLUDEPATH *= . \
