@@ -57,13 +57,11 @@ void rggImageWidget :: contextMenuEvent ( QContextMenuEvent * event )
 void rggImageWidget :: saveImage (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    QString fImName = QFileDialog :: getSaveFileName (this, tr("Save image"), QDir::currentPath(), tr("Images (*.png *.xpm *.jpg);;All files (*)"));
+    QString fImName = QFileDialog :: getSaveFileName (this, tr("Save image"), QDir::currentPath(), tr("Image files (*.xpm *.png *.ico *.jpg *.jpeg *.bmp *.gif *.pbm *.pgm *.xbm);;All files (*)"));
     if (fImName.isEmpty())
         return;
-    QImageWriter imW (fImName);
-    imW.setQuality (100);
-    //lImage->pixmap()->save (fImName);
-    //im.save (fImName);
-    bool isW = imW.write (im);
+    //QImageWriter imW (fImName);
+    //imW.setQuality (100);
+    bool isW = im.save (fImName);//imW.write (im);
     qDebug () << __PRETTY_FUNCTION__ << isW;
 }
