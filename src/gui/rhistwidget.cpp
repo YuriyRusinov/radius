@@ -75,8 +75,19 @@ void HistWidget :: setHistData (const double * const rHist, const double * const
     (dynamic_cast <Histogram *>(plotRedHist))->setValues (nColors, rhist);
     (dynamic_cast <Histogram *>(plotGreenHist))->setValues (nColors, ghist);
     (dynamic_cast <Histogram *>(plotBlueHist))->setValues (nColors, bhist);
+    QBrush redBrush (QColor (Qt::red));
+    plotRedHist->setBrush (redBrush);
+    plotRedHist->setStyle (QwtPlotHistogram::Outline);
     plotRedHist->attach (m_plot);
+
+    QBrush greenBrush (QColor (Qt::green));
+    plotGreenHist->setBrush (greenBrush);
+    plotGreenHist->setStyle (QwtPlotHistogram::Outline);
     plotGreenHist->attach (m_plot);
+
+    QBrush blueBrush (QColor (Qt::blue));
+    plotBlueHist->setBrush (blueBrush);
+    plotBlueHist->setStyle (QwtPlotHistogram::Outline);
     plotBlueHist->attach (m_plot);
     m_plot->setAxisScale(QwtPlot::yLeft, 0.0, yMax);
     wNoiseMinSp->setRange (0.0, yMax);

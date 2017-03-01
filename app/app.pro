@@ -2,4 +2,4 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
            radius \
-           test1
+           opencv_test

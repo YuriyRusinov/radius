@@ -88,6 +88,7 @@ void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist
     int hist_h = imH;//400;
     qDebug () << __PRETTY_FUNCTION__ << hist_w << hist_h;
     int bin_w = cvRound( (double) hist_w/histSize );
+    Q_UNUSED (bin_w);
 
     Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
 
@@ -114,7 +115,7 @@ void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist
             bHist[ qBlue( color ) ] += 1.0;
         }
     }
-    double ar = (rHist[1]-rHist[0])/ (r_hist.at<float>(1)-r_hist.at<float>(0));
+/*    double ar = (rHist[1]-rHist[0])/ (r_hist.at<float>(1)-r_hist.at<float>(0));
     double br = rHist[0] - ar * r_hist.at<float>(0);
     double ag = (gHist[1]-gHist[0])/ (g_hist.at<float>(1)-g_hist.at<float>(0));
     double bg = gHist[0] - ag * g_hist.at<float>(0);
@@ -140,6 +141,7 @@ void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist
                          Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
                          Scalar( 0, 0, 255), 2, 8, 0  );
     }
+*/
 }
 
 void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin, double wNoiseMax, int vRed, int vBlue)
