@@ -47,12 +47,12 @@ int main( int, char** argv )
   qDebug () << __FUNCTION__ << (imTr == imSrcF) << (imTr0 == imSrc);
   qDebug () << __FUNCTION__ << outFile << outFile_s << saved << saved_s;
 
-  if( !src.data )
+  if( !src1.data )
     { return -1; }
 
   /// Separate the image in 3 places ( B, G and R )
   vector<Mat> bgr_planes;
-  split( src, bgr_planes );
+  split( src1, bgr_planes );
 
   /// Establish the number of bins
   int histSize = 256;
