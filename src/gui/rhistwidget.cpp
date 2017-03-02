@@ -7,7 +7,7 @@
 #include <QGroupBox>
 #include <QtDebug>
 
-#include <qwt_plot_histogram.h>
+#include <qwt_plot_curve.h>
 #include <qwt_series_data.h>
 #include <qwt_plot.h>
 #include <qwt_picker.h>
@@ -54,9 +54,9 @@ void HistWidget :: setImage (const QImage& wIm)
 
 void HistWidget :: setHistData (const double * const rHist, const double * const gHist, const double * const bHist, int nColors)
 {
-    QwtPlotHistogram * plotRedHist = new Histogram (tr("Model histogram"), QColor(Qt::red));//new QwtPlotHistogram;
-    QwtPlotHistogram * plotGreenHist = new Histogram (tr("Model histogram"), QColor(Qt::green));//new QwtPlotHistogram;
-    QwtPlotHistogram * plotBlueHist = new Histogram (tr("Model histogram"), QColor(Qt::blue));//new QwtPlotHistogram;
+    QwtPlotCurve * plotRedHist = new Histogram (tr("Model histogram"));//new QwtPlotHistogram;
+    QwtPlotCurve * plotGreenHist = new Histogram (tr("Model histogram"));//new QwtPlotHistogram;
+    QwtPlotCurve * plotBlueHist = new Histogram (tr("Model histogram"));//new QwtPlotHistogram;
     double *rhist = new double [nColors];
     double *ghist = new double [nColors];
     double *bhist = new double [nColors];
@@ -75,20 +75,18 @@ void HistWidget :: setHistData (const double * const rHist, const double * const
     (dynamic_cast <Histogram *>(plotRedHist))->setValues (nColors, rhist);
     (dynamic_cast <Histogram *>(plotGreenHist))->setValues (nColors, ghist);
     (dynamic_cast <Histogram *>(plotBlueHist))->setValues (nColors, bhist);
-    QBrush redBrush (QColor (Qt::red));
-    plotRedHist->setBrush (redBrush);
-    plotRedHist->setStyle (QwtPlotHistogram::Outline);
+    QPen redPen (QBrush (QColor (Qt::red)), 4.0);
+    plotRedHist->setPen (redPen);
     plotRedHist->attach (m_plot);
 
-    QBrush greenBrush (QColor (Qt::green));
-    plotGreenHist->setBrush (greenBrush);
-    plotGreenHist->setStyle (QwtPlotHistogram::Outline);
+    QPen greenPen (QBrush (QColor (Qt::green)), 4.0);
+    plotGreenHist->setPen (greenPen);//Brush (greenBrush);
     plotGreenHist->attach (m_plot);
 
-    QBrush blueBrush (QColor (Qt::blue));
-    plotBlueHist->setBrush (blueBrush);
-    plotBlueHist->setStyle (QwtPlotHistogram::Outline);
+    QPen bluePen (QBrush (QColor (Qt::blue)), 4.0);
+    plotBlueHist->setPen (bluePen);//setBrush (blueBrush);
     plotBlueHist->attach (m_plot);
+
     m_plot->setAxisScale(QwtPlot::yLeft, 0.0, yMax);
     wNoiseMinSp->setRange (0.0, yMax);
     wNoiseMinSp->setValue (0.0);
@@ -131,12 +129,14 @@ void HistWidget :: init (void)
     m_plotMarkerColorRed->attach (m_plot);
     m_plotMarkerColorRed->setLineStyle( QwtPlotMarker::VLine );
     QPen rPen ( QColor (Qt::red) );
+    rPen.setStyle (Qt::DashLine);
     m_plotMarkerColorRed->setLinePen (rPen);
     m_plotMarkerColorRed->setValue (0.0, 0.0);
 
     m_plotMarkerColorBlue->setValue (256.0, 0.0);
     m_plotMarkerColorBlue->setLineStyle( QwtPlotMarker::VLine );
     QPen bPen ( QColor (Qt::blue) );
+    bPen.setStyle (Qt::DashLine);
     m_plotMarkerColorBlue->setLinePen (bPen);
     m_plotMarkerColorBlue->attach (m_plot);
 

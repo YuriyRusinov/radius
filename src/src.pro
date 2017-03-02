@@ -66,6 +66,7 @@ HEADERS += fft_c.h \
            RadarImageEq.h \
            qimage_to_cvmat.h \
            cvmat_to_qimage.h \
+           histogramCalc.h \
            src_config.h
 
 SOURCES += fft_c.cpp \
@@ -87,7 +88,7 @@ SOURCES += fft_c.cpp \
            RadarImageEq.cpp \
            qimage_to_cvmat.cpp \
            cvmat_to_qimage.cpp \
-
+           histogramCalc.cpp
 
 include (gui/gui.pri)
 include (misc/misc.pri)

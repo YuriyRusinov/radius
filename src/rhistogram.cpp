@@ -10,12 +10,13 @@
 #include <qpen.h>
 #include <stdlib.h>
 
-Histogram::Histogram( const QString &title, const QColor &symbolColor ):
-    QwtPlotHistogram( title )
+Histogram::Histogram( const QString &title ):
+    QwtPlotCurve( title )
 {
-    setStyle( QwtPlotHistogram::Columns );
+    setStyle ( QwtPlotCurve::Lines );
+    //QwtPlotHistogram::Columns );
 
-    setColor( symbolColor );
+    //setColor( symbolColor );
 }
 
 void Histogram::setColor( const QColor &color )
@@ -27,14 +28,14 @@ void Histogram::setColor( const QColor &color )
 
 void Histogram::setValues( uint numValues, const double *values )
 {
-    QVector<QwtIntervalSample> samples( numValues );
+    QVector<QPointF> samples( numValues );
     for ( uint i = 0; i < numValues; i++ )
     {
-        QwtInterval interval( double( i ), i + 1.0 );
-        interval.setBorderFlags( QwtInterval::ExcludeMaximum );
+        //QwtInterval interval( double( i ), i + 1.0 );
+        //interval.setBorderFlags( QwtInterval::ExcludeMaximum );
 
-        samples[i] = QwtIntervalSample( values[i], interval );
+        samples[i] = QPointF ( (double)i, values[i]);// QwtIntervalSample( values[i], interval );
     }
 
-    setData( new QwtIntervalSeriesData( samples ) );
+    setSamples ( samples );//new QwtIntervalSeriesData( samples ) );
 }

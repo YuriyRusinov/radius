@@ -8,6 +8,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "qimage_to_cvmat.h"
+#include "histogramCalc.h"
 
 using std::vector;
 using namespace cv;
@@ -60,88 +61,39 @@ void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist
 {
     if (wImage.isNull() || !rHist || !gHist || !bHist)
         return;
-    qDebug () << __PRETTY_FUNCTION__;
-    cv::Mat wMat (wMatr.clone());//= QImageToCvMat (wImage);
+    qDebug () << __PRETTY_FUNCTION__ << wImage.format();
+
+    QImage wImC (wImage);
+    if (wImage.format() == QImage::Format_RGB32)
+        wImC = wImage.convertToFormat( QImage::Format_RGB888 );
+    cv::Mat wMat = QImageToCvMat (wImC);
+    Q_UNUSED (wMatr);
     std::vector<cv::Mat> rgbPlanes;// (3);
     split (wMat, rgbPlanes);
     //qDebug () << __PRETTY_FUNCTION__ << rgbPlanes.size();
     float range[] = {0.0, (float)nColors};
     const float * histRange = { range };
-    bool uniform = true; 
+/*    bool uniform = true; 
     bool accumulate = false;
     int histSize = nColors;
-
+*/
     cv::Mat b_hist, g_hist, r_hist;
-
-    //
-    // Compute the histograms:
-    //
-    calcHist( &rgbPlanes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
-    //qDebug () << __PRETTY_FUNCTION__ << b_hist.size ().width << ' ' << b_hist.size ().height;
-    calcHist( &rgbPlanes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
-    //qDebug () << __PRETTY_FUNCTION__ << g_hist.size ().width << ' ' << b_hist.size ().height;
-    calcHist( &rgbPlanes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
-    //qDebug () << __PRETTY_FUNCTION__ << r_hist.size ().width << ' ' << b_hist.size ().height;
+    Mat histImage;
     int imW = wImage.width();
     int imH = wImage.height();
     int hist_w = imW;//512;
     int hist_h = imH;//400;
-    qDebug () << __PRETTY_FUNCTION__ << hist_w << hist_h;
-    int bin_w = cvRound( (double) hist_w/histSize );
-    Q_UNUSED (bin_w);
 
-    Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
-
-    /// Normalize the result to [ 0, histImage.rows ]
-    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-
+    //
+    // Compute the histograms:
+    //
+    histogramCalc (wMat, r_hist, g_hist, b_hist, nColors, histRange, histImage, hist_w, hist_h);
     for (int i=0; i<nColors; i++)
     {
-        rHist [i] = 0.0;//cvRound (r_hist.at<float> (i, 0));
-        gHist [i] = 0.0;//cvRound (g_hist.at<float> (i, 0));//0.0;
-        bHist [i] = 0.0;//cvRound (b_hist.at<float> (i, 0));//0.0;
+        rHist [i] = (double) (r_hist.at<float> (i));
+        gHist [i] = (double) (g_hist.at<float> (i));
+        bHist [i] = (double) (b_hist.at<float> (i));
     }
-    double sq = imW * imH;
-    Q_UNUSED (sq);
-    for (int i=0; i<imW; i++)
-    {
-        for (int j=0; j<imH; j++)
-        {
-            int color = wImage.pixel( i,j );
-            rHist[ qRed( color ) ] += 1.0;
-            gHist[ qGreen( color ) ] += 1.0;
-            bHist[ qBlue( color ) ] += 1.0;
-        }
-    }
-/*    double ar = (rHist[1]-rHist[0])/ (r_hist.at<float>(1)-r_hist.at<float>(0));
-    double br = rHist[0] - ar * r_hist.at<float>(0);
-    double ag = (gHist[1]-gHist[0])/ (g_hist.at<float>(1)-g_hist.at<float>(0));
-    double bg = gHist[0] - ag * g_hist.at<float>(0);
-    double ab = (bHist[1]-bHist[0])/ (b_hist.at<float>(1)-b_hist.at<float>(0));
-    double bb = bHist[0] - ab * b_hist.at<float>(0);
-    qDebug () << __PRETTY_FUNCTION__ << ar << br << ag << bg << ab << bb;
-    for (int i=0; i<nColors; i++)
-    {
-        qDebug () << __PRETTY_FUNCTION__ << rHist[i] - (ar*r_hist.at<float> (i, 0)+br);// << ' ' 
-//                                         << gHist[i]/imH << g_hist.at<float> (i, 0) << gHist[i] / g_hist.at<float> (i, 0) << ' '
-//                                         << bHist[i]/imH << b_hist.at<float> (i, 0) << bHist[i] / b_hist.at<float> (i, 0);
-    }
-
-    for( int i = 1; i < histSize; i++ )
-    {
-        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ) ,
-                         Point( bin_w*(i), hist_h - cvRound(b_hist.at<float>(i)) ),
-                         Scalar( 255, 0, 0), 2, 8, 0  );
-        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(g_hist.at<float>(i-1)) ) ,
-                         Point( bin_w*(i), hist_h - cvRound(g_hist.at<float>(i)) ),
-                         Scalar( 0, 255, 0), 2, 8, 0  );
-        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ) ,
-                         Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
-                         Scalar( 0, 0, 255), 2, 8, 0  );
-    }
-*/
 }
 
 void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin, double wNoiseMax, int vRed, int vBlue)
