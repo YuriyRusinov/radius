@@ -8,6 +8,8 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "qimage_to_cvmat.h"
+#include "cvmat_to_qimage.h"
+
 #include "histogramCalc.h"
 
 using std::vector;
@@ -106,8 +108,14 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
     double * rHist = new double [nCol];
     double * gHist = new double [nCol];
     double * bHist = new double [nCol];
-    cv::Mat wMat = QImageToCvMat (wImage);
-    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat);
+    QImage wImC (wImage);
+    if (wImage.format() == QImage::Format_RGB32)
+        wImC = wImage.convertToFormat( QImage::Format_RGB888 );
+    cv::Mat wMat = QImageToCvMat (wImC);
+    cvtColor( wMat, wMat, CV_BGR2GRAY );
+    cv::Mat wMatR;// (wMat.clone());
+    equalizeHist (wMat, wMatR);
+/*    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat);
     for (int i=0; i<nCol; i++)
     {
         rHist[i] /= imSize;
@@ -148,22 +156,25 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
         histogram[ i ] = qRgb( (int)( 0.5 ),
                          (int)( 0.5 ),
                          (int)( 0.5 ));
+
     unsigned int * buffer = applyHistogram (wImage, histogram);
     delete [] histogram;
-
-    QImage res;
-    if (buffer)
-    {
-        QImage tImage ((unsigned char*)buffer, wImage.width(), wImage.height(), QImage::Format_RGB32);
-        res = tImage;
-        res.detach ();
-        delete [] buffer;
-        XFormWidget * xfw = new XFormWidget (0);
-        xfw->setImage (res);
-        connect (xfw, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
-        emit histView (xfw);
-        emit viewEqImage (res);
-    }
+*/
+    QImage res = cvMatToQImage (wMatR);
+    if (wImage.format() == QImage::Format_RGB32)
+        res.convertToFormat (wImage.format());
+    //    if (buffer)
+//    {
+//        QImage tImage ((unsigned char*)buffer, wImage.width(), wImage.height(), QImage::Format_RGB32);
+//        res = tImage;
+//        res.detach ();
+//        delete [] buffer;
+    XFormWidget * xfw = new XFormWidget (0);
+    xfw->setImage (res);
+    connect (xfw, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
+    emit histView (xfw);
+    emit viewEqImage (res);
+//    }
     delete [] bHist;
     delete [] gHist;
     delete [] rHist;
