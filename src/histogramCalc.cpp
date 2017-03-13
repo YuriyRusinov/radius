@@ -5,7 +5,7 @@ using std::vector;
 using cv::Scalar;
 using cv::NORM_MINMAX;
 
-void histogramCalc (const Mat& src, Mat& r_hist, Mat& g_hist, Mat& b_hist, int histSize, const float* histRange, Mat& histImage, int width, int height)
+void histogramCalc (const Mat& src, Mat& r_hist, Mat& g_hist, Mat& b_hist, int histSize, const float* histRange, Mat& histImage, int width, int height, bool accum)
 {
     if (!src.data)
         return;
@@ -13,7 +13,7 @@ void histogramCalc (const Mat& src, Mat& r_hist, Mat& g_hist, Mat& b_hist, int h
     split( src, bgr_planes );
 
     bool uniform = true;
-    bool accumulate = false;
+    bool accumulate = accum;
 
     calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
     calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );

@@ -59,7 +59,7 @@ void RadiusImageEqualizer :: viewHistogram (QPixmap pMap, const cv::Mat& wMatr)
     emit histView (w);
 }
 
-void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist, double * gHist, double * bHist, const int& nColors, const cv::Mat& wMatr)
+void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist, double * gHist, double * bHist, const int& nColors, const cv::Mat& wMatr, bool accum)
 {
     if (wImage.isNull() || !rHist || !gHist || !bHist)
         return;
@@ -89,7 +89,7 @@ void RadiusImageEqualizer :: calcHistogram (const QImage& wImage, double * rHist
     //
     // Compute the histograms:
     //
-    histogramCalc (wMat, r_hist, g_hist, b_hist, nColors, histRange, histImage, hist_w, hist_h);
+    histogramCalc (wMat, r_hist, g_hist, b_hist, nColors, histRange, histImage, hist_w, hist_h, accum);
     for (int i=0; i<nColors; i++)
     {
         rHist [i] = (double) (r_hist.at<float> (i));
@@ -114,9 +114,11 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
     cv::Mat wMat = QImageToCvMat (wImC);
     cvtColor( wMat, wMat, CV_BGR2GRAY );
     cv::Mat wMatR;// (wMat.clone());
-    equalizeHist (wMat, wMatR);
-/*    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat);
-    for (int i=0; i<nCol; i++)
+    cv::equalizeHist (wMat, wMatR);
+    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat);
+    cv::Mat wMatRes = cv::Mat::zeros (wMat.size(), wMat.type());
+    this->equalizeHist (wMat, rHist, gHist, bHist, nCol, wMatRes);
+/*    for (int i=0; i<nCol; i++)
     {
         rHist[i] /= imSize;
         rHist[i] -= wNoiseMin;
@@ -161,8 +163,12 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
     delete [] histogram;
 */
     QImage res = cvMatToQImage (wMatR);
+    QImage res1 = cvMatToQImage (wMatRes);
     if (wImage.format() == QImage::Format_RGB32)
+    {
         res.convertToFormat (wImage.format());
+        res1.convertToFormat (wImage.format());
+    }
     //    if (buffer)
 //    {
 //        QImage tImage ((unsigned char*)buffer, wImage.width(), wImage.height(), QImage::Format_RGB32);
@@ -174,10 +180,34 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
     connect (xfw, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
     emit histView (xfw);
     emit viewEqImage (res);
+    XFormWidget * xfw1 = new XFormWidget (0);
+    xfw1->setImage (res1);
+    connect (xfw1, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
+    emit histView (xfw1);
+    emit viewEqImage (res1);
+
 //    }
     delete [] bHist;
     delete [] gHist;
     delete [] rHist;
+}
+
+void RadiusImageEqualizer :: equalizeHist (const cv::Mat& wMatr, double * rHist, double * gHist, double * bHist, int nCol, cv::Mat& wMatRes)
+{
+//    double * histogram = new double [nCol];
+    int nr = wMatr.rows;
+    int nc = wMatr.cols;
+    for (int i=0; i<nr; i++)
+        for (int j=0; j<nc; j++)
+        {
+            unsigned int sum = 0;
+            for (int k=0; k<qMin (wMatr.at<float> (i, j), (float)nCol); k++)
+                sum += qRgb(rHist[k], gHist[k], bHist[k]);
+            qDebug () << __PRETTY_FUNCTION__ << i << j << sum << wMatr.at<float> (i, j);
+            wMatRes.at<float> (i, j) = sum;
+        }
+
+//    delete [] histogram;
 }
 
 unsigned int * RadiusImageEqualizer :: applyHistogram (const QImage &img, unsigned int *histogram)

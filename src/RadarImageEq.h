@@ -27,7 +27,7 @@ public:
     // rHist, gHist, bHist -- выходные массивы для цветов red, green, blue размерности nColor соответственно
     // nColor -- число цветов для гистограмм
     //
-    void calcHistogram (const QImage& wImage, double * rHist, double * gHist, double * bHist, const int& nColor, const cv::Mat& wMatr);
+    void calcHistogram (const QImage& wImage, double * rHist, double * gHist, double * bHist, const int& nColor, const cv::Mat& wMatr, bool accum=false);
 
 private slots:
     void viewHistogram (QPixmap pMap, const cv::Mat& wMatr);
@@ -46,6 +46,7 @@ private:
     RadiusImageEqualizer (QObject * parent=0);
     virtual ~RadiusImageEqualizer (void);
     RadiusImageEqualizer& operator= (const RadiusImageEqualizer&);
+    void equalizeHist (const cv::Mat& wMatr, double * rHist, double * gHist, double * bHist, int nCol, cv::Mat& wMatRes);
 
     unsigned int * applyHistogram (const QImage &img, unsigned int *histogram);
 
