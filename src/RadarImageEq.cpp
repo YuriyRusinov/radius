@@ -194,8 +194,13 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
 
 void RadiusImageEqualizer :: equalizeHist (const cv::Mat& wMatr, double * rHist, double * gHist, double * bHist, int nCol, cv::Mat& wMatRes)
 {
+    wMatRes = wMatr.clone ();
+    Q_UNUSED (rHist);
+    Q_UNUSED (gHist);
+    Q_UNUSED (bHist);
+    Q_UNUSED (nCol);
 //    double * histogram = new double [nCol];
-    int nr = wMatr.rows;
+/*    int nr = wMatr.rows;
     int nc = wMatr.cols;
     for (int i=0; i<nr; i++)
         for (int j=0; j<nc; j++)
@@ -206,7 +211,7 @@ void RadiusImageEqualizer :: equalizeHist (const cv::Mat& wMatr, double * rHist,
             qDebug () << __PRETTY_FUNCTION__ << i << j << sum << wMatr.at<float> (i, j);
             wMatRes.at<float> (i, j) = sum;
         }
-
+*/
 //    delete [] histogram;
 }
 
