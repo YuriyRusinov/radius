@@ -115,8 +115,8 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
     cvtColor( wMat, wMat, CV_BGR2GRAY );
     cv::Mat wMatR;// (wMat.clone());
     cv::equalizeHist (wMat, wMatR);
-    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat);
-    cv::Mat wMatRes = cv::Mat::zeros (wMat.size(), wMat.type());
+    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat, true);
+    cv::Mat wMatRes = wMat.clone();//cv::Mat::zeros (wMat.size(), wMat.type());
     this->equalizeHist (wMat, rHist, gHist, bHist, nCol, wMatRes);
 /*    for (int i=0; i<nCol; i++)
     {
@@ -194,24 +194,22 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
 
 void RadiusImageEqualizer :: equalizeHist (const cv::Mat& wMatr, double * rHist, double * gHist, double * bHist, int nCol, cv::Mat& wMatRes)
 {
-    wMatRes = wMatr.clone ();
-    Q_UNUSED (rHist);
-    Q_UNUSED (gHist);
-    Q_UNUSED (bHist);
-    Q_UNUSED (nCol);
+    wMatRes = wMatr.clone();//Mat::zeros (wMatr.cols, wMatr.rows, wMatr.type());
 //    double * histogram = new double [nCol];
-/*    int nr = wMatr.rows;
+    int nr = wMatr.rows;
     int nc = wMatr.cols;
     for (int i=0; i<nr; i++)
         for (int j=0; j<nc; j++)
         {
             unsigned int sum = 0;
-            for (int k=0; k<qMin (wMatr.at<float> (i, j), (float)nCol); k++)
+            int kMax = qMin (wMatr.at<float> (i, j), (float)nCol);
+            for (int k=0; k<kMax; k++)
                 sum += qRgb(rHist[k], gHist[k], bHist[k]);
             qDebug () << __PRETTY_FUNCTION__ << i << j << sum << wMatr.at<float> (i, j);
             wMatRes.at<float> (i, j) = sum;
+            wMatRes.at<double> (i, j) = sum;
         }
-*/
+
 //    delete [] histogram;
 }
 
