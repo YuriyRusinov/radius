@@ -46,7 +46,7 @@ void ConvAzimuthThread :: run (void)
     int ndv = ndcentre-ndDim/2;
     int ndn = ndcentre+ndDim/2;
     int ndrz = ndn-ndv;
-    CMatrix rgg1 (0.0, ndrz, na2);
+    CMatrix * rgg1 = new CMatrix (0.0, ndrz, na2);
 //    complex<double>* rgg1Vec = new complex<double> [ndrz*na2];
     QFile rggMatrC("rgg1.dat");
     rggMatrC.open(QIODevice::WriteOnly);
@@ -66,7 +66,7 @@ void ConvAzimuthThread :: run (void)
             stlb2[j]=stlb[j+2*ndv];
         for (int j=0; j<ndrz;j++)
         {
-            rgg1(j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
+            rgg1->operator() (j, i0) = complex<double>(stlb2[2*j], stlb2[2*j+1]);
         }
         //qDebug () << __PRETTY_FUNCTION__ << i0 << na2 << cr;
         // << ndv << stlb2[0] << stlb2[2*ndv] << sizeof (quint32);
@@ -77,20 +77,20 @@ void ConvAzimuthThread :: run (void)
     for (int i=0; i<20; i++)
     {
         for (int j=0; j<20; j++)
-            rggStr << real (rgg1(i, j)) << " " << imag (rgg1(i, j)) << "i ";
+            rggStr << real (rgg1->operator() (i, j)) << " " << imag (rgg1->operator() (i, j)) << "i ";
         rggStr << endl;
     }
     int nas = na2/2;
     qDebug () << __PRETTY_FUNCTION__ << QString ("Matrices were set") << ndrz << nas << na2;
 
 //    CMatrix corf2 (complex<double>(0.0), ndrz, na2);
-    CMatrix corf3 (complex<double>(0.0), ndrz, nas);
+    CMatrix * corf3 = new CMatrix (complex<double>(0.0), ndrz, nas);
     QFile corfCont ("ctest.dat");
     corfCont.open (QIODevice::WriteOnly);
     QTextStream stCorf (&corfCont);
     int from_opor (0);
     //complex<double> * corfVec = new complex<double> [ndrz*na2];
-    CMatrix corf (complex<double>(0.0), ndrz, na2);
+    CMatrix * corf = new CMatrix (complex<double>(0.0), ndrz, na2);
     qDebug () << __PRETTY_FUNCTION__ << nas << na2;
     double dx = convAzParameters->getAzimuthStep();
     double R = convAzParameters->radius ();
@@ -106,18 +106,18 @@ void ConvAzimuthThread :: run (void)
             double rt1 = rt - sqrt (R*R+H*H);
             int N0 = (int)(rt1/dnr);
             double phase = -4*pi*rt/lamb;
-            corf3(N0, j) = complex<double>(cos(phase), sin(phase));
+            corf3->operator() (N0, j) = complex<double>(cos(phase), sin(phase));
         }
         from_opor++;
     }
 //    complex<double>* c = corf3.getData();
-    complex<double> * corfVec = corf3.getData();
+    complex<double> * corfVec = corf3->getData();
     Q_UNUSED (corfVec);
     for (int i=0; i<10/*ndrz*/; i++)
     {
         for (int j=0; j<nas; j++)
         {
-            stCorf << qSetRealNumberPrecision(14) << real(corf3(i, j)) << " " << qSetRealNumberPrecision(14) << imag (corf3(i, j)) << "i ";
+            stCorf << qSetRealNumberPrecision(14) << real(corf3->operator() (i, j)) << " " << qSetRealNumberPrecision(14) << imag (corf3->operator() (i, j)) << "i ";
         }
         stCorf << endl;
         //qDebug () << __PRETTY_FUNCTION__ << i;
@@ -128,11 +128,12 @@ void ConvAzimuthThread :: run (void)
     {
         for (int j=0; j<ndrz; j++)
         {
-            corf(j, i) = corf3(j, i+nas/2); //corfVec[j+(i+nas/2)*ndrz];//
-            corf(j, i+na2-nas/2) = corf3(j, i); // corfVec[j + i*ndrz]; 
+            corf->operator() (j, i) = corf3->operator() (j, i+nas/2); //corfVec[j+(i+nas/2)*ndrz];//
+            corf->operator() (j, i+na2-nas/2) = corf3->operator() (j, i); // corfVec[j + i*ndrz]; 
         }
         cor_func++;
     }
+    delete corf3;
 
     stCorf << QString("Matrix for FFT") << endl;
 
@@ -140,8 +141,8 @@ void ConvAzimuthThread :: run (void)
     {
         for (int j=0; j<na2; j++)
         {
-            double x = real (corf(i,j));
-            double y = imag (corf(i,j));
+            double x = real (corf->operator() (i,j));
+            double y = imag (corf->operator() (i,j));
             //if ((i==0 && fabs (x + 0.50376075247194) <= 0.1e-5))// || fabs (xd) > 0.1e-15 || fabs (yd) > 0.1e-15)
             //    qDebug() << __PRETTY_FUNCTION__ << "Debug indices" << i << j;
             stCorf << qSetRealNumberPrecision(16) << x << " " << qSetRealNumberPrecision(16) << y << " ";
@@ -151,15 +152,16 @@ void ConvAzimuthThread :: run (void)
     stCorf << endl;
 
     FFT2_Transform fft2;// = new FFT2_Transform;
-    complex<double> * corfw = fft2(corf.getData(), ndrz, na2, FFTW_FORWARD, FFTW_ESTIMATE);
+    complex<double> * corfw = fft2(corf->getData(), ndrz, na2, FFTW_FORWARD, FFTW_ESTIMATE);
+    delete corf;
     stCorf << QString("Results of FFT") << endl;
     int numMatr (0);
-    CMatrix corf2 (ndrz, na2);
+    CMatrix * corf2 = new CMatrix (ndrz, na2);
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<na2; j++)
         {
-            corf2(i, j) = corfw[i*na2+j];
+            corf2->operator()(i, j) = corfw[i*na2+j];
             if (i<10)
                 stCorf << /*qSetFieldWidth(19) <<*/ qSetRealNumberPrecision(16) << real (corfw[i*na2+j])*ndrz*na2 << " " 
                        << /*qSetFieldWidth(19) <<*/ qSetRealNumberPrecision(16) << imag (corfw[i*na2+j])*ndrz*na2 << "i ";
@@ -169,22 +171,25 @@ void ConvAzimuthThread :: run (void)
             stCorf << endl;
     }
     delete [] corfw;
-    complex<double> * rggD = fft2(rgg1.getData(), ndrz, na2, FFTW_FORWARD, FFTW_ESTIMATE);
-    CMatrix rgg (ndrz, na2);
+    complex<double> * rggD = fft2(rgg1->getData(), ndrz, na2, FFTW_FORWARD, FFTW_ESTIMATE);
+    delete rgg1;
+    CMatrix * rgg = new CMatrix (ndrz, na2);
     int cor_volfr (0);
     for (int i=0; i<ndrz; i++)
     {
         for (int j=0; j<na2; j++)
         {
-            rgg (i, j) = rggD[i*na2+j];
-            rgg (i, j) *= conj (corf2 (i, j));
+            rgg->operator () (i, j) = rggD[i*na2+j];
+            rgg->operator () (i, j) *= conj (corf2->operator() (i, j));
             //rggD[j+i*na2] *= conj (corfw[j+i*na2]);
             //rggD[j+i*na2] /= na2*ndrz;
         }
         cor_volfr++;
     }
+    delete corf2;
     delete [] rggD;
-    complex<double> * rggBD = fft2(rgg.getData(), ndrz, na2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    complex<double> * rggBD = fft2(rgg->getData(), ndrz, na2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    delete rgg;
     double maxVal = 0.0;
 //    double minVal = 0.0;//sqrt (real(rggBD[0])*real(rggBD[0])+imag(rggBD[0])*imag(rggBD[0]));
     for (int i=0; i<ndrz*nas; i++)
