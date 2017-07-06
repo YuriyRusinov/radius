@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>467</width>
-    <height>550</height>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -206,6 +206,20 @@
       </item>
       <item row="7" column="1">
        <widget class="QLineEdit" name="lENumberOfReadingsInImpulse">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" alignment="Qt::AlignRight">
+       <widget class="QLabel" name="lSynthInterval">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Synthesis interval :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="lESynthesisInterval">
         <property name="readOnly">
          <bool>true</bool>
         </property>

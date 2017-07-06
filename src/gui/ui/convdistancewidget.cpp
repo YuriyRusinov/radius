@@ -11,6 +11,8 @@
 #include <QThread>
 #include <QtDebug>
 
+#include "fft_c.h"
+
 #include "ConvDistPhys.h"
 #include "constants1.h"
 #include "convdistancewidget.h"
@@ -26,6 +28,7 @@ ConvDistanceWidget :: ConvDistanceWidget (QWidget * parent, Qt::WindowFlags flag
     this->setWindowIcon (QIcon(":/radius/dcconv.png"));
     this->init();
 
+    connect (UI->lEReadingsNumber, SIGNAL (textChanged(const QString&)), this, SLOT (calcSynInt (const QString&)) );
     connect (UI->lELightSpeed, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
     connect (UI->lEDistanceStep, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
     connect (UI->lEImpulseDuration, SIGNAL (textChanged (const QString &)), this, SLOT (calcNumbImp (const QString&)) );
@@ -145,6 +148,10 @@ void ConvDistanceWidget :: init (void)
     UI->lEImpulseDuration->setText (QString::number (dimp*1e6));
 
     UI->lENumberOfReadingsInImpulse->setText (QString::number (N1));
+    QValidator * iSynthVal = new QIntValidator (this);
+    UI->lESynthesisInterval->setValidator (iSynthVal);
+    int nas = FFT_Transform::pow2roundup (ndn)/2;
+    UI->lESynthesisInterval->setText (QString::number (nas));
 
     QValidator * fftVal = new QIntValidator (1, 100, this);
     UI->lEFFTThreads->setValidator (fftVal);
@@ -230,4 +237,17 @@ void ConvDistanceWidget :: calcNumbImp (const QString& text)
     double fQuant2 = UI->lEQuantizationFrequency->text().toDouble();
     int NImp = (int)(Dimp*fQuant2)+1;
     UI->lENumberOfReadingsInImpulse->setText (QString::number (NImp));
+}
+
+void ConvDistanceWidget :: calcSynInt (const QString& text)
+{
+    bool ok;
+    int ndn = text.toInt (&ok);
+    if (!ok)
+    {
+        QMessageBox::warning (this, tr("Set parameters"), tr ("Incorrect parameters"), QMessageBox::Ok);
+        return;
+    }
+    int nas = FFT_Transform::pow2roundup (ndn)/2;
+    UI->lESynthesisInterval->setText (QString::number (nas));
 }

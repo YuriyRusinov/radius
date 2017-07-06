@@ -27,6 +27,7 @@ private slots:
 
     void calcFQuant (const QString& text);
     void calcNumbImp (const QString& text);
+    void calcSynInt (const QString& text);
 
 protected:
      void closeEvent(QCloseEvent *event);

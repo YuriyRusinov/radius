@@ -27,9 +27,13 @@ void ConvAzimuthThread :: run (void)
     QTime * fftTime = new QTime;
     fftTime->start();
     QString fileName = convAzParameters->getInputFileName();
+    mFile.lock ();
     FILE * fid6 = fopen (fileName.toAscii().constData(), "rb");
     if (!fid6)
+    {
+        mFile.unlock ();
         return;
+    }
     int nd = FFT_Transform::pow2roundup (convAzParameters->getFFTDim());
     int na2 (nd);
     int na_ots = convAzParameters->getShift ();
@@ -38,6 +42,7 @@ void ConvAzimuthThread :: run (void)
     if (h1 < 0)
     {
         fclose (fid6);
+        mFile.unlock ();
         return;
     }
     int read (0);
@@ -316,6 +321,7 @@ void ConvAzimuthThread :: run (void)
 //    subIm->setAttribute (Qt::WA_DeleteOnClose);
 
     fclose (fid6);
+    mFile.unlock ();
     int msecs = fftTime->elapsed ();
     emit sendTime (msecs);
     //FFTTimeWidget * fftWidget = new FFTTimeWidget;

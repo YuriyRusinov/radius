@@ -4,12 +4,12 @@
 <context>
     <name>ConvAzimuthThread</name>
     <message>
-        <location filename="../src/ConvAzimuthThread.cpp" line="194"/>
+        <location filename="../src/ConvAzimuthThread.cpp" line="204"/>
         <source>Results </source>
         <translation>Результаты</translation>
     </message>
     <message>
-        <location filename="../src/ConvAzimuthThread.cpp" line="204"/>
+        <location filename="../src/ConvAzimuthThread.cpp" line="214"/>
         <source>Image was calculated</source>
         <translation>Голографическое изображение получено</translation>
     </message>
@@ -75,41 +75,43 @@
 <context>
     <name>ConvDistanceWidget</name>
     <message>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="45"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="48"/>
         <source>Select source file</source>
         <translation>Выберите файл с данными</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="45"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="56"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="48"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="59"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="56"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="59"/>
         <source>Save convolution by distance data</source>
         <translation>Сохранить промежуточное изображение</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="161"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="168"/>
         <source>Number of FFT threads</source>
         <translation>Число потоков БПФ</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="188"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="196"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="206"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="212"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="226"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="195"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="203"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="213"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="219"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="233"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="248"/>
         <source>Set parameters</source>
         <translation>Установка параметров</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="188"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="196"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="206"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="212"/>
-        <location filename="../src/gui/ui/convdistancewidget.cpp" line="226"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="195"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="203"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="213"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="219"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="233"/>
+        <location filename="../src/gui/ui/convdistancewidget.cpp" line="248"/>
         <source>Incorrect parameters</source>
         <translation>Параметры заданы некорректно </translation>
     </message>
@@ -141,21 +143,21 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/golographicModel.cpp" line="75"/>
+        <location filename="../src/gui/golographicModel.cpp" line="82"/>
         <source>Azimuth,
  degrees</source>
         <translation>Азимут,
 градусы</translation>
     </message>
     <message>
-        <location filename="../src/gui/golographicModel.cpp" line="78"/>
+        <location filename="../src/gui/golographicModel.cpp" line="85"/>
         <source>Obliquity,
  degrees</source>
         <translation>Наклонение,
 градусы</translation>
     </message>
     <message>
-        <location filename="../src/gui/golographicModel.cpp" line="81"/>
+        <location filename="../src/gui/golographicModel.cpp" line="88"/>
         <source>Image of ship</source>
         <translation>Изображение</translation>
     </message>
@@ -163,16 +165,51 @@
 <context>
     <name>HistWidget</name>
     <message>
-        <location filename="../src/gui/rhistwidget.cpp" line="15"/>
+        <location filename="../src/gui/rhistwidget.cpp" line="33"/>
+        <source>Equalize</source>
+        <translation>Выравнивание</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="36"/>
         <source>Histogram</source>
         <translation>Гистограмма</translation>
     </message>
     <message>
-        <location filename="../src/gui/rhistwidget.cpp" line="38"/>
-        <location filename="../src/gui/rhistwidget.cpp" line="39"/>
-        <location filename="../src/gui/rhistwidget.cpp" line="40"/>
+        <location filename="../src/gui/rhistwidget.cpp" line="57"/>
+        <location filename="../src/gui/rhistwidget.cpp" line="58"/>
+        <location filename="../src/gui/rhistwidget.cpp" line="59"/>
         <source>Model histogram</source>
         <translation>Гистограмма</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="143"/>
+        <source>Noise filter parameters</source>
+        <translation>Параметры фильтрации белого шума</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="144"/>
+        <source>Noise min value</source>
+        <translation>Минимальная дисперсия шума</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="152"/>
+        <source>Noise max value</source>
+        <translation>Максимальная дисперсия шума</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="161"/>
+        <source>Color range parameters</source>
+        <translation>Параметры частотной фильтрации</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="163"/>
+        <source>Red color border</source>
+        <translation>Нижняя граница фильтрации</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/rhistwidget.cpp" line="170"/>
+        <source>Blue color border</source>
+        <translation>Верхняя граница фильтрации</translation>
     </message>
 </context>
 <context>
@@ -204,14 +241,14 @@
 <context>
     <name>RadMainWindow</name>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="111"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="1236"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="112"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1237"/>
         <source>Select source file</source>
         <translation>Выберите файл с данными</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="324"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="567"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="325"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="568"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -222,7 +259,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="76"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="77"/>
         <source>&amp;RLI tools</source>
         <translation>Работа с &amp;РЛИ</translation>
     </message>
@@ -233,9 +270,14 @@
 &quot;Радиус&quot; </translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="75"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="76"/>
         <source>&amp;Images tools</source>
         <translation>Работа с &amp;изображениями</translation>
+    </message>
+    <message>
+        <location filename="../app/radius/radmainwindow.cpp" line="111"/>
+        <source>Image files (*.flt *.xpm *.png *.ico *.jpg *.jpeg *.bmp *.gif *.pbm *.pgm *.xbm);;All files(*);</source>
+        <translation>Файлы изображений (*.flt *.xpm *.png *.ico *.jpg *.jpeg *.bmp *.gif *.pbm *.pgm *.xbm);;Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="172"/>
@@ -281,45 +323,40 @@
         <translation>Тестирование &amp;FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="221"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="222"/>
         <source>Test FFT for opor</source>
         <translation>Тестирование FFT для опорной функции</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="225"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="226"/>
         <source>Test FFT for stc</source>
         <translation>Тестирование FFT для данных</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="229"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="230"/>
         <source>Test FFT for stc1</source>
         <translation>Тестирование FFT для контрольных данных</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="233"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="234"/>
         <source>Test 2D FFT</source>
         <translation>Тестирование FFT 2D</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="78"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="242"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="79"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="243"/>
         <source>&amp;Settings</source>
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="77"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="78"/>
         <source>3&amp;D models</source>
         <translation>Работа с 3&amp;D моделями</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="79"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="80"/>
         <source>&amp;Help</source>
         <translation>&amp;Помощь</translation>
-    </message>
-    <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="110"/>
-        <source>Image files (*.flt *.bmp *.gif *.jpg);;All files(*);</source>
-        <translation>Файлы RLI изображений (*.flt *.bmp *.gif *.jpg);;Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../app/radius/radmainwindow.cpp" line="202"/>
@@ -337,108 +374,108 @@
         <translation>Бинарные RLI</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="249"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="250"/>
         <source>User Manual</source>
         <translation>Руководство пользователя</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="250"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="251"/>
         <source>F1</source>
         <comment>Help</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="324"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="325"/>
         <source>Save 1st data</source>
         <translation>Сохранение результатов свертки </translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="441"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="442"/>
         <source>Stc2 after FFT</source>
         <translation>Данные после FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="467"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="468"/>
         <source>Write error</source>
         <translation>Ошибка записи</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="567"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="568"/>
         <source>Open convolution data</source>
         <translation>Открыть данные свертки по дальности</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="597"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="598"/>
         <source>Read data</source>
         <translation>Чтение данных</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="597"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="598"/>
         <source>Cannot read convolution data</source>
         <translation>Не могу считать данные</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="730"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="731"/>
         <source>Results </source>
         <translation>Результаты</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="740"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="741"/>
         <source>Image was calculated</source>
         <translation>Голографическое изображение получено</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="792"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="917"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="793"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="918"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="792"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="836"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="917"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="975"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="793"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="837"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="918"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="976"/>
         <source>All files (*.*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="836"/>
-        <location filename="../app/radius/radmainwindow.cpp" line="975"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="837"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="976"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="891"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="892"/>
         <source>Opor before FFT</source>
         <translation>Опорная функция</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="906"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="907"/>
         <source>Opor after FFT</source>
         <translation>Опорная функция после FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1112"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1113"/>
         <source>Source matrix</source>
         <translation>Исходная матрица</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1127"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1128"/>
         <source>Source matrix after FFT</source>
         <translation>Образ Фурье исходной матрицы</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1135"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1136"/>
         <source>Source matrix after forward and backward FFT</source>
         <translation>Исходная матрица после прямого и обратного FFT</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1227"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1228"/>
         <source>Golographic images</source>
         <translation>Голографические изображения</translation>
     </message>
     <message>
-        <location filename="../app/radius/radmainwindow.cpp" line="1235"/>
+        <location filename="../app/radius/radmainwindow.cpp" line="1236"/>
         <source>Object files (*.obj);;All files(*);</source>
         <translation>Объектные файлы (*.obj);;Все файлы (*)</translation>
     </message>
@@ -492,7 +529,7 @@
 <context>
     <name>RadarImageProc</name>
     <message>
-        <location filename="../src/radarConvIm.cpp" line="93"/>
+        <location filename="../src/radarConvIm.cpp" line="97"/>
         <source>Result image</source>
         <translation>Результирующее изображение</translation>
     </message>
@@ -540,47 +577,47 @@
 <context>
     <name>XFormWidget</name>
     <message>
-        <location filename="../src/gui/xform.cpp" line="993"/>
+        <location filename="../src/gui/xform.cpp" line="1003"/>
         <source>Radius software sample transformations</source>
         <translation>Программный комплекс &quot;Радиус&quot;, преобразование моделей </translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1000"/>
+        <location filename="../src/gui/xform.cpp" line="1010"/>
         <source>Transformations</source>
         <translation>Преобразования</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1003"/>
+        <location filename="../src/gui/xform.cpp" line="1013"/>
         <source>Rotate</source>
         <translation>Вращение</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1009"/>
+        <location filename="../src/gui/xform.cpp" line="1019"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1015"/>
+        <location filename="../src/gui/xform.cpp" line="1025"/>
         <source>Shear</source>
         <translation>Дисторсия</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1021"/>
+        <location filename="../src/gui/xform.cpp" line="1031"/>
         <source>Histograms</source>
         <translation>Гистограммы</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1025"/>
+        <location filename="../src/gui/xform.cpp" line="1035"/>
         <source>Histogram</source>
         <translation>Гистограмма</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1027"/>
+        <location filename="../src/gui/xform.cpp" line="1037"/>
         <source>Brightness</source>
         <translation>Яркость</translation>
     </message>
     <message>
-        <location filename="../src/gui/xform.cpp" line="1030"/>
+        <location filename="../src/gui/xform.cpp" line="1040"/>
         <source>Image justify</source>
         <translation>Регулировка изображения</translation>
     </message>
@@ -819,22 +856,27 @@
         <translation>Число отсчетов в импульсе :</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/conv_distance_widget.ui" line="235"/>
+        <location filename="../src/gui/ui/conv_distance_widget.ui" line="217"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Synthesis interval :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>Интервал синтезирования</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ui/conv_distance_widget.ui" line="249"/>
         <source>&amp;Start</source>
         <translation>&amp;Старт</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/conv_distance_widget.ui" line="242"/>
+        <location filename="../src/gui/ui/conv_distance_widget.ui" line="256"/>
         <source>&amp;Close</source>
         <translation>&amp;Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/conv_distance_widget.ui" line="251"/>
+        <location filename="../src/gui/ui/conv_distance_widget.ui" line="265"/>
         <source>Computing parameters</source>
         <translation>Параметры вычислений</translation>
     </message>
     <message>
-        <location filename="../src/gui/ui/conv_distance_widget.ui" line="257"/>
+        <location filename="../src/gui/ui/conv_distance_widget.ui" line="271"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of FFT threads :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>Число потоков для FFT</translation>
     </message>
@@ -993,8 +1035,8 @@
     </message>
     <message>
         <location filename="../src/gui/rggImageWidget.cpp" line="60"/>
-        <source>Images (*.png *.xpm *.jpg);;All files (*)</source>
-        <translation>Файлы изображений (*.png *.xpm *.jpg);;Все файлы (*)</translation>
+        <source>Image files (*.xpm *.png *.ico *.jpg *.jpeg *.bmp *.gif *.pbm *.pgm *.xbm);;All files (*)</source>
+        <translation>Файлы изображений (*.xpm *.png *.ico *.jpg *.jpeg *.bmp *.gif *.pbm *.pgm *.xbm);;Все файлы (*)</translation>
     </message>
 </context>
 <context>
