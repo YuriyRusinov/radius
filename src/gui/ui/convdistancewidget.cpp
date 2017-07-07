@@ -31,6 +31,7 @@ ConvDistanceWidget :: ConvDistanceWidget (QWidget * parent, Qt::WindowFlags flag
     connect (UI->lEReadingsNumber, SIGNAL (textChanged(const QString&)), this, SLOT (calcSynInt (const QString&)) );
     connect (UI->lELightSpeed, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
     connect (UI->lEDistanceStep, SIGNAL (textChanged (const QString &)), this, SLOT (calcFQuant (const QString&)) );
+    connect (UI->lEQuantizationFrequency, SIGNAL (textChanged (const QString &)), this, SLOT (calcNumbImp (const QString&)) );
     connect (UI->lEImpulseDuration, SIGNAL (textChanged (const QString &)), this, SLOT (calcNumbImp (const QString&)) );
     connect (UI->tbRggFileName, SIGNAL (clicked()), this, SLOT (loadDataFile()) );
     connect (UI->tbConvDFileName, SIGNAL (clicked()), this, SLOT (setSaveFile()) );
@@ -226,15 +227,26 @@ void ConvDistanceWidget :: calcFQuant (const QString& text)
 
 void ConvDistanceWidget :: calcNumbImp (const QString& text)
 {
-    bool ok;
-    double Dimp = text.toDouble (&ok);
-    if (!ok)
+    bool ok1;
+    bool ok2;
+    double Dimp;// = text.toDouble (&ok);
+    double fQuant2;
+    if (qobject_cast<QWidget *>(this->sender()) == UI->lEImpulseDuration)
+    {
+        Dimp = text.toDouble (&ok1);
+        fQuant2 = UI->lEQuantizationFrequency->text().toDouble(&ok2);
+    }
+    else
+    {
+        Dimp = UI->lEImpulseDuration->text().toDouble (&ok1);
+        fQuant2 = text.toDouble (&ok2);
+    }
+    if (!ok1 || !ok2)
     {
         QMessageBox::warning (this, tr("Set parameters"), tr ("Incorrect parameters"), QMessageBox::Ok);
         return;
     }
     Dimp *= 0.1e-5;
-    double fQuant2 = UI->lEQuantizationFrequency->text().toDouble();
     int NImp = (int)(Dimp*fQuant2)+1;
     UI->lENumberOfReadingsInImpulse->setText (QString::number (NImp));
 }

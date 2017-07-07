@@ -177,7 +177,7 @@
       <item row="5" column="1">
        <widget class="QLineEdit" name="lEQuantizationFrequency">
         <property name="readOnly">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -197,7 +197,7 @@
       <item row="7" column="0">
        <widget class="QLabel" name="lNumberofReadingsInImpulse">
         <property name="text">
-         <string>Number of readings in impulse :</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of readings in impulse :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

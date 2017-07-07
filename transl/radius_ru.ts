@@ -140,7 +140,7 @@
         <location filename="../src/gui/golographicModel.cpp" line="36"/>
         <location filename="../src/gui/golographicModel.cpp" line="38"/>
         <source>%1</source>
-        <translation></translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../src/gui/golographicModel.cpp" line="82"/>
@@ -649,17 +649,17 @@
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Output file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Файл результатов</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Файл результатов :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="53"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Входной файл</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Входной файл :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="76"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calibration scale :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Масштаб калибровки</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Масштаб калибровки :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="86"/>
@@ -674,17 +674,17 @@
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="108"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Image size :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Размер изображения </translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Размер изображения :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="118"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Scale factor :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Масштабный множитель</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Масштабный множитель :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="131"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Offset :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Смещение</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Смещение :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="144"/>
@@ -704,37 +704,37 @@
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="203"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Image shift :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Смещение</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Смещение :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="213"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by azimuth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скважность по азимуту, градусы</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скважность по азимуту, градусы :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="226"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bandwidth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Ширина полосы</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ширина полосы :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="239"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by distance :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скважность по радиусу, м</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скважность по радиусу, м :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="249"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Light speed :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скорость света</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скорость света :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="269"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quantization frequency :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Частота квантования</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Частота квантования :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="279"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Impulse duration, microseconds :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Продолжительность импульса, мкс</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Продолжительность импульса, мкс :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="292"/>
@@ -744,22 +744,22 @@
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="309"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lambda :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Лямбда</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Лямбда :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="322"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Horizontal component :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Горизонтальная компонента</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Горизонтальная компонента :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="335"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vertical component :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Вертикальная компонента</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Вертикальная компонента :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="345"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dimension for FFT :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Размерность FFT</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Размерность FFT:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_azimuth_widget.ui" line="380"/>
@@ -793,12 +793,12 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Output file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Файл результатов</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Файл результатов :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="57"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input file :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Входной файл</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Входной файл :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="74"/>
@@ -808,7 +808,7 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calibration scale :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Масштаб калибровки</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Масштаб калибровки :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="99"/>
@@ -818,47 +818,47 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="105"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of readings in distance channel :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Число отсчетов в канале</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Число отсчетов в канале :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="118"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of distance channels :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Число каналов по дальности</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Число каналов по дальности :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="131"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bandwidth :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Ширина полосы</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ширина полосы :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="144"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step by distance :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скважность по радиусу, м</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скважность по радиусу, м :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="157"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Light speed :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скорость света</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скорость света :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="170"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quantization frequency :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Частота квантования</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Частота квантования :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="187"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Impulse duration, microseconds :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Продолжительность ипульса, ms</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Продолжительность импульса, мкс :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="200"/>
-        <source>Number of readings in impulse :</source>
-        <translation>Число отсчетов в импульсе :</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of readings in impulse :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Число отсчетов в импульсе :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="217"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Synthesis interval :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Интервал синтезирования</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Интервал синтезирования :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="249"/>
@@ -878,7 +878,7 @@
     <message>
         <location filename="../src/gui/ui/conv_distance_widget.ui" line="271"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of FFT threads :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Число потоков для FFT</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Число потоков для FFT:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
 </context>
 <context>
@@ -891,12 +891,12 @@
     <message>
         <location filename="../src/gui/ui/fft_time_widget.ui" line="22"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Elapsed time :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Время выполнения</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Время выполнения :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/ui/fft_time_widget.ui" line="39"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;seconds&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>секунд</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;секунд&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -949,7 +949,7 @@
     <message>
         <location filename="../src/gologram/image_creator_form.ui" line="158"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Azimuth Angle step:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скважность по азимуту</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скважность по азимуту:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
     <message>
         <location filename="../src/gologram/image_creator_form.ui" line="183"/>
@@ -964,7 +964,7 @@
     <message>
         <location filename="../src/gologram/image_creator_form.ui" line="225"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Obliquity Angle step:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>Скважность по наклонению</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скважность по наклонению:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/gologram/image_creator_form.ui" line="260"/>
