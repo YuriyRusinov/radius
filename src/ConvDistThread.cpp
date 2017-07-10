@@ -5,6 +5,7 @@
 #include <QAbstractItemModel>
 #include <QStandardItemModel>
 #include <QImage>
+#include <QDataStream>
 #include <QtDebug>
 
 #include <complex>
@@ -38,7 +39,7 @@ void ConvDistThread :: run (void)
         return;
     QTime * fftTime = new QTime;
     fftTime->start();
-    mFile.lock ();
+    //mFile.lock ();
     int ndn = convParameters->getNRChannels();
     int nd = FFT_Transform::pow2roundup (ndn);
     int nd2 = 2*ndn;
@@ -89,14 +90,17 @@ void ConvDistThread :: run (void)
     qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
     if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
     {
-        mFile.unlock();
+        //mFile.unlock();
         return;
     }
 
     QString fileConvName = convParameters->getConvFileName();//QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
     FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "w+");
-
+/*     QFile fid6f (fileConvName.toAscii());
+    fid6f.open (fid6, QIODevice::WriteOnly);
+    QDataStream f6d (&fid6f);
+*/
     int na = convParameters->getChannelsNumb ();
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
     QAbstractItemModel * radModel = new QStandardItemModel (nd2, 1, 0);// (nd2, na);
@@ -113,13 +117,13 @@ void ConvDistThread :: run (void)
     {
         if (convImage)
             delete convImage;
-        mFile.unlock();
+        //mFile.unlock();
         return;
     }
     convImage->fill (0);
     double maxval = 0.0;
 //    stc2MatrAbs = new double (na*nd);
-    qDebug () << __PRETTY_FUNCTION__ << fftTime->elapsed ();
+    qDebug () << __PRETTY_FUNCTION__ << QString ("Estimated time of data is %1 seconds").arg (fftTime->elapsed ()/0.1e4);
     int nThr = convParameters->getNumThreads();
     fftw_init_threads ();
     fftw_plan_with_nthreads (nThr);
@@ -135,9 +139,15 @@ void ConvDistThread :: run (void)
         thrCol->wait();
         //thrCol->deleteLater();
 */
+        if (!rFileLock.tryLockForRead ())
+            return;
         int cr = fread (st, sizeof (quint8), nd2, fid5);
         if (cr <= 0)
+        {
+            rFileLock.unlock ();
             return;
+        }
+        rFileLock.unlock ();
         for (int ii=0; ii< nd2; ii++)
         {
             if (i0<1)
@@ -200,18 +210,24 @@ void ConvDistThread :: run (void)
             double vmod = sqrt (stc2[2*ii]*stc2[2*ii] + stc2[2*ii+1]*stc2[2*ii+1]);
             maxval = qMax (maxval, vmod);
         }
+  
         if (fid6)
         {
             //qDebug () << __PRETTY_FUNCTION__ << QString ("Write data");
-            size_t h = fwrite (stc2, sizeof (double)/2, 2*nd, fid6);
+            rFileLock.tryLockForWrite ();
+            size_t h =  fwrite (stc2, sizeof (double)/2, 2*nd, fid6);//fwrite (ts, sizeof (char), sizeof (double)/2*2*nd, fid6);
+            rFileLock.unlock ();
+            //char * str = new char [nd*sizeof (double)];
+            //h = f6d.writeRawData (str, nd*sizeof (double));
             int ier = ferror (fid6);
             //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
-            if (h ==0 || ier)
+            if (ier)
             {
                 qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
                 return;
             }
         }
+
         delete [] xfft;
 
         //delete [] stc2abs;
@@ -220,7 +236,7 @@ void ConvDistThread :: run (void)
     delete cop;
     if (fid6)
         fclose (fid6);
-    mFile.unlock();
+    //mFile.unlock();
     fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "r+");
     qDebug () << __PRETTY_FUNCTION__ << maxval;
     if (fid6)

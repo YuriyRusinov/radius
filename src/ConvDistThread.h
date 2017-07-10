@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QMutex>
+#include <QReadWriteLock>
 
 #include <complex>
 #include "matrix.h"
@@ -38,7 +39,9 @@ private:
     // Variables
     //
     ConvDistPhysParameters * convParameters;
-    QMutex mFile;
+    QReadWriteLock rFileLock;
+
+    //QMutex mFile;
     double* stc2MatrAbs;
 
 private:
