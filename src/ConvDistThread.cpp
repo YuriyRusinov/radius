@@ -125,6 +125,8 @@ void ConvDistThread :: run (void)
 //    stc2MatrAbs = new double (na*nd);
     qDebug () << __PRETTY_FUNCTION__ << QString ("Estimated time of data is %1 seconds").arg (fftTime->elapsed ()/0.1e4);
     int nThr = convParameters->getNumThreads();
+    char * buf = new char [sizeof(double)*nd*na];
+    setvbuf (fid6, buf, _IOFBF, BUFSIZ);
     fftw_init_threads ();
     fftw_plan_with_nthreads (nThr);
     for (int i0=0; i0<na; i0++)
@@ -223,7 +225,7 @@ void ConvDistThread :: run (void)
             //qDebug () << __PRETTY_FUNCTION__ << QString ("Data were written %1 bytes, error indicator =%2 ").arg (h).arg(ier);
             if (ier)
             {
-                qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1").arg (ier);
+                qDebug () << __PRETTY_FUNCTION__ << tr ("Write error, code=%1, %2 bytes were written").arg (ier).arg (h);
                 return;
             }
         }
@@ -235,7 +237,11 @@ void ConvDistThread :: run (void)
     }
     delete cop;
     if (fid6)
+    {
+        fflush (fid6);
         fclose (fid6);
+        delete [] buf;
+    }
     //mFile.unlock();
     fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "r+");
     qDebug () << __PRETTY_FUNCTION__ << maxval;
