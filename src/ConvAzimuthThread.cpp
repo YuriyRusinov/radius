@@ -116,8 +116,8 @@ void ConvAzimuthThread :: run (void)
         from_opor++;
     }
 //    complex<double>* c = corf3.getData();
-    complex<double> * corfVec = corf3->getData();
-    Q_UNUSED (corfVec);
+//    complex<double> * corfVec = corf3->getData();
+//    Q_UNUSED (corfVec);
     for (int i=0; i<10/*ndrz*/; i++)
     {
         for (int j=0; j<nas; j++)
@@ -221,8 +221,8 @@ void ConvAzimuthThread :: run (void)
     double aScale = convAzParameters->getImScale();
     double bShift = convAzParameters->getImOffset();
     bool isLog = convAzParameters->getLogarithm();
-    CMatrix CRggBD (rggBD, ndrz, nas);
-    CMatrix CRggBDT = transp (CRggBD);
+    CMatrix * CRggBD = new CMatrix (rggBD, ndrz, nas);
+    CMatrix * CRggBDT = new CMatrix ( transp (*CRggBD) );
     for (int i=0; i<ndrz/* *nas/nCal*/; i++)//=nCal)
     {
         for (int j=0; j<nas/nCal;j++)
@@ -232,7 +232,7 @@ void ConvAzimuthThread :: run (void)
             double sum = 0.0;
             for (int iii=0; iii<nCal; iii++)
             {
-                complex<double> arg (CRggBDT(j, i));//(rggBD[ii]);
+                complex<double> arg (CRggBDT->operator() (j, i));//(rggBD[ii]);
                 //complex<double> argc (rggBD[ii+nas/2]);
                 double argAbs = sqrt (real(arg)*real(arg)+imag(arg)*imag(arg)) / maxVal;
                 //double argAbsC = sqrt (real(argc)*real(argc)+imag(argc)*imag(argc)) / maxVal;
@@ -293,7 +293,7 @@ void ConvAzimuthThread :: run (void)
             double wSum (0.0);
             for (int iii=0; iii<nCal; iii++)
             {
-                complex<double> arg (CRggBDT(j, i));//(rggBD[ii]);
+                complex<double> arg (CRggBDT->operator() (j, i));//(rggBD[ii]);
                 //complex<double> argc (rggBD[ii+nas/2]);
                 double argAbs = sqrt (real(arg)*real(arg)+imag(arg)*imag(arg)) / maxVal;
                 //double argAbsC = sqrt (real(argc)*real(argc)+imag(argc)*imag(argc)) / maxVal;
@@ -307,6 +307,8 @@ void ConvAzimuthThread :: run (void)
             fwrite (&wf, sizeof (float), 1, fid7);
         }
     }
+    delete CRggBD;
+    delete CRggBDT;
 //    delete [] rggBD;
 
     fclose (fid7);
