@@ -29,6 +29,7 @@ public:
 private slots:
     void initConvDist (void);
     void initConvAz (void);
+    void initPulsarCalc(void);
 
     void openDataFile (void);
     void saveImageFile (void);
@@ -82,6 +83,7 @@ private:
     QMenu * calcMenu;
     QAction * actInitConvDist;
     QAction * actInitConvAz;
+    QAction * actCalcPulsar;
     QMenu * RLI3DMenu;
     QAction * act3DMod;
     QAction * actView3DMod;

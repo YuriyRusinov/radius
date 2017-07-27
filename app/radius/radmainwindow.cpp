@@ -75,6 +75,7 @@ RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     actCalc2 (0),//new QAction (tr("Calculate&2"), this)),
     menuFile (new QMenu (tr ("&Images tools"))),
     calcMenu (new QMenu (tr ("&RLI tools"))),
+    actCalcPulsar (0),
     RLI3DMenu (new QMenu (tr ("3&D models"))),
     settingsMenu (new QMenu (tr ("&Settings"))),
     menuHelp (new QMenu (tr("&Help")))
@@ -197,6 +198,8 @@ void RadMainWindow :: init (void)
     actInitConvAz = calcMenu->addAction (tr("&Init convolution by azimuth"));
     actInitConvAz->setIcon (QIcon (":/radius/fft_a.png"));
     connect (actInitConvAz, SIGNAL (triggered()), this, SLOT (initConvAz()) );
+    actCalcPulsar = calcMenu->addAction (tr("Test of &Pulsar calculations"));
+    connect (actCalcPulsar, SIGNAL (triggered()), this, SLOT (initPulsarCalc()) );
 //    calcMenu->addSeparator ();
 
     act3DMod = RLI3DMenu->addAction (QIcon (":/radius/antenna_128.png"), tr ("3D Models RLI"));
@@ -1251,4 +1254,9 @@ void RadMainWindow :: viewHistogram (QPixmap pMap)
 {
     QWidget * w = new HistWidget (pMap.toImage(), this);
     addWidget (w);
+}
+
+void RadMainWindow :: initPulsarCalc(void)
+{
+    qDebug () << __PRETTY_FUNCTION__;
 }

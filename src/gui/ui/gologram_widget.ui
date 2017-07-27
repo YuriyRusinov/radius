@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>gologram_parameters_widget</class>
+ <widget class="QWidget" name="gologram_parameters_widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>431</width>
+    <height>456</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Gologram parameters form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="hLayFile">
+     <item>
+      <widget class="QLabel" name="lFileLoad">
+       <property name="text">
+        <string>Input file name :</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lEFileName"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbLoad">
+       <property name="toolTip">
+        <string>Load file with gologram</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="hImageLay">
+     <item>
+      <widget class="QLabel" name="lImageFile">
+       <property name="text">
+        <string>Image file name :</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lEImageFileName"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbOutputFile">
+       <property name="toolTip">
+        <string>Result image file</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="gbParameters">
+     <property name="title">
+      <string>Gologram Parameters </string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lFrequency">
+        <property name="text">
+         <string>Discretization frequency by length :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lEFrequency"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lACP">
+        <property name="text">
+         <string>Number of ACP bits :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lEACP"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lWidthFM">
+        <property name="text">
+         <string>Width of FM :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lEWFM"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lPulseDuration">
+        <property name="text">
+         <string>Pulse duration :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lEPulseDuration"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lResultStrobeDuration">
+        <property name="text">
+         <string>Result strobe duration :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lEStrobeDuration"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lResultImpulseDuration">
+        <property name="text">
+         <string>Result impulse duration :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="lEImpulseDuration"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="lVOLZ">
+        <property name="text">
+         <string>VOLZ delay :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="lEVOLZDelay"/>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="lMatrix">
+        <property name="text">
+         <string>Matrix dimension :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLineEdit" name="lENs_int"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="hButtonsLay">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbStart">
+       <property name="text">
+        <string>&amp;Start</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbClose">
+       <property name="text">
+        <string>&amp;Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
