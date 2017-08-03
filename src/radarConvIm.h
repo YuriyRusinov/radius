@@ -15,6 +15,7 @@ class ConvAzimuthWidget;
 class ConvAzimuthPhysParameters;
 class ImageGolographicObject;
 class RadiusImageEqualizer;
+class GologramWidget;
 
 using std::complex;
 
@@ -26,6 +27,7 @@ public:
     ConvAzimuthWidget * getCAzWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
     ImageGolographicObject * getImageGolographic (void);
     RadiusImageEqualizer * getImageHistEq (void);
+    GologramWidget * getGologramWidget (QWidget * parent=0, Qt::WindowFlags flags=0);
 
 public slots:
     void procConvDist (ConvDistPhysParameters * cParams);

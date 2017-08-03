@@ -7,6 +7,7 @@ HEADERS += gui/radDataWidget.h \
            gui/ui/convazimuthwidget.h \
            gui/ui/savesettingsform.h \
            gui/ui/editsettingsform.h \
+           gui/ui/gologramwidget.h \
            gui/OpenGl/window.h \
            gui/OpenGl/glwidget.h \
            gui/OpenGl/qtlogo.h \
@@ -24,7 +25,8 @@ FORMS += gui/ui/fft_time_widget.ui \
          gui/ui/conv_distance_widget.ui \
          gui/ui/conv_azimuth_widget.ui \
          gui/ui/save_settings_form.ui \
-         gui/ui/edit_settings_form.ui
+         gui/ui/edit_settings_form.ui \
+         gui/ui/gologram_widget.ui
 
 SOURCES += gui/radDataWidget.cpp \
            gui/radTableWidget.cpp \
@@ -35,6 +37,7 @@ SOURCES += gui/radDataWidget.cpp \
            gui/ui/convazimuthwidget.cpp \
            gui/ui/savesettingsform.cpp \
            gui/ui/editsettingsform.cpp \
+           gui/ui/gologramwidget.cpp \
            gui/OpenGl/window.cpp \
            gui/OpenGl/glwidget.cpp \
            gui/OpenGl/qtlogo.cpp \
@@ -56,6 +59,7 @@ headers.files += gui/radDataWidget.h \
                  gui/ui/convdistancewidget.h \
                  gui/ui/convazimuthwidget.h \
                  gui/ui/savesettingsform.h \
+                 gui/ui/gologramwidget.h \
                  gui/OpenGl/window.h \
                  gui/OpenGl/glwidget.h \
                  gui/OpenGl/qtlogo.h \

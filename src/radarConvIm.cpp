@@ -8,6 +8,7 @@
 #include <ffttimewidget.h>
 #include <convdistancewidget.h>
 #include <convazimuthwidget.h>
+#include <gologramwidget.h>
 
 #include "ConvAzimuthPhys.h"
 #include "ConvDistPhys.h"
@@ -141,4 +142,12 @@ ImageGolographicObject * RadarImageProc::getImageGolographic (void)
 RadiusImageEqualizer * RadarImageProc::getImageHistEq (void)
 {
     return m_RadIm;
+}
+
+GologramWidget * RadarImageProc::getGologramWidget (QWidget * parent, Qt::WindowFlags flags)
+{
+    GologramWidget * gW = new GologramWidget (parent, flags);
+
+    //emit sendWidget (gW);
+    return gW;
 }

@@ -55,6 +55,7 @@
 #include <imagecreatorform.h>
 #include <golographicModel.h>
 #include <golographicWidget.h>
+#include <gologramwidget.h>
 #include <rhistwidget.h>
 #include <RadarImageEq.h>
 
@@ -1259,4 +1260,12 @@ void RadMainWindow :: viewHistogram (QPixmap pMap)
 void RadMainWindow :: initPulsarCalc(void)
 {
     qDebug () << __PRETTY_FUNCTION__;
+    RadarImageProc * rdConv = RadarImageProc::getRadarImage();
+    if (!rdConv)
+        return;
+
+    GologramWidget * gW = rdConv->getGologramWidget ();
+    QMdiSubWindow * subGW = m_mdiArea->addSubWindow (gW);
+    gW->show();
+    subGW->setAttribute (Qt::WA_DeleteOnClose);
 }

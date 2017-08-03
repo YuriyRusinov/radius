@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>gologram_parameters_widget</class>
- <widget class="QWidget" name="gologram_parameters_widget">
+ <class>gologram_widget</class>
+ <widget class="QWidget" name="gologram_widget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -166,9 +166,9 @@
        <widget class="QLineEdit" name="lEVOLZDelay"/>
       </item>
       <item row="7" column="0">
-       <widget class="QLabel" name="lMatrix">
+       <widget class="QLabel" name="lNumberOfValues">
         <property name="text">
-         <string>Matrix dimension :</string>
+         <string>Number of values :</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
