@@ -1,7 +1,8 @@
 #include <QtDebug>
 
+#include <QProxyStyle>
 #include <vector>
-#include "xform.h"
+//#include "xform.h"
 #include "rhistwidget.h"
 #include "RadarImageEq.h"
 
@@ -29,13 +30,16 @@ RadiusImageEqualizer& RadiusImageEqualizer :: operator= (const RadiusImageEquali
     return *this;
 }
 
-XFormWidget * RadiusImageEqualizer :: viewGolographicImage (QString fileName, QWidget *parent)
+QWidget * RadiusImageEqualizer :: viewGolographicImage (QString fileName, QWidget *parent)
 {
-    XFormWidget * xformWidget = new XFormWidget(parent);
-    QStyle *arthurStyle = new ArthurStyle();
-    xformWidget->setStyle(arthurStyle);
-    xformWidget->setFile(fileName);
-    connect (xformWidget, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
+    QWidget * xformWidget = new QWidget(parent);
+    QStyle *arthurStyle = new QProxyStyle;//ArthurStyle();
+    // TODO:
+    // to Qt5
+//    xformWidget->setStyle(arthurStyle);
+//    xformWidget->setFile(fileName);
+//  TODO: connect as Qt5
+//    connect (xformWidget, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
     return xformWidget;
 }
 
@@ -112,7 +116,11 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
     if (wImage.format() == QImage::Format_RGB32)
         wImC = wImage.convertToFormat( QImage::Format_RGB888 );
     cv::Mat wMat = QImageToCvMat (wImC);
-    cvtColor( wMat, wMat, CV_BGR2GRAY );
+#if (CV_VERSION_MAJOR >= 4)
+    cvtColor( wMat, wMat, cv::COLOR_BGR2GRAY );
+ #else
+    cv::cvtColor( wMat, wMat, CV_BGR2GRAY );
+ #endif
     cv::Mat wMatR;// (wMat.clone());
     equalizeHist (wMat, wMatR);
 /*    calcHistogram (wImage, rHist, gHist, bHist, nCol, wMat);
@@ -169,10 +177,15 @@ void RadiusImageEqualizer :: histogramEq (const QImage& wImage, double wNoiseMin
 //        res = tImage;
 //        res.detach ();
 //        delete [] buffer;
-    XFormWidget * xfw = new XFormWidget (0);
-    xfw->setImage (res);
+//  TODO:
+//  convert to new widgets
+//
+    QWidget * xfw = new QWidget;//XFormWidget (0);
+    // TODO: convert to Qt5
+    //xfw->setImage (res);
     connect (xfw, SIGNAL (pHistogram (QPixmap, const cv::Mat&)), this, SLOT (viewHistogram (QPixmap, const cv::Mat&)) );
-    emit histView (xfw);
+//    TODO: convert to Qt5
+//    emit histView (xfw);
     emit viewEqImage (res);
 //    }
     delete [] bHist;

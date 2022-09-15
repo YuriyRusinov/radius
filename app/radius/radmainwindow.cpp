@@ -39,9 +39,9 @@
 #include <RadSettings.h>
 #include <ImageGeneratorObject.h>
 #include <radMdiArea.h>
-#include <assistant.h>
+//#include <assistant.h>
 #include <window.h>
-#include <xform.h>
+//#include <xform.h>
 
 #include <complex>
 #include <math.h>

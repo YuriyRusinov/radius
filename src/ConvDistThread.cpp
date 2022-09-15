@@ -85,8 +85,8 @@ void ConvDistThread :: run (void)
     int a = 0;
     Q_UNUSED (a);
 
-    FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
-    qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
+    FILE * fid5 = fopen (fileName.toUtf8().constData(), "rb");
+    qDebug () << __PRETTY_FUNCTION__ << fileName.toUtf8().constData() << fid5;
     if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
     {
         mFile.unlock();
@@ -95,7 +95,7 @@ void ConvDistThread :: run (void)
 
     QString fileConvName = convParameters->getConvFileName();//QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
-    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "w+");
+    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toUtf8().constData(), "w+");
 
     int na = convParameters->getChannelsNumb ();
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
@@ -221,7 +221,7 @@ void ConvDistThread :: run (void)
     if (fid6)
         fclose (fid6);
     mFile.unlock();
-    fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "r+");
+    fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toUtf8().constData(), "r+");
     qDebug () << __PRETTY_FUNCTION__ << maxval;
     if (fid6)
     {

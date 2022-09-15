@@ -21,7 +21,7 @@ DEPENDPATH *= $$QWT_INC_DIR
 
 CONFIG += link_pkgconfig
 PKGCONFIG += gsl
-PKGCONFIG += fftw3 fftw3_threads
+PKGCONFIG += fftw fftw_threads
 PKGCONFIG += blas
 PKGCONFIG += opencv
 

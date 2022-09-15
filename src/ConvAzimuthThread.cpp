@@ -27,7 +27,7 @@ void ConvAzimuthThread :: run (void)
     QTime * fftTime = new QTime;
     fftTime->start();
     QString fileName = convAzParameters->getInputFileName();
-    FILE * fid6 = fopen (fileName.toAscii().constData(), "rb");
+    FILE * fid6 = fopen (fileName.toUtf8().constData(), "rb");
     if (!fid6)
         return;
     int nd = FFT_Transform::pow2roundup (convAzParameters->getFFTDim());
@@ -266,7 +266,7 @@ void ConvAzimuthThread :: run (void)
     //bool isLoaded = hIm->loadFromData (imData, ndrz*nas/2);
     qDebug () << __PRETTY_FUNCTION__ << maxvalim << maxVal;//isLoaded;
     QString fileImage = convAzParameters->getConvFileName();
-    FILE * fid7 = fopen (fileImage.toAscii().constData(), "wb");
+    FILE * fid7 = fopen (fileImage.toUtf8().constData(), "wb");
     //hIm->save(fileImage, "PNG");
     emit sendImage (hIm);
     fwrite ("FLT=", sizeof (char), 4, fid7);

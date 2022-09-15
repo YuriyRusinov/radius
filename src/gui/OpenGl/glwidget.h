@@ -41,7 +41,7 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QGLWidget>
+#include <QtOpenGl/QGLWidget>
 
 #include "src_config.h"
 

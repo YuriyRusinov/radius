@@ -12,7 +12,7 @@
 
 class QImage;
 
-class XFormWidget;
+//class XFormWidget;
 class HistWidget;
 
 using cv::Mat;
@@ -20,7 +20,7 @@ using cv::Mat;
 class _FFTMATR_EXPORT_ RadiusImageEqualizer : public QObject
 {
 public:
-    XFormWidget * viewGolographicImage (QString fileName, QWidget *parent=0);
+    QWidget * viewGolographicImage (QString fileName, QWidget *parent=0);
 
     //
     // Функция рассчитывает гистограмму входного изображения wImage
