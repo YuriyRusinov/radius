@@ -40,7 +40,7 @@
 #include <ImageGeneratorObject.h>
 #include <radMdiArea.h>
 //#include <assistant.h>
-#include <window.h>
+//#include <window.h>
 //#include <xform.h>
 
 #include <complex>
@@ -66,13 +66,13 @@ using std::complex;
 RadMainWindow :: RadMainWindow (QWidget * parent, Qt::WindowFlags flags)
     : QMainWindow (parent, flags),
     UI (new Ui::Rad_Main_Window),
-    m_mdiArea (0),//new QMdiArea (this)),
-    ass (new Assistant),
+    m_mdiArea (nullptr),//new QMdiArea (this)),
+    //ass (new Assistant),
     tbActions (new QToolBar (this)),
     tbCalc (new QToolBar (this)),
     tbOthers (new QToolBar (this)),
-    actCalc1 (0),//new QAction (tr("Calculate&1"), this)),
-    actCalc2 (0),//new QAction (tr("Calculate&2"), this)),
+    actCalc1 (nullptr),//new QAction (tr("Calculate&1"), this)),
+    actCalc2 (nullptr),//new QAction (tr("Calculate&2"), this)),
     menuFile (new QMenu (tr ("&Images tools"))),
     calcMenu (new QMenu (tr ("&RLI tools"))),
     RLI3DMenu (new QMenu (tr ("3&D models"))),
@@ -101,8 +101,8 @@ RadMainWindow :: ~RadMainWindow (void)
         delete [] stc3;
     if (stc4)
         delete [] stc4;
-*/
-    delete ass;
+
+    delete ass;*/
 }
 
 void RadMainWindow :: openDataFile (void)
@@ -115,7 +115,7 @@ void RadMainWindow :: openDataFile (void)
 
     RadarImageProc * rdConv = RadarImageProc::getRadarImage();
     RadiusImageEqualizer * m_ImageEq = rdConv->getImageHistEq ();
-    XFormWidget * xformWidget = m_ImageEq->viewGolographicImage (fileName);
+    QWidget * xformWidget = m_ImageEq->viewGolographicImage (fileName);
     this->addWidget (xformWidget);
 }
 
@@ -317,14 +317,14 @@ void RadMainWindow :: slotTest1 (void)
     int a = 0;
     Q_UNUSED (a);
 
-    FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
-    qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
+    FILE * fid5 = fopen (fileName.toUtf8().constData(), "rb");
+    qDebug () << __PRETTY_FUNCTION__ << fileName.toUtf8().constData() << fid5;
     if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
         return;
 
     fileConvName = QFileDialog::getSaveFileName (this, tr("Save 1st data"), QDir::currentPath(), tr("All files (*)"));
 
-    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toAscii().constData(), "w+");
+    FILE * fid6 = fileConvName.isEmpty() ? 0 : fopen (fileConvName.toUtf8().constData(), "w+");
 
     qDebug () << __PRETTY_FUNCTION__ << (int)na;
     QAbstractItemModel * radModel = new QStandardItemModel (nd2, 1, 0);// (nd2, na);
@@ -571,7 +571,7 @@ void RadMainWindow :: slotTest2 (void)
 
     QTime * fftTime = new QTime;
     fftTime->start();
-    FILE * fid6 = fopen (fileName.toAscii().constData(), "rb");
+    FILE * fid6 = fopen (fileName.toUtf8().constData(), "rb");
     if (!fid6)
         return;
     qDebug () << __PRETTY_FUNCTION__ << fid6 << na_ots;
@@ -1029,8 +1029,8 @@ void RadMainWindow :: stcFFTTest (void)
     int a = 0;
     Q_UNUSED (a);
 
-    FILE * fid5 = fopen (fileName.toAscii().constData(), "rb");
-    qDebug () << __PRETTY_FUNCTION__ << fileName.toAscii().constData() << fid5;
+    FILE * fid5 = fopen (fileName.toUtf8().constData(), "rb");
+    qDebug () << __PRETTY_FUNCTION__ << fileName.toUtf8().constData() << fid5;
     if (!fData.open (fid5, QIODevice::ReadOnly | QIODevice::Unbuffered))
         return;
 
@@ -1187,7 +1187,7 @@ void RadMainWindow :: slotSetings (void)
 void RadMainWindow :: slotHelp (void)
 {
     qDebug () << __PRETTY_FUNCTION__;
-    ass->showDocumentation ("index.html");
+    //ass->showDocumentation ("index.html");
 }
 
 void RadMainWindow :: slot3DMod (void)
@@ -1238,8 +1238,9 @@ void RadMainWindow :: slot3DView (void)
     if (objFileName.isEmpty())
         return;
 
-    QWidget * w = new Window (objFileName);
-    addWidget (w);
+    // TODO: to Qt5
+    //QWidget * w = new Window (objFileName);
+    //addWidget (w);
 }
 
 void RadMainWindow :: slotBinariRLI (void)

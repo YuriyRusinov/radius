@@ -10,4 +10,4 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)   # See below (1)
 
 add_subdirectory(src)
-#add_subdirectory(app)
+add_subdirectory(app)

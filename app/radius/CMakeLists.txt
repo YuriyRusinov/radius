@@ -16,6 +16,11 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(PkgConfig REQUIRED)
+#find_package(FFTW REQUIRED)
+pkg_check_modules(FFTW IMPORTED_TARGET REQUIRED fftw3)
+include_directories(PkgConfig::FFTW)
+link_libraries     (PkgConfig::FFTW)
 
 include_directories(${PROJECT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
@@ -23,6 +28,12 @@ include_directories(${PROJECT_SOURCE_DIR}
                     ${Qt5Core_INCLUDE_DIRS}
                     ${Qt5Gui_INCLUDE_DIRS}
                     ${Qt5Network_INCLUDE_DIRS}
+                    ${CMAKE_SOURCE_DIR}
+                    ${CMAKE_SOURCE_DIR}/src
+                    ${CMAKE_SOURCE_DIR}/src/gui
+                    ${CMAKE_SOURCE_DIR}/src/gui/ui
+                    ${CMAKE_SOURCE_DIR}/src/gologram
+                    ${CMAKE_SOURCE_DIR}/src/misc
                     )
 
 set(HEADERS
@@ -30,7 +41,7 @@ set(HEADERS
 )
 
 set(FORMS
-    lapack_test_main_window.ui
+    radius_mainwindow.ui
 )
 
 set(SOURCES
@@ -44,10 +55,9 @@ set(RESOURCES
 
 qt5_wrap_ui(UIS_HDRS ${FORMS} )
 
-include_directories( ../src ../src/ui ../../src/gologram)
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${UIS_HDRS} ${RESOURCES}  )
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets fftw3 fftw3_threads ${QWT_LIBRARIES}
     radius_src)
 
 install(TARGETS ${PROJECT_NAME}

@@ -10,7 +10,7 @@ class QMdiArea;
 class QAction;
 class QToolBar;
 class QMenu;
-class Assistant;
+//class Assistant;
 class generatingDataPlus;
 
 namespace Ui
@@ -64,7 +64,7 @@ private:
     //
     Ui::Rad_Main_Window * UI;
     QMdiArea * m_mdiArea;
-    Assistant * ass;
+    //Assistant * ass;
     QString fileName;
     QString fileConvName;
     QToolBar * tbActions;

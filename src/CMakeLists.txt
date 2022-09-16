@@ -61,17 +61,21 @@ if (Qwt_FOUND AND NOT TARGET Qwt::Qwt)
 endif ()
 
 find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 include_directories(${PROJECT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${Qt5Widgets_INCLUDE_DIRS}
                     ${Qt5Core_INCLUDE_DIRS}
                     ${Qt5Gui_INCLUDE_DIRS}
-		    ${Qt5OpenGL_INCLUDE_DIRS}
-		    ${QWT_INCLUDE_DIRS}
-		    #${FFTW_INCLUDE_DIRS}
-                    )
+		            ${Qt5OpenGL_INCLUDE_DIRS}
+		            ${QWT_INCLUDE_DIRS}
+                    ${OpenCV_INCLUDE_DIRS}
+		            #${FFTW_INCLUDE_DIRS}
+                    ${PROJECT_SOURCE_DIR}/gologram 
+                    ${PROJECT_SOURCE_DIR}/gui
+                    ${PROJECT_SOURCE_DIR}/gui/ui
+                    ${PROJECT_SOURCE_DIR}/misc )
+
 
 set(HEADERS
     fft_c.h
@@ -121,6 +125,7 @@ set(HEADERS
     #gui/arthurstyle.h
     gui/rhistwidget.h
     #gui/xform.h
+    misc/constants1.h
 )
 
 set(FORMS
@@ -185,12 +190,10 @@ set(RESOURCES
 )
 
 qt5_wrap_ui(UIS_HDRS ${FORMS} )
-include_directories( ./gologram ./gui ./gui/ui ./misc )
-
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS} ${UIS_HDRS}
 	${RESOURCES} )
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets fftw3 ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets fftw3 fftw3_threads ${QWT_LIBRARIES} ${OpenCV_LIBS})
 
 set(${PROJECT_NAME}_RUNTIME_LIBRARY_DIRS ${CMAKE_INSTALL_LIBDIR} )
 
